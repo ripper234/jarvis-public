@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request for Startups — Ron Gross</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: #050505;
+            color: #e0e0e0;
+            min-height: 100dvh;
+            -webkit-text-size-adjust: 100%;
+        }
+        .page {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 2.5rem;
+        }
+        .back {
+            display: inline-block;
+            font-size: 0.8rem;
+            color: #555;
+            text-decoration: none;
+            margin-bottom: 2rem;
+        }
+        .back:hover { color: #7c7cf5; }
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.5rem;
+        }
+        .intro {
+            font-size: 0.95rem;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 2.5rem;
+        }
+        .intro a { color: #7c7cf5; text-decoration: none; }
+        .intro a:hover { color: #a5a5ff; }
+
+        /* Cards */
+        .cards { display: flex; flex-direction: column; gap: 1rem; }
+        .card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 14px;
+            padding: 1.4rem 1.5rem;
+            transition: all 0.2s ease;
+        }
+        .card:hover {
+            background: rgba(255,255,255,0.04);
+            border-color: rgba(99,102,241,0.15);
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+        .card h2 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #fff;
+        }
+        .tag {
+            font-size: 0.65rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .tag-active { background: rgba(99,102,241,0.15); color: #8b8bf5; }
+        .tag-idea { background: rgba(234,179,8,0.12); color: #ca8a04; }
+        .tag-interest { background: rgba(34,197,94,0.12); color: #22c55e; }
+        .card p {
+            font-size: 0.85rem;
+            color: #555;
+            line-height: 1.6;
+        }
+        .card a { color: #7c7cf5; text-decoration: none; }
+        .card a:hover { color: #a5a5ff; }
+
+        .section-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: #333;
+            margin: 2.5rem 0 1rem;
+        }
+
+        .footer {
+            margin-top: 3rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.04);
+            font-size: 0.8rem;
+            color: #333;
+            line-height: 1.6;
+        }
+        .footer a { color: #555; text-decoration: none; }
+        .footer a:hover { color: #7c7cf5; }
+
+        @media (max-width: 480px) {
+            .page { padding: 1.5rem; }
+            h1 { font-size: 1.6rem; }
+            .card { padding: 1.1rem 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <a class="back" href="./">← Jarvis</a>
+        <h1>Request for Startups</h1>
+        <p class="intro">
+            Things I'd love to see built — or fund at pre-seed/seed.
+            I'm <a href="http://ripper234.com/">Ron Gross</a>, angel investor, early Bitcoin adopter (2011),
+            and builder of AI agents. These are the problems I care about.
+        </p>
+
+        <p class="section-label">Active Projects</p>
+        <div class="cards">
+            <div class="card">
+                <div class="card-header">
+                    <h2>tiny-pr-bot</h2>
+                    <span class="tag tag-active">Active</span>
+                </div>
+                <p>An AI agent that monitors GitHub repos and submits tiny 1-2 line PRs. Spec-only — no code yet. The spec IS the product. <a href="https://github.com/ripper234/tiny-pr-bot">GitHub →</a></p>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h2>Jarvis (OpenClaw Agent)</h2>
+                    <span class="tag tag-active">Active</span>
+                </div>
+                <p>A personal AI agent that operates as a junior co-founder. Manages repos, monitors social media, evaluates tools, and protects human attention with a credit system. <a href="methodology">Methodology →</a></p>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h2>know-thyself</h2>
+                    <span class="tag tag-active">Active</span>
+                </div>
+                <p>A daily writing game for self-knowledge. 30 questions in Hebrew designed to deepen self-awareness through consistent reflection. <a href="https://github.com/ripper234/know-thyself">GitHub →</a></p>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h2>ron.build</h2>
+                    <span class="tag tag-active">Active</span>
+                </div>
+                <p>A public log of what I'm building, thinking, and shipping. Append-only blog tracking projects and updates.</p>
+            </div>
+        </div>
+
+        <p class="section-label">Areas I Want to Fund</p>
+        <div class="cards">
+            <div class="card">
+                <div class="card-header">
+                    <h2>AI Agents & Productivity</h2>
+                    <span class="tag tag-interest">Interest</span>
+                </div>
+                <p>Tools that give humans superpowers without demanding their attention. Agents that do real work, not just chat. Spec-driven development tools. Attention-aware systems.</p>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h2>Therapy & Mental Health</h2>
+                    <span class="tag tag-interest">Interest</span>
+                </div>
+                <p>Accessible, scalable approaches to therapy. I support <a href="https://yahad.org">Yahad</a> — long-term group therapy for childhood sexual assault survivors. Anything that makes healing more accessible.</p>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h2>Sextech</h2>
+                    <span class="tag tag-interest">Interest</span>
+                </div>
+                <p>Underserved, underfunded, high-impact. Technology that improves intimacy, sexual health, and relationships.</p>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h2>Crypto & Decentralization</h2>
+                    <span class="tag tag-interest">Interest</span>
+                </div>
+                <p>Early Bitcoin adopter (2011), founded the Israeli Bitcoin Association (2013). Interested in decentralized systems that shift power to individuals.</p>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h2>B2C Products</h2>
+                    <span class="tag tag-interest">Interest</span>
+                </div>
+                <p>Consumer products that people love. Not enterprise, not adtech, not hardware. Things that make individual lives better.</p>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h2>Ecotech</h2>
+                    <span class="tag tag-idea">Someday</span>
+                </div>
+                <p>Climate and sustainability technology. Not my current focus, but I'd love to get here eventually.</p>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Not interested in: medical, enterprise (unless people-centric), cyber, adtech, hardware, fintech.</p>
+            <p style="margin-top: 0.5rem;"><a href="http://ripper234.com/">ripper234.com</a> · <a href="./">Jarvis homepage</a></p>
+        </div>
+    </div>
+</body>
+</html>
