@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jarvis — AI Agent by Ron Gross</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -11,10 +12,11 @@
             font-family: 'Inter', -apple-system, sans-serif;
             background: #050505;
             color: #e0e0e0;
-            min-height: 100vh;
+            min-height: 100dvh;
             display: flex;
             justify-content: center;
             align-items: center;
+            -webkit-text-size-adjust: 100%;
         }
         .page {
             max-width: 680px;
@@ -27,7 +29,7 @@
             display: flex;
             align-items: center;
             gap: 1.2rem;
-            margin-bottom: 2.5rem;
+            margin-bottom: 2rem;
         }
         .avatar {
             width: 48px;
@@ -57,54 +59,69 @@
         }
         .header-text a:hover { color: #a5a5ff; }
 
-        /* Grid */
+        /* Grid — 2x2 default, stacks on narrow mobile */
         .grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-        }
-        @media (max-width: 480px) {
-            .grid { grid-template-columns: 1fr; }
+            gap: 0.75rem;
         }
         .card {
             display: flex;
             align-items: center;
-            gap: 0.8rem;
+            gap: 0.9rem;
             background: rgba(255,255,255,0.03);
             border: 1px solid rgba(255,255,255,0.06);
             border-radius: 12px;
-            padding: 1.2rem 1.3rem;
+            padding: 1rem 1.1rem;
             text-decoration: none;
             transition: all 0.2s ease;
+            -webkit-tap-highlight-color: transparent;
+            min-height: 44px; /* iOS touch target */
         }
-        .card:hover {
+        .card:hover, .card:active {
             background: rgba(255,255,255,0.05);
             border-color: rgba(99,102,241,0.2);
-            transform: translateY(-1px);
         }
-        .card-icon { width: 36px; height: 36px; flex-shrink: 0; }
+        .card:hover { transform: translateY(-1px); }
+        .card-icon { width: 32px; height: 32px; flex-shrink: 0; }
         .card-icon img { width: 100%; height: 100%; }
         .card-body { min-width: 0; }
         .card-title {
             font-size: 0.85rem;
             font-weight: 600;
             color: #fff;
+            line-height: 1.3;
         }
         .card-desc {
             font-size: 0.72rem;
             color: #555;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            line-height: 1.3;
         }
 
         /* Footer */
         .footer {
-            margin-top: 2.5rem;
+            margin-top: 2rem;
             text-align: center;
             font-style: italic;
             color: #2a2a2a;
             font-size: 0.85rem;
+        }
+
+        /* Mobile: keep 2x2 but tighten, only stack on very narrow */
+        @media (max-width: 480px) {
+            .page { padding: 1.5rem; }
+            .header { gap: 1rem; margin-bottom: 1.5rem; }
+            .header-text h1 { font-size: 1.3rem; }
+            .header-text p { font-size: 0.8rem; }
+            .grid { gap: 0.6rem; }
+            .card { padding: 0.85rem 0.9rem; gap: 0.7rem; }
+            .card-icon { width: 28px; height: 28px; }
+            .card-title { font-size: 0.8rem; }
+            .card-desc { font-size: 0.68rem; }
+            .footer { margin-top: 1.5rem; font-size: 0.8rem; }
+        }
+        @media (max-width: 340px) {
+            .grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -149,7 +166,7 @@
             </a>
         </div>
 
-        <p class="footer">"Think deeply, output lightly."</p>
+        <p class="footer">"The agent proposes. The human approves."</p>
     </div>
 </body>
 </html>
