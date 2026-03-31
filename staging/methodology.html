@@ -37,13 +37,46 @@
         <h2>Spec is the Product</h2>
         <p>The philosophy is top-down: <strong>spec first</strong>, then tests, then architecture, then code. Most of the code doesn't exist yet, and that's intentional. The spec IS the product at this stage. The agent's job is to sharpen the spec until building becomes obvious. Ron calls it <strong>"think deeply, output lightly."</strong></p>
 
-        <div style="margin-top:2.5rem; padding-top:1.5rem; border-top:1px solid #eee;">
-            <h2 style="font-size:1rem; margin-bottom:0.5rem;">References</h2>
-            <ol style="padding-left:1.2rem; font-size:0.85rem; color:#888;">
-                <li style="margin-bottom:0.3rem;"><a href="setup.html">Jarvis OpenClaw setup guide</a></li>
-                <li style="margin-bottom:0.3rem;"><a href="https://openspec.dev/">OpenSpec</a> — a lightweight spec-driven framework for AI coding agents</li>
-            </ol>
+        <hr class="section-divider">
+
+        <h2>SDD Resources</h2>
+        <p>Spec-driven development (SDD) flips the traditional workflow: instead of writing code and documenting it later, you write specifications first and let AI agents generate the implementation. The spec becomes the source of truth, not the code.</p>
+
+        <div class="projects" style="margin-top:1rem;">
+            <a class="project" href="https://github.com/github/spec-kit">
+                <div class="project-header">
+                    <span class="project-name">GitHub Spec Kit</span>
+                    <span class="tag">Official</span>
+                </div>
+                <p class="project-desc">GitHub's SDD toolkit. CLI-based: constitution → specify → plan → tasks → implement. 40+ extensions.</p>
+            </a>
+            <a class="project" href="https://openspec.dev/">
+                <div class="project-header">
+                    <span class="project-name">OpenSpec</span>
+                    <span class="tag">YC-backed</span>
+                </div>
+                <p class="project-desc">Lightweight spec-driven framework. Three-phase state machine with spec deltas. 20+ AI tool integrations.</p>
+            </a>
+            <a class="project" href="https://github.com/bmad-code-org/BMAD-METHOD">
+                <div class="project-header">
+                    <span class="project-name">BMad Method</span>
+                    <span class="tag">Open source</span>
+                </div>
+                <p class="project-desc">Full agile AI framework. 12+ specialized agents, 34+ workflows, scale-adaptive planning.</p>
+            </a>
         </div>
+
+        <h3 style="margin-top:1.5rem;">Videos</h3>
+        <ul>
+            <li><a href="https://www.youtube.com/watch?v=a9eR1xsfvHg">Spec Kit Overview</a> — GitHub's official walkthrough</li>
+            <li><a href="https://www.youtube.com/watch?v=nnUMJX9013Y">Does spec-driven development really work?</a></li>
+        </ul>
+
+        <h3>Community</h3>
+        <ul>
+            <li><a href="https://www.reddit.com/r/openspec/">r/openspec</a> — Reddit community for SDD discussion</li>
+            <li><a href="setup.html">Jarvis OpenClaw setup guide</a></li>
+        </ul>
 
         <p class="footer"><a href="./">Home</a></p>
         <p class="version">v0.2-staging</p>
