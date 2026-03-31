@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tiny-pr-bot — Autonomous Repo Improvement</title>
+    <meta name="description" content="An AI bot that submits tiny, high-leverage PRs to improve your repos. Pure spec, no code.">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="page">
+        <a class="back" href="./">← Jarvis</a>
+        <h1>tiny-pr-bot</h1>
+        <p class="subtitle">An AI bot that improves your repos one tiny PR at a time.</p>
+
+        <div class="tldr">
+            Instead of large refactors or big feature PRs, the bot reviews specification repositories and proposes <strong>small, thoughtful improvements</strong> — 1-2 lines, 1 file, minimal decision overhead. The spec IS the product. There is no code yet, and that's intentional.
+        </div>
+
+        <h2>How It Works</h2>
+        <p>The bot runs a continuous polling loop. When no PR is pending, it identifies the <strong>highest-value tiny improvement</strong> and creates a pull request. It then waits for human feedback before proposing the next one. No batch dumps, no overwhelm.</p>
+
+        <h2>What It Proposes</h2>
+        <ul>
+            <li>Improve documentation clarity</li>
+            <li>Refactor sections (move / rename / simplify)</li>
+            <li>Add or refine TODOs</li>
+            <li>Provide research support (1-line summary + link)</li>
+            <li>Reduce ambiguity in specs</li>
+        </ul>
+        <div class="callout">These are examples — the bot can propose any change it believes is useful at the current stage.</div>
+
+        <h2>Design Principles</h2>
+        <ul>
+            <li><strong>Maximal usefulness</strong> — every PR should move the project forward</li>
+            <li><strong>Minimal decision overload</strong> — review in 10 seconds</li>
+            <li><strong>Tiny PRs always</strong> — 1-2 lines, 1 file, one idea</li>
+            <li><strong>High relevance</strong> — matched to the current project stage</li>
+        </ul>
+
+        <h2>What It Avoids</h2>
+        <ul>
+            <li>Adding content just to "look busy"</li>
+            <li>Introducing premature structure</li>
+            <li>Large or multi-decision PRs</li>
+        </ul>
+
+        <h2>Feedback Protocol</h2>
+        <p>Simple commands via GitHub PR comments or Telegram:</p>
+        <div style="display:flex; flex-wrap:wrap; gap:0.4rem; margin-bottom:1rem;">
+            <span class="tag" style="background:rgba(16,185,129,0.1);color:#059669;">APPROVE</span>
+            <span class="tag" style="background:rgba(245,158,11,0.1);color:#d97706;">CHANGES</span>
+            <span class="tag" style="background:rgba(239,68,68,0.1);color:#dc2626;">NOPE</span>
+            <span class="tag" style="background:rgba(99,102,241,0.1);color:#4f46e5;">NOW</span>
+            <span class="tag" style="background:rgba(107,114,128,0.1);color:#6b7280;">PAUSE</span>
+            <span class="tag" style="background:rgba(107,114,128,0.1);color:#6b7280;">RESUME</span>
+        </div>
+
+        <h2>Status</h2>
+        <p><strong>Active.</strong> Operated by <a href="methodology.html">Jarvis</a> via OpenClaw. Currently targeting its own repo — the bot improves itself.</p>
+
+        <hr class="section-divider">
+
+        <p style="font-size:0.85rem; color:#888;">
+            <a href="https://github.com/ripper234/tiny-pr-bot">View on GitHub →</a>
+        </p>
+
+        <p class="footer"><a href="./">Home</a></p>
+        <p class="version">v0.2-staging</p>
+    </div>
+</body>
+</html>
