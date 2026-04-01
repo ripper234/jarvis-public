@@ -48,7 +48,8 @@ a { color: #4f46e5; text-decoration: none; }
 a:hover { color: #6366f1; }
 
 .page {
-    max-width: 640px;
+    max-width: 800px;
+    width: 100%;
     margin: 0 auto;
     padding: 2.5rem 1.25rem;
     position: relative;
@@ -56,9 +57,9 @@ a:hover { color: #6366f1; }
 .page-centered {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     min-height: 100dvh;
-    padding: 2rem 1.25rem;
+    padding: 4rem 1.25rem 2rem;
 }
 .page-centered .page { padding: 0; }
 
@@ -158,6 +159,7 @@ a.card:active { transform: translateY(0); }
 
 /* Grid */
 .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+.grid-3 { grid-template-columns: 1fr 1fr 1fr; }
 
 /* Project list (vertical) */
 .projects { display: flex; flex-direction: column; gap: 0.75rem; }
@@ -194,6 +196,10 @@ a.project:active { transform: translateY(0); }
     background: rgba(79,70,229,0.08);
     color: #4f46e5;
 }
+.tag-ideation {
+    background: rgba(156,163,175,0.1);
+    color: #9ca3af;
+}
 
 /* Callout box */
 .callout {
@@ -216,24 +222,28 @@ a.project:active { transform: translateY(0); }
 .tldr { background: rgba(79,70,229,0.04); border-left: 3px solid rgba(79,70,229,0.2); padding: 0.8rem 1rem; border-radius: 0 8px 8px 0; margin-bottom: 2rem; font-size: 0.88rem; color: #555; line-height: 1.6; }
 
 /* Footer */
-.footer { margin-top: 2rem; font-size: 0.78rem; color: #bbb; }
+.footer { margin-top: 2rem; font-size: 0.78rem; color: #bbb; text-align: center; }
 .footer a { color: #999; text-decoration: none; }
 .footer a:hover { color: #4f46e5; }
-.version { font-size: 0.65rem; color: #ccc; margin-top: 0.3rem; }
+.version { font-size: 0.65rem; color: #ccc; margin-top: 0.3rem; text-align: center; }
 
 /* Mobile */
 @media (max-width: 480px) {
     .page { padding: 1.5rem 1rem; }
+    .page-centered { padding-top: 2rem; }
     h1 { font-size: 1.5rem; }
     .grid { gap: 0.5rem; }
     a.card, a.project { padding: 1rem; }
     a.card { min-height: 76px; }
-    .card-title { font-size: 0.82rem; }
-    .card-desc { font-size: 0.7rem; }
+    .card-title { font-size: 0.88rem; }
+    .card-desc { font-size: 0.75rem; }
     pre { font-size: 0.72rem; padding: 0.8rem; }
     table { font-size: 0.75rem; }
     body::before { width: 300px; height: 300px; }
     body::after { width: 250px; height: 250px; }
+}
+@media (max-width: 480px) {
+    .grid-3 { grid-template-columns: 1fr; }
 }
 @media (max-width: 320px) {
     .grid { grid-template-columns: 1fr; }
