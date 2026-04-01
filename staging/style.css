@@ -159,6 +159,7 @@ a.card:active { transform: translateY(0); }
 
 /* Grid */
 .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+.grid-3 { grid-template-columns: 1fr 1fr 1fr; }
 
 /* Project list (vertical) */
 .projects { display: flex; flex-direction: column; gap: 0.75rem; }
@@ -240,6 +241,9 @@ a.project:active { transform: translateY(0); }
     table { font-size: 0.75rem; }
     body::before { width: 300px; height: 300px; }
     body::after { width: 250px; height: 250px; }
+}
+@media (max-width: 480px) {
+    .grid-3 { grid-template-columns: 1fr; }
 }
 @media (max-width: 320px) {
     .grid { grid-template-columns: 1fr; }
