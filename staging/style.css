@@ -195,6 +195,10 @@ a.project:active { transform: translateY(0); }
     background: rgba(79,70,229,0.08);
     color: #4f46e5;
 }
+.tag-ideation {
+    background: rgba(156,163,175,0.1);
+    color: #9ca3af;
+}
 
 /* Callout box */
 .callout {
