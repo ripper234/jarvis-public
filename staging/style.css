@@ -225,12 +225,13 @@ a.project:active { transform: translateY(0); }
 /* Mobile */
 @media (max-width: 480px) {
     .page { padding: 1.5rem 1rem; }
+    .page-centered { padding-top: 2rem; }
     h1 { font-size: 1.5rem; }
     .grid { gap: 0.5rem; }
     a.card, a.project { padding: 1rem; }
     a.card { min-height: 76px; }
-    .card-title { font-size: 0.82rem; }
-    .card-desc { font-size: 0.7rem; }
+    .card-title { font-size: 0.88rem; }
+    .card-desc { font-size: 0.75rem; }
     pre { font-size: 0.72rem; padding: 0.8rem; }
     table { font-size: 0.75rem; }
     body::before { width: 300px; height: 300px; }
