@@ -3,9 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>What I'm Working On — Ron Gross</title>
+    <title>Projects — Ron Gross</title>
     <meta name="description" content="Active projects and ideas by Ron Gross">
     <link rel="stylesheet" href="style.css">
+    <style>
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+        }
+        .project-tile {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(0,0,0,0.06);
+            border-radius: 14px;
+            padding: 1.25rem 0.75rem;
+            text-decoration: none;
+            transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .project-tile:hover {
+            border-color: rgba(99,102,241,0.2);
+            box-shadow: 0 4px 20px rgba(79,70,229,0.08);
+            transform: translateY(-2px);
+        }
+        .project-tile:active { transform: translateY(0); }
+        .tile-icon {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            line-height: 1;
+        }
+        .tile-name {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #111;
+            margin-bottom: 0.2rem;
+        }
+        .tile-tag {
+            font-size: 0.55rem;
+            padding: 0.1rem 0.4rem;
+            border-radius: 20px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 0.35rem;
+        }
+        .tile-tag-active { background: rgba(79,70,229,0.08); color: #4f46e5; }
+        .tile-tag-launched { background: rgba(16,185,129,0.1); color: #10b981; }
+        .tile-tag-ideation { background: rgba(156,163,175,0.1); color: #9ca3af; }
+        .tile-desc {
+            font-size: 0.68rem;
+            color: #888;
+            line-height: 1.4;
+        }
+        @media (max-width: 480px) {
+            .project-grid { grid-template-columns: repeat(2, 1fr); }
+            .tile-icon { font-size: 1.8rem; }
+        }
+        @media (max-width: 320px) {
+            .project-grid { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 <body>
     <div class="page">
@@ -13,73 +77,58 @@
         <h1>What I'm Working On</h1>
         <p class="intro"><a href="http://ripper234.com/">Ron Gross</a></p>
 
-        <div class="projects">
-            <a class="project" href="methodology.html">
-                <div class="project-header">
-                    <span class="project-name">Jarvis</span>
-                    <span class="tag">Active</span>
-                </div>
-                <p class="project-desc">Personal AI co-founder on OpenClaw. Manages repos, monitors activity, evaluates tools, and protects human attention with a credit system.</p>
+        <div class="project-grid">
+            <a class="project-tile" href="methodology.html">
+                <div class="tile-icon">🤖</div>
+                <span class="tile-tag tile-tag-active">Active</span>
+                <div class="tile-name">Jarvis</div>
+                <div class="tile-desc">AI co-founder on OpenClaw</div>
             </a>
-
-            <a class="project" href="balance.html">
-                <div class="project-header">
-                    <span class="project-name">Balance</span>
-                    <span class="tag">Active</span>
-                </div>
-                <p class="project-desc">Bipolar copilot app. Track mood, sleep, and energy patterns with AI-powered insights. Built with Yaniv.</p>
+            <a class="project-tile" href="balance.html">
+                <div class="tile-icon">⚖️</div>
+                <span class="tile-tag tile-tag-active">Active</span>
+                <div class="tile-name">Balance</div>
+                <div class="tile-desc">Bipolar copilot app</div>
             </a>
-
-            <a class="project" href="https://github.com/ripper234/tiny-pr-bot">
-                <div class="project-header">
-                    <span class="project-name">tiny-pr-bot</span>
-                    <span class="tag">Active</span>
-                </div>
-                <p class="project-desc">AI agent that monitors repos and submits tiny 1-2 line PRs. Spec-only — no code. The spec IS the product.</p>
+            <a class="project-tile" href="https://github.com/ripper234/tiny-pr-bot">
+                <div class="tile-icon">🔧</div>
+                <span class="tile-tag tile-tag-active">Active</span>
+                <div class="tile-name">tiny-pr-bot</div>
+                <div class="tile-desc">Spec-driven 1-line PRs</div>
             </a>
-
-            <a class="project" href="https://docs.google.com/spreadsheets/d/1x3njEmv5_Zo92w_nH-1s75m4xzLJ_DGxBDxs2-REtPY/edit?gid=0#gid=0">
-                <div class="project-header">
-                    <span class="project-name">ron.build</span>
-                    <span class="tag">Active</span>
-                </div>
-                <p class="project-desc">Public log of what I'm building, thinking, and shipping.</p>
+            <a class="project-tile" href="https://docs.google.com/spreadsheets/d/1x3njEmv5_Zo92w_nH-1s75m4xzLJ_DGxBDxs2-REtPY/edit?gid=0#gid=0">
+                <div class="tile-icon">📝</div>
+                <span class="tile-tag tile-tag-active">Active</span>
+                <div class="tile-name">ron.build</div>
+                <div class="tile-desc">Public build log</div>
             </a>
-
-            <a class="project" href="https://fredo.ai/">
-                <div class="project-header">
-                    <span class="project-name">Fredo.ai</span>
-                    <span class="tag tag-launched">Launched</span>
-                </div>
-                <p class="project-desc">WhatsApp productivity bot. ~3,000 weekly active users. Free, maintenance mode. Predecessor to Jarvis.</p>
+            <a class="project-tile" href="https://fredo.ai/">
+                <div class="tile-icon">💬</div>
+                <span class="tile-tag tile-tag-launched">Launched</span>
+                <div class="tile-name">Fredo.ai</div>
+                <div class="tile-desc">WhatsApp productivity bot</div>
             </a>
-
-            <a class="project" href="https://whateverworks.me/">
-                <div class="project-header">
-                    <span class="project-name">Whatever Works</span>
-                    <span class="tag tag-launched">Launched</span>
-                </div>
-                <p class="project-desc">A toolkit for self-optimization. Book + wiki exploring therapy, productivity, relationships, and personal growth through evidence-based methods.</p>
+            <a class="project-tile" href="https://whateverworks.me/">
+                <div class="tile-icon">📖</div>
+                <span class="tile-tag tile-tag-launched">Launched</span>
+                <div class="tile-name">Whatever Works</div>
+                <div class="tile-desc">Self-optimization toolkit</div>
             </a>
-
-            <a class="project" href="https://github.com/ripper234/know-thyself">
-                <div class="project-header">
-                    <span class="project-name">know-thyself</span>
-                    <span class="tag tag-ideation">Ideation</span>
-                </div>
-                <p class="project-desc">Daily writing game for self-knowledge. 30 questions in Hebrew for deeper self-awareness through reflection.</p>
+            <a class="project-tile" href="https://github.com/ripper234/know-thyself">
+                <div class="tile-icon">🪞</div>
+                <span class="tile-tag tile-tag-ideation">Ideation</span>
+                <div class="tile-name">know-thyself</div>
+                <div class="tile-desc">Daily self-knowledge game</div>
             </a>
-
-            <a class="project" href="https://docs.google.com/document/d/1CWh1JruHN5nPEzKt610S4mdoQqG6q_kltdIJfc4SJLc/edit">
-                <div class="project-header">
-                    <span class="project-name">Next-Level Spa (Tel Aviv)</span>
-                    <span class="tag tag-ideation">Ideation</span>
-                </div>
-                <p class="project-desc">A world-class spa experience in Tel Aviv. Inspired by Japanese onsen culture and French hydrotherapy. Wellness tech, meditation, biohacking, top-tier massage.</p>
+            <a class="project-tile" href="https://docs.google.com/document/d/1CWh1JruHN5nPEzKt610S4mdoQqG6q_kltdIJfc4SJLc/edit">
+                <div class="tile-icon">🧖</div>
+                <span class="tile-tag tile-tag-ideation">Ideation</span>
+                <div class="tile-name">Next-Level Spa</div>
+                <div class="tile-desc">World-class spa in Tel Aviv</div>
             </a>
         </div>
 
-        <p class="footer">Built by <a href="http://ripper234.com/">Ron Gross</a> · <a href="./">Home</a> · v0.2</p>
+        <p class="footer">Built by <a href="http://ripper234.com/">Ron Gross</a> · <a href="./">Home</a></p>
     </div>
 </body>
 </html>
