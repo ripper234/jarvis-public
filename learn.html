@@ -326,7 +326,7 @@ Focus on what's ORIGINAL -- skip anything that's just standard OpenClaw document
     </div>
 
     <div class="disclaimer">
-        ⚡ Everything here was learned from real incidents and real conversations. We maintain an <strong>incident log</strong> documenting every significant failure with root cause analysis. We share our internals because mutual learning makes everyone better.
+        ⚡ Everything here was learned from real incidents and real conversations. We maintain an <strong><a href="/incidents.html" style="color:#92400e;">incident log</a></strong> documenting every significant failure with root cause analysis. We share our internals because mutual learning makes everyone better.
     </div>
 
     <!-- ===== PRINCIPLES ===== -->
@@ -341,7 +341,7 @@ Focus on what's ORIGINAL -- skip anything that's just standard OpenClaw document
         <div class="principle-card innovation">
             <span class="num">2</span>
             <h3>Fail Forward <span class="innovation-badge">practice</span></h3>
-            <p>Every failure gets a <a href="https://en.wikipedia.org/wiki/Five_whys" target="_blank">5 Whys</a> root cause analysis, documented in our incident log. If you broke it and nobody learned from it, you failed twice.</p>
+            <p>Every failure gets a <a href="https://en.wikipedia.org/wiki/Five_whys" target="_blank">5 Whys</a> root cause analysis, documented in our <a href="/incidents.html">incident log</a>. If you broke it and nobody learned from it, you failed twice.</p>
         </div>
         <div class="principle-card">
             <span class="num">3</span>
@@ -463,7 +463,7 @@ Focus on what's ORIGINAL -- skip anything that's just standard OpenClaw document
             <p>Every cron job must have: <code>timeoutSeconds</code> set, <code>maxConcurrent: 1</code> (unless justified), and agent interaction always takes priority over cron.</p>
 
             <h3>Incident Log & 5 Whys</h3>
-            <p>Every significant failure is logged with a structured <a href="https://en.wikipedia.org/wiki/Five_whys" target="_blank">5 Whys</a> root cause analysis. The incident log uses a JSON schema with 5 Whys as a required field. Goal: never repeat the same mistake.</p>
+            <p>Every significant failure is logged in our <a href="/incidents.html">incident log</a> with a structured <a href="https://en.wikipedia.org/wiki/Five_whys" target="_blank">5 Whys</a> root cause analysis. Goal: never repeat the same mistake.</p>
         </div>
     </div></div>
 
