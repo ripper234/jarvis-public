@@ -70,7 +70,7 @@
         }
         .tile-tooltip {
             position: absolute;
-            bottom: calc(100% + 10px);
+            top: calc(100% + 10px);
             left: 50%;
             width: 200px;
             background: #fff;
@@ -85,17 +85,17 @@
             pointer-events: none;
             /* Start hidden, slide up gently */
             opacity: 0;
-            transform: translateX(-50%) translateY(4px);
+            transform: translateX(-50%) translateY(-4px);
             transition: opacity 0.2s ease, transform 0.2s ease;
         }
         .tile-tooltip::after {
             content: '';
             position: absolute;
-            top: 100%;
+            bottom: 100%;
             left: 50%;
             transform: translateX(-50%);
             border: 5px solid transparent;
-            border-top-color: #fff;
+            border-bottom-color: #fff;
         }
         .project-tile:hover .tile-tooltip {
             opacity: 1;
