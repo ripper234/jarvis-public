@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300">
+  <defs>
+    <!-- Gradient for robot body -->
+    <linearGradient id="bodyGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#4f46e5"/>
+    </linearGradient>
+    <!-- Glow for eyes -->
+    <radialGradient id="eyeGlow">
+      <stop offset="0%" stop-color="#06b6d4"/>
+      <stop offset="100%" stop-color="#06b6d4" stop-opacity="0"/>
+    </radialGradient>
+    <!-- Soft shadow -->
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#4f46e5" flood-opacity="0.15"/>
+    </filter>
+    <filter id="orbGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <style>
+    @keyframes float1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(12px,-18px)} }
+    @keyframes float2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-15px,12px)} }
+    @keyframes float3 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(10px,15px)} }
+    @keyframes float4 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-8px,-10px)} }
+    @keyframes float5 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(14px,8px)} }
+    @keyframes eyePulse { 0%,100%{opacity:0.7;r:6} 50%{opacity:1;r:7.5} }
+    @keyframes antennaPulse { 0%,100%{opacity:0.5;r:4} 50%{opacity:1;r:6} }
+    @keyframes breathe { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-3px)} }
+    @keyframes spin { 0%{transform:rotate(0deg)} 100%{transform:rotate(360deg)} }
+    @keyframes fadeOrb { 0%,100%{opacity:0.4} 50%{opacity:0.8} }
+    .orb1{animation:float1 8s ease-in-out infinite, fadeOrb 8s ease-in-out infinite}
+    .orb2{animation:float2 10s ease-in-out infinite, fadeOrb 10s ease-in-out infinite}
+    .orb3{animation:float3 12s ease-in-out infinite, fadeOrb 12s ease-in-out infinite}
+    .orb4{animation:float4 9s ease-in-out infinite, fadeOrb 9s ease-in-out infinite}
+    .orb5{animation:float5 11s ease-in-out infinite, fadeOrb 11s ease-in-out infinite}
+    .robot{animation:breathe 5s ease-in-out infinite}
+    .eye-glow{animation:eyePulse 3s ease-in-out infinite}
+    .antenna-glow{animation:antennaPulse 2.5s ease-in-out infinite}
+    .hex{animation:spin 30s linear infinite;transform-origin:center}
+    @media(prefers-reduced-motion:reduce){*{animation:none!important}}
+  </style>
+
+  <!-- Background orbs -->
+  <circle class="orb1" cx="60" cy="60" r="20" fill="#4f46e5" opacity="0.15" filter="url(#orbGlow)"/>
+  <circle class="orb2" cx="340" cy="80" r="14" fill="#06b6d4" opacity="0.15" filter="url(#orbGlow)"/>
+  <circle class="orb3" cx="50" cy="220" r="16" fill="#10b981" opacity="0.12" filter="url(#orbGlow)"/>
+  <circle class="orb4" cx="350" cy="230" r="12" fill="#7c3aed" opacity="0.15" filter="url(#orbGlow)"/>
+  <circle class="orb5" cx="320" cy="150" r="10" fill="#4f46e5" opacity="0.1" filter="url(#orbGlow)"/>
+
+  <!-- Decorative hex -->
+  <g class="hex" style="transform-origin:90px 140px">
+    <polygon points="90,120 107,130 107,150 90,160 73,150 73,130" fill="none" stroke="#6366f1" stroke-width="1" opacity="0.15"/>
+  </g>
+  <g class="hex" style="transform-origin:310px 180px;animation-direction:reverse;animation-duration:25s">
+    <polygon points="310,165 324,173 324,188 310,196 296,188 296,173" fill="none" stroke="#06b6d4" stroke-width="1" opacity="0.12"/>
+  </g>
+
+  <!-- Robot body group -->
+  <g class="robot" filter="url(#shadow)">
+    <!-- Body -->
+    <rect x="160" y="130" width="80" height="90" rx="16" fill="url(#bodyGrad)"/>
+    
+    <!-- Head -->
+    <rect x="155" y="80" width="90" height="60" rx="14" fill="url(#bodyGrad)"/>
+    
+    <!-- Antenna -->
+    <line x1="200" y1="80" x2="200" y2="62" stroke="#6366f1" stroke-width="2.5" stroke-linecap="round"/>
+    <circle class="antenna-glow" cx="200" cy="58" r="5" fill="#06b6d4" filter="url(#orbGlow)"/>
+    
+    <!-- Eyes -->
+    <circle cx="180" cy="105" r="8" fill="#1e1b4b"/>
+    <circle class="eye-glow" cx="180" cy="105" r="6" fill="#06b6d4"/>
+    <circle cx="220" cy="105" r="8" fill="#1e1b4b"/>
+    <circle class="eye-glow" cx="220" cy="105" r="6" fill="#06b6d4"/>
+    
+    <!-- Mouth -->
+    <rect x="185" y="122" width="30" height="3" rx="1.5" fill="#1e1b4b" opacity="0.5"/>
+    
+    <!-- Chest light -->
+    <circle cx="200" cy="165" r="6" fill="#06b6d4" opacity="0.6"/>
+    <circle cx="200" cy="165" r="3" fill="#fff" opacity="0.8"/>
+    
+    <!-- Arms -->
+    <rect x="138" y="140" width="18" height="50" rx="9" fill="#4f46e5" opacity="0.85"/>
+    <rect x="244" y="140" width="18" height="50" rx="9" fill="#4f46e5" opacity="0.85"/>
+    
+    <!-- Legs -->
+    <rect x="170" y="222" width="22" height="35" rx="8" fill="#4f46e5" opacity="0.85"/>
+    <rect x="208" y="222" width="22" height="35" rx="8" fill="#4f46e5" opacity="0.85"/>
+    
+    <!-- Feet -->
+    <rect x="165" y="252" width="32" height="10" rx="5" fill="#4338ca"/>
+    <rect x="203" y="252" width="32" height="10" rx="5" fill="#4338ca"/>
+  </g>
+
+  <!-- Small accent dots -->
+  <circle class="orb1" cx="130" cy="100" r="3" fill="#10b981" opacity="0.3"/>
+  <circle class="orb3" cx="270" cy="130" r="2.5" fill="#7c3aed" opacity="0.3"/>
+  <circle class="orb4" cx="150" cy="250" r="2" fill="#06b6d4" opacity="0.3"/>
+  <circle class="orb2" cx="260" cy="240" r="3" fill="#4f46e5" opacity="0.25"/>
+</svg>

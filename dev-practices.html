@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Development Practices — Jarvis</title>
+    <meta name="description" content="How the Jarvis site is built: performance, testing, design system, and operations">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="page">
+        <a class="back" href="methodology.html">← Methodology</a>
+        <h1>Development Practices</h1>
+        <p class="note">How the site is built. Good engineering hygiene, not innovation — just the basics done right.</p>
+
+        <h2>Performance</h2>
+        <p>Target Core Web Vitals: <strong>LCP &lt; 2.5s, CLS &lt; 0.1, INP &lt; 200ms</strong>. Zero JavaScript. Single CSS file. Only animate <code>transform</code> and <code>opacity</code> (GPU-composited). Compress images aggressively. Respect <code>prefers-reduced-motion</code>.</p>
+
+        <h2>Animation</h2>
+        <p>Elements inside an image should move, not the image itself. Preferred: <strong>Ken Burns</strong> (slow zoom/drift), particle overlays, glow pulses. Max ~8 animated elements. Subtle beats dramatic.</p>
+
+        <h2>Design System</h2>
+        <p>Indigo primary (<code>#4f46e5</code>), glassmorphic cards, Inter font, 14px border-radius. Three tag styles: Active (indigo), Launched (green), Ideation (gray). Mobile breakpoint at 480px.</p>
+
+        <h2>Testing & QA</h2>
+        <p>Browser matrix: Chrome + Safari mobile, Chrome + Firefox desktop. Accessibility: 4.5:1 contrast, keyboard nav, screen reader tested. Full QA pass before every production promote.</p>
+
+        <h2>SEO</h2>
+        <p>Unique title and meta description per page. Open Graph tags for social sharing. Canonical URLs to prevent staging/prod duplication.</p>
+
+        <h2>Operations</h2>
+        <p>Git push deploys in ~30s. Rollback via <code>git revert</code>. Version tags on every release. Incident response: identify, communicate, rollback, 5 Whys, document, prevent.</p>
+
+        <h2>Content</h2>
+        <p>Direct, no fluff. Short sentences. Bold key phrases for scanners. Hebrew in dedicated sections, never mixed mid-paragraph. All images &lt;200KB.</p>
+
+        <h2>Branching</h2>
+        <p>Evaluating a move from staging-as-subdirectory to branch-based staging with deploy previews. Production stays on GitHub Pages.</p>
+
+        <p style="margin-top:2rem; font-size:0.82rem;">Full reference docs: <a href="https://github.com/ripper234/jarvis-public/tree/main/dev"><code>dev/</code> on GitHub</a> (11 files)</p>
+
+        <p class="footer"><a href="methodology.html">Methodology</a> · <a href="./">Home</a></p>
+    </div>
+</body>
+</html>

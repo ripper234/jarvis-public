@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jarvis — An OpenClaw Agent</title>
+    <meta name="description" content="Spec-first AI agent built on OpenClaw by Ron Gross. Write the spec, not the code.">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* === SCROLLABLE LANDING PAGE === */
+        body { background: #fafafa; }
+        .page-centered { display: block; padding: 0; }
+        .page { max-width: 100%; padding: 0; }
+
+        /* Hero — full width, dramatic */
+        .hero {
+            text-align: center;
+            padding: 3rem 1.25rem 2.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, rgba(79,70,229,0.03) 0%, rgba(6,182,212,0.03) 100%);
+            z-index: 0;
+        }
+        .hero > * { position: relative; z-index: 1; }
+        .hero h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.6rem;
+        }
+        .hero-tagline {
+            font-size: 1.05rem;
+            color: #666;
+            max-width: 520px;
+            margin: 0 auto 1.5rem;
+            line-height: 1.6;
+        }
+        .hero-img {
+            width: 80%;
+            max-width: 400px;
+            border-radius: 16px;
+            box-shadow: 0 8px 40px rgba(79,70,229,0.12);
+            animation: heroFadeIn 1s ease-out;
+        }
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 2.5rem;
+            margin-top: 1.5rem;
+        }
+        .stat { text-align: center; }
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #4f46e5;
+        }
+        .stat-label {
+            font-size: 0.72rem;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        @keyframes heroFadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .hero-img { animation: none; }
+        }
+
+        /* Sticky nav */
+        .nav-sticky {
+            position: sticky;
+            top: 3px;
+            z-index: 5;
+            background: rgba(250,250,250,0.92);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 0.6rem 1.25rem;
+            display: flex;
+            justify-content: center;
+            gap: 0.4rem;
+            overflow-x: auto;
+            scrollbar-width: none;
+            border-bottom: 1px solid rgba(0,0,0,0.04);
+        }
+        .nav-sticky::-webkit-scrollbar { display: none; }
+        .nav-pill {
+            flex-shrink: 0;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #666;
+            padding: 0.4rem 0.9rem;
+            border-radius: 20px;
+            text-decoration: none;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .nav-pill:hover { background: rgba(79,70,229,0.08); color: #4f46e5; }
+
+        /* Section wrapper */
+        .section {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 3rem 1.25rem;
+            scroll-margin-top: 3rem;
+        }
+        .section-alt {
+            background: rgba(79,70,229,0.02);
+        }
+        .section-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .section-emoji { font-size: 1.8rem; display: block; margin-bottom: 0.5rem; }
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #111;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.3rem;
+        }
+        .section-subtitle {
+            font-size: 0.88rem;
+            color: #888;
+        }
+
+        /* Feature blocks — alternating layout */
+        .features {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        .feature {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(0,0,0,0.05);
+            border-radius: 16px;
+            padding: 1.5rem;
+        }
+        .feature:nth-child(even) { flex-direction: row-reverse; }
+        .feature-icon {
+            font-size: 2.5rem;
+            flex-shrink: 0;
+            width: 64px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(79,70,229,0.06);
+            border-radius: 14px;
+        }
+        .feature-text { flex: 1; }
+        .feature-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #111;
+            margin-bottom: 0.25rem;
+        }
+        .feature-desc {
+            font-size: 0.82rem;
+            color: #666;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* How it works — numbered steps */
+        .steps {
+            display: flex;
+            gap: 1rem;
+            counter-reset: step;
+        }
+        .step {
+            flex: 1;
+            text-align: center;
+            padding: 1.25rem 1rem;
+            background: rgba(255,255,255,0.8);
+            border: 1px solid rgba(0,0,0,0.05);
+            border-radius: 14px;
+            position: relative;
+        }
+        .step::before {
+            counter-increment: step;
+            content: counter(step);
+            display: block;
+            width: 32px;
+            height: 32px;
+            line-height: 32px;
+            margin: 0 auto 0.75rem;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            border-radius: 50%;
+            font-size: 0.82rem;
+            font-weight: 700;
+        }
+        .step-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #111;
+            margin-bottom: 0.2rem;
+        }
+        .step-desc {
+            font-size: 0.75rem;
+            color: #888;
+            line-height: 1.5;
+        }
+
+        /* Projects grid */
+        .project-showcase {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+        }
+        .project-card {
+            display: flex;
+            flex-direction: column;
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(0,0,0,0.05);
+            border-radius: 14px;
+            padding: 1.25rem;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .project-card:hover {
+            border-color: rgba(79,70,229,0.2);
+            box-shadow: 0 4px 20px rgba(79,70,229,0.08);
+            transform: translateY(-2px);
+        }
+        .project-card-icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
+        .project-card-name { font-size: 0.88rem; font-weight: 600; color: #111; }
+        .project-card-desc { font-size: 0.75rem; color: #888; line-height: 1.5; margin-top: 0.25rem; }
+        .project-card-tag {
+            display: inline-block;
+            font-size: 0.55rem;
+            padding: 0.1rem 0.45rem;
+            border-radius: 20px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: 0.5rem;
+        }
+        .tag-active { background: rgba(79,70,229,0.08); color: #4f46e5; }
+        .tag-launched { background: rgba(16,185,129,0.1); color: #10b981; }
+        .tag-ideation { background: rgba(156,163,175,0.1); color: #9ca3af; }
+        .project-card.featured {
+            grid-column: 1 / -1;
+            flex-direction: row;
+            gap: 1.25rem;
+            align-items: center;
+        }
+        .project-card.featured .project-card-icon { font-size: 2rem; flex-shrink: 0; }
+
+        /* SDD resources */
+        .resource-row {
+            display: flex;
+            gap: 0.75rem;
+        }
+        .resource {
+            flex: 1;
+            background: rgba(255,255,255,0.8);
+            border: 1px solid rgba(0,0,0,0.05);
+            border-radius: 14px;
+            padding: 1.25rem;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .resource:hover {
+            border-color: rgba(79,70,229,0.2);
+            transform: translateY(-2px);
+        }
+        .resource-name { font-size: 0.88rem; font-weight: 600; color: #111; }
+        .resource-tag {
+            display: inline-block;
+            font-size: 0.55rem;
+            padding: 0.1rem 0.4rem;
+            border-radius: 20px;
+            font-weight: 600;
+            text-transform: uppercase;
+            background: rgba(79,70,229,0.08);
+            color: #4f46e5;
+            margin-left: 0.4rem;
+            vertical-align: middle;
+        }
+        .resource-desc { font-size: 0.75rem; color: #888; line-height: 1.5; margin-top: 0.3rem; }
+
+        /* CTA / Follow */
+        .cta-section {
+            text-align: center;
+            padding: 3rem 1.25rem;
+            background: linear-gradient(135deg, rgba(79,70,229,0.04) 0%, rgba(6,182,212,0.04) 100%);
+        }
+        .cta-section .section-title { margin-bottom: 1rem; }
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .cta-primary {
+            background: #4f46e5;
+            color: #fff;
+        }
+        .cta-primary:hover { background: #4338ca; color: #fff; transform: translateY(-1px); }
+        .cta-secondary {
+            background: rgba(255,255,255,0.8);
+            border: 1px solid rgba(0,0,0,0.08);
+            color: #444;
+        }
+        .cta-secondary:hover { border-color: rgba(79,70,229,0.2); color: #4f46e5; transform: translateY(-1px); }
+
+        /* Footer */
+        .site-footer {
+            text-align: center;
+            padding: 1.5rem 1.25rem;
+            font-size: 0.75rem;
+            color: #bbb;
+        }
+        .site-footer a { color: #999; text-decoration: none; }
+        .site-footer a:hover { color: #4f46e5; }
+
+        /* Quote / highlight */
+        .quote-block {
+            text-align: center;
+            padding: 2rem 1.5rem;
+            max-width: 500px;
+            margin: 0 auto 1rem;
+        }
+        .quote-text {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #333;
+            font-style: italic;
+            line-height: 1.6;
+        }
+        .quote-attr {
+            font-size: 0.78rem;
+            color: #999;
+            margin-top: 0.5rem;
+        }
+
+        /* Mobile */
+        @media (max-width: 600px) {
+            .hero h1 { font-size: 1.6rem; }
+            .hero-tagline { font-size: 0.9rem; }
+            .hero-stats { gap: 1.5rem; }
+            .stat-value { font-size: 1.2rem; }
+            .feature { flex-direction: column !important; text-align: center; }
+            .feature-icon { margin: 0 auto; }
+            .steps { flex-direction: column; }
+            .project-showcase { grid-template-columns: 1fr; }
+            .project-card.featured { flex-direction: column; text-align: center; }
+            .resource-row { flex-direction: column; }
+            .section { padding: 2rem 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-centered">
+    <div class="page">
+
+        <!-- ========== HERO ========== -->
+        <div class="hero">
+            <h1>Jarvis, an <a href="https://github.com/openclaw/openclaw">OpenClaw</a> Agent</h1>
+            <p class="hero-tagline">A spec-first AI agent that builds websites, manages repos, monitors the web, and reports back each morning.</p>
+            <img class="hero-img" src="img/hero.webp" alt="AI agent illustration" loading="eager" width="400" height="267">
+            <div class="hero-stats">
+                <div class="stat">
+                    <div class="stat-value">24/7</div>
+                    <div class="stat-label">Always On</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">30+</div>
+                    <div class="stat-label">Daily Tasks</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">0</div>
+                    <div class="stat-label">Lines of Code</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== NAV ========== -->
+        <nav class="nav-sticky">
+            <a class="nav-pill" href="#how">How It Works</a>
+            <a class="nav-pill" href="#methodology">Methodology</a>
+            <a class="nav-pill" href="#projects">Projects</a>
+            <a class="nav-pill" href="#sdd">SDD</a>
+            <a class="nav-pill" href="#follow">Follow</a>
+        </nav>
+
+        <!-- ========== HOW IT WORKS ========== -->
+        <div class="section" id="how">
+            <div class="section-header">
+                <span class="section-emoji">⚡</span>
+                <div class="section-title">How It Works</div>
+                <div class="section-subtitle">Ron writes specs. Jarvis does everything else.</div>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-title">Write a Spec</div>
+                    <div class="step-desc">Describe what you want in plain language. SOUL.md, USER.md, or a quick Telegram message.</div>
+                </div>
+                <div class="step">
+                    <div class="step-title">Jarvis Executes</div>
+                    <div class="step-desc">Builds sites, submits PRs, researches tools, monitors repos. All autonomously.</div>
+                </div>
+                <div class="step">
+                    <div class="step-title">Review in 30 min</div>
+                    <div class="step-desc">Morning report with everything that happened. Approve, reject, or redirect.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== METHODOLOGY ========== -->
+        <div class="section-alt">
+        <div class="section" id="methodology">
+            <div class="section-header">
+                <span class="section-emoji">📋</span>
+                <div class="section-title">Methodology</div>
+                <div class="section-subtitle">The principles behind spec-first AI development</div>
+            </div>
+
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">🧠</div>
+                    <div class="feature-text">
+                        <div class="feature-title">Agent as Co-Founder</div>
+                        <p class="feature-desc">Not a tool you prompt. A partner that reads specifications, understands intent, and proposes tiny improvements. 1-2 lines per PR. The agent thinks, the human approves.</p>
+                    </div>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🎯</div>
+                    <div class="feature-text">
+                        <div class="feature-title">Attention as Currency</div>
+                        <p class="feature-desc">10 free + 20 earnable credits daily. Capture mode costs zero -- fire off ideas via voice, the agent files everything. Only the morning summary costs attention.</p>
+                    </div>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🔒</div>
+                    <div class="feature-text">
+                        <div class="feature-title">Safety by Architecture</div>
+                        <p class="feature-desc">No direct write access to anything. Every mutation goes through a code-level guard. Rules enforced by scripts, not prompts the AI might forget. Trust is earned through structure.</p>
+                    </div>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">📄</div>
+                    <div class="feature-text">
+                        <div class="feature-title">Spec is the Product</div>
+                        <p class="feature-desc">Top-down: spec first, then tests, then architecture, then code. Most of the code doesn't exist yet -- and that's intentional. The spec IS the product.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quote-block">
+                <div class="quote-text">"Think deeply. Output lightly."</div>
+            </div>
+
+            <p style="text-align:center; font-size:0.82rem;"><a href="methodology.html">Read the full methodology →</a></p>
+        </div>
+        </div>
+
+        <!-- ========== PROJECTS ========== -->
+        <div class="section" id="projects">
+            <div class="section-header">
+                <span class="section-emoji">🚀</span>
+                <div class="section-title">What I'm Working On</div>
+                <div class="section-subtitle">Active projects, shipped products, and ideas brewing</div>
+            </div>
+
+            <div class="project-showcase">
+                <a class="project-card featured" href="methodology.html">
+                    <div class="project-card-icon">🤖</div>
+                    <div>
+                        <div class="project-card-name">Jarvis</div>
+                        <div class="project-card-desc">Personal AI agent running 24/7 on OpenClaw. Manages websites, GitHub repos, research, and daily operations via Telegram. Spec-first with attention budget.</div>
+                        <span class="project-card-tag tag-active">Active</span>
+                    </div>
+                </a>
+                <a class="project-card" href="balance.html">
+                    <div class="project-card-icon">⚖️</div>
+                    <div class="project-card-name">Balance</div>
+                    <div class="project-card-desc">AI copilot for people with Bipolar. Mood tracking, pattern detection, personalized insights.</div>
+                    <span class="project-card-tag tag-active">Active</span>
+                </a>
+                <a class="project-card" href="https://github.com/ripper234/tiny-pr-bot">
+                    <div class="project-card-icon">🔧</div>
+                    <div class="project-card-name">tiny-pr-bot</div>
+                    <div class="project-card-desc">Submits 1-2 line PRs from specs. One idea, one file, one thought.</div>
+                    <span class="project-card-tag tag-active">Active</span>
+                </a>
+                <a class="project-card" href="https://fredo.ai/">
+                    <div class="project-card-icon">💬</div>
+                    <div class="project-card-name">Fredo.ai</div>
+                    <div class="project-card-desc">WhatsApp productivity bot. ~3K WAU. Jarvis's predecessor.</div>
+                    <span class="project-card-tag tag-launched">Launched</span>
+                </a>
+                <a class="project-card" href="https://whateverworks.me/">
+                    <div class="project-card-icon">📖</div>
+                    <div class="project-card-name">Whatever Works</div>
+                    <div class="project-card-desc">Book + wiki on therapy, productivity, and personal growth.</div>
+                    <span class="project-card-tag tag-launched">Launched</span>
+                </a>
+                <a class="project-card" href="https://github.com/ripper234/know-thyself">
+                    <div class="project-card-icon">🪞</div>
+                    <div class="project-card-name">know-thyself</div>
+                    <div class="project-card-desc">Daily writing game. 30 guided questions in Hebrew.</div>
+                    <span class="project-card-tag tag-ideation">Ideation</span>
+                </a>
+                <a class="project-card" href="https://docs.google.com/document/d/1CWh1JruHN5nPEzKt610S4mdoQqG6q_kltdIJfc4SJLc/edit">
+                    <div class="project-card-icon">🧖</div>
+                    <div class="project-card-name">Next-Level Spa</div>
+                    <div class="project-card-desc">World-class spa in Tel Aviv. Japanese onsen meets biohacking.</div>
+                    <span class="project-card-tag tag-ideation">Ideation</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- ========== SDD ========== -->
+        <div class="section-alt">
+        <div class="section" id="sdd">
+            <div class="section-header">
+                <span class="section-emoji">📚</span>
+                <div class="section-title">SDD Resources</div>
+                <div class="section-subtitle">Spec-driven development: write specs first, let AI build</div>
+            </div>
+            <div class="resource-row">
+                <a class="resource" href="https://github.com/github/spec-kit">
+                    <div class="resource-name">GitHub Spec Kit <span class="resource-tag">Official</span></div>
+                    <div class="resource-desc">GitHub's SDD toolkit. Constitution → specify → plan → tasks → implement.</div>
+                </a>
+                <a class="resource" href="https://openspec.dev/">
+                    <div class="resource-name">OpenSpec <span class="resource-tag">YC</span></div>
+                    <div class="resource-desc">Lightweight spec framework. Three-phase state machine with spec deltas.</div>
+                </a>
+                <a class="resource" href="https://github.com/bmad-code-org/BMAD-METHOD">
+                    <div class="resource-name">BMad Method <span class="resource-tag">OSS</span></div>
+                    <div class="resource-desc">Full agile AI framework. 12+ agents, 34+ workflows.</div>
+                </a>
+            </div>
+        </div>
+        </div>
+
+        <!-- ========== CTA ========== -->
+        <div class="cta-section" id="follow">
+            <span class="section-emoji">📬</span>
+            <div class="section-title">Get Involved</div>
+            <p style="color:#666; font-size:0.88rem; margin: 0.5rem auto 1.5rem; max-width:400px;">Follow the journey, read the methodology, or build your own agent.</p>
+            <div class="cta-buttons">
+                <a class="cta-btn cta-primary" href="https://chat.whatsapp.com/FVmFqeuAsGH5y0D5qXXkzD">💬 עקבו בוואטסאפ</a>
+                <a class="cta-btn cta-secondary" href="setup.html">🛠 Setup Guide</a>
+                <a class="cta-btn cta-secondary" href="https://github.com/openclaw/openclaw">⭐ OpenClaw</a>
+            </div>
+        </div>
+
+        <div class="site-footer">
+            <a href="tools.html">Tools</a> · Built by <a href="http://ripper234.com/">Ron Gross</a> · v0.4-scrollable
+        </div>
+
+    </div>
+    </div>
+</body>
+</html>
