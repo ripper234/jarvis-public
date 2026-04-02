@@ -15,20 +15,19 @@
             margin: 0 auto 0.75rem;
             border-radius: 14px;
             box-shadow: 0 4px 24px rgba(79,70,229,0.08);
-            animation: heroFloat 6s ease-in-out infinite, heroFadeIn 1s ease-out;
+            animation: heroFadeIn 1s ease-out;
         }
         h1 { margin-bottom: 0.3rem; }
         .grid { margin-top: 0; }
         @media (max-width: 480px) {
             .hero-img { width: 80%; max-width: 400px; }
         }
-        @keyframes heroFloat {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
-        }
         @keyframes heroFadeIn {
             from { opacity: 0; transform: translateY(16px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .hero-img { animation: none; }
         }
     </style>
 </head>
