@@ -63,10 +63,40 @@
             line-height: 1.4;
             max-height: 2.8em;
             overflow: hidden;
-            transition: max-height 0.3s ease;
         }
-        .project-tile:hover .tile-desc {
-            max-height: 12em;
+        /* Tooltip popup on hover */
+        .project-tile {
+            position: relative;
+        }
+        .tile-tooltip {
+            display: none;
+            position: absolute;
+            bottom: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%);
+            width: 220px;
+            background: #fff;
+            border: 1px solid rgba(0,0,0,0.08);
+            border-radius: 10px;
+            padding: 0.75rem;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+            font-size: 0.72rem;
+            color: #555;
+            line-height: 1.5;
+            z-index: 10;
+            pointer-events: none;
+        }
+        .tile-tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 6px solid transparent;
+            border-top-color: #fff;
+        }
+        .project-tile:hover .tile-tooltip {
+            display: block;
         }
         @media (max-width: 480px) {
             .project-grid { grid-template-columns: repeat(2, 1fr); }
@@ -88,49 +118,57 @@
                 <div class="tile-icon">🤖</div>
                 <span class="tile-tag tile-tag-active">Active</span>
                 <div class="tile-name">Jarvis</div>
-                <div class="tile-desc">Personal AI agent running 24/7 on OpenClaw. Manages websites, GitHub repos, research, and daily operations via Telegram. Spec-first methodology with attention budget system. Ron writes specs, Jarvis does the work.</div>
+                <div class="tile-desc">AI agent on OpenClaw. Spec-first, 24/7.</div>
+                <div class="tile-tooltip">Personal AI agent running 24/7 on OpenClaw. Manages websites, GitHub repos, research, and daily operations via Telegram. Spec-first methodology with attention budget system. Ron writes specs, Jarvis does the work.</div>
             </a>
             <a class="project-tile" href="balance.html">
                 <div class="tile-icon">⚖️</div>
                 <span class="tile-tag tile-tag-active">Active</span>
                 <div class="tile-name">Balance</div>
-                <div class="tile-desc">AI copilot for people living with Bipolar. Tracks mood, sleep, energy, and medication patterns. Detects early warning signs and provides personalized insights. Built with Yaniv. Looking for beta testers.</div>
+                <div class="tile-desc">Bipolar copilot. Mood, sleep, energy.</div>
+                <div class="tile-tooltip">AI copilot for people living with Bipolar. Tracks mood, sleep, energy, and medication patterns. Detects early warning signs and provides personalized insights. Built with Yaniv. Looking for beta testers.</div>
             </a>
             <a class="project-tile" href="https://github.com/ripper234/tiny-pr-bot">
                 <div class="tile-icon">🔧</div>
                 <span class="tile-tag tile-tag-active">Active</span>
                 <div class="tile-name">tiny-pr-bot</div>
-                <div class="tile-desc">AI agent that reads repo specs and submits tiny 1-2 line pull requests. One idea per PR, one file per change. The spec IS the product. No code repo, just SOUL.md and config.</div>
+                <div class="tile-desc">1-2 line PRs from specs.</div>
+                <div class="tile-tooltip">AI agent that reads repo specs and submits tiny 1-2 line pull requests. One idea per PR, one file per change. The spec IS the product. No code repo, just SOUL.md and config.</div>
             </a>
             <a class="project-tile" href="https://docs.google.com/spreadsheets/d/1x3njEmv5_Zo92w_nH-1s75m4xzLJ_DGxBDxs2-REtPY/edit?gid=0#gid=0">
                 <div class="tile-icon">📝</div>
                 <span class="tile-tag tile-tag-active">Active</span>
                 <div class="tile-name">ron.build</div>
-                <div class="tile-desc">Public log of what I'm building, thinking, and shipping. Weekly updates in Hebrew. Shared via WhatsApp group with founders, investors, and friends.</div>
+                <div class="tile-desc">Public build log in Hebrew.</div>
+                <div class="tile-tooltip">Public log of what I'm building, thinking, and shipping. Weekly updates in Hebrew. Shared via WhatsApp group with founders, investors, and friends.</div>
             </a>
             <a class="project-tile" href="https://fredo.ai/">
                 <div class="tile-icon">💬</div>
                 <span class="tile-tag tile-tag-launched">Launched</span>
                 <div class="tile-name">Fredo.ai</div>
-                <div class="tile-desc">WhatsApp productivity bot with ~3,000 weekly active users. Free. Now in maintenance mode. Jarvis is its spiritual successor, proving that personal AI agents can go far beyond chatbots.</div>
+                <div class="tile-desc">WhatsApp bot. ~3K WAU.</div>
+                <div class="tile-tooltip">WhatsApp productivity bot with ~3,000 weekly active users. Free. Now in maintenance mode. Jarvis is its spiritual successor, proving that personal AI agents can go far beyond chatbots.</div>
             </a>
             <a class="project-tile" href="https://whateverworks.me/">
                 <div class="tile-icon">📖</div>
                 <span class="tile-tag tile-tag-launched">Launched</span>
                 <div class="tile-name">Whatever Works</div>
-                <div class="tile-desc">Book + wiki exploring evidence-based approaches to therapy, productivity, relationships, and personal growth. A curated toolkit for self-optimization. Available on Amazon.</div>
+                <div class="tile-desc">Self-optimization book + wiki.</div>
+                <div class="tile-tooltip">Book + wiki exploring evidence-based approaches to therapy, productivity, relationships, and personal growth. A curated toolkit for self-optimization. Available on Amazon.</div>
             </a>
             <a class="project-tile" href="https://github.com/ripper234/know-thyself">
                 <div class="tile-icon">🪞</div>
                 <span class="tile-tag tile-tag-ideation">Ideation</span>
                 <div class="tile-name">know-thyself</div>
-                <div class="tile-desc">Daily writing game for deeper self-knowledge. 30 guided questions in Hebrew designed to surface patterns, beliefs, and blind spots through honest reflection.</div>
+                <div class="tile-desc">Daily self-knowledge game.</div>
+                <div class="tile-tooltip">Daily writing game for deeper self-knowledge. 30 guided questions in Hebrew designed to surface patterns, beliefs, and blind spots through honest reflection.</div>
             </a>
             <a class="project-tile" href="https://docs.google.com/document/d/1CWh1JruHN5nPEzKt610S4mdoQqG6q_kltdIJfc4SJLc/edit">
                 <div class="tile-icon">🧖</div>
                 <span class="tile-tag tile-tag-ideation">Ideation</span>
                 <div class="tile-name">Next-Level Spa</div>
-                <div class="tile-desc">A world-class spa experience in Tel Aviv. Inspired by Japanese onsen and French hydrotherapy. Wellness tech, meditation rooms, biohacking, and top-tier massage therapy.</div>
+                <div class="tile-desc">World-class spa in Tel Aviv.</div>
+                <div class="tile-tooltip">A world-class spa experience in Tel Aviv. Inspired by Japanese onsen and French hydrotherapy. Wellness tech, meditation rooms, biohacking, and top-tier massage therapy.</div>
             </a>
         </div>
 
