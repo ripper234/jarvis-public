@@ -1,4 +1,4 @@
-/* Jarvis site v0.2 — unified light theme */
+/* Jarvis site v0.3.0 — unified light theme */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap');
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -154,6 +154,7 @@ a.card:hover {
     transform: translateY(-1px);
 }
 a.card:active { transform: translateY(0); }
+.card-icon { font-size: 1.6rem; margin-bottom: 0.4rem; line-height: 1; }
 .card-title { font-size: 0.9rem; font-weight: 600; color: #111; margin-bottom: 0.2rem; }
 .card-desc { font-size: 0.75rem; color: #888; line-height: 1.4; }
 
