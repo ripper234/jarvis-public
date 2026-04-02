@@ -39,6 +39,26 @@
 
         <hr class="section-divider">
 
+        <h2>Development Practices</h2>
+        <p>The site itself is built with the same philosophy: spec-driven, mobile-first, performance-conscious. A <code>dev/</code> folder in the repo holds living documentation that evolves with the project.</p>
+
+        <h3>Performance</h3>
+        <p>Target Core Web Vitals: <strong>LCP &lt; 2.5s, CLS &lt; 0.1, INP &lt; 200ms</strong>. Zero JavaScript. Single CSS file. Only animate <code>transform</code> and <code>opacity</code> (GPU-composited). Compress images aggressively. Always respect <code>prefers-reduced-motion</code>.</p>
+
+        <h3>Animation</h3>
+        <p>Elements inside an image should move, not the image itself. Floating the whole image looks cheap. Preferred techniques: <strong>particle overlays</strong>, <strong>glow pulses</strong>, <strong>light sweeps</strong>. Max ~8 animated elements. Subtle beats dramatic every time.</p>
+
+        <h3>Pre-Ship Checklist</h3>
+        <p>Every change runs through a checklist: performance (no layout-triggering animations, compressed images), visual (tested mobile + desktop, above-fold check), links (no 404s, redirects for renames), and staging/prod (staging first, version bump on promote).</p>
+
+        <h3>Design System</h3>
+        <p>Indigo primary (<code>#4f46e5</code>), glassmorphic cards, Inter font, 14px border-radius. Three tag styles: <strong>Active</strong> (indigo), <strong>Launched</strong> (green), <strong>Ideation</strong> (gray). Mobile breakpoint at 480px. Everything documented in <code>dev/style-guide.md</code>.</p>
+
+        <h3>Branching</h3>
+        <p>Currently staging as a subdirectory on <code>main</code>. Evaluating a move to branch-based staging with Netlify deploy previews for per-PR review URLs. Production stays on GitHub Pages.</p>
+
+        <hr class="section-divider">
+
         <h2>SDD Resources</h2>
         <p>Spec-driven development (SDD) flips the traditional workflow: instead of writing code and documenting it later, you write specifications first and let AI agents generate the implementation. The spec becomes the source of truth, not the code.</p>
 
