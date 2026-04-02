@@ -1,0 +1,58 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main, staging]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: main
+
+      - name: Checkout staging
+        uses: actions/checkout@v4
+        with:
+          ref: staging
+          path: staging-branch
+        continue-on-error: true
+
+      - name: Build site
+        run: |
+          mkdir -p _site
+          # Copy prod from main (exclude staging/ subfolder and dev/)
+          rsync -a --exclude='staging/' --exclude='dev/' --exclude='.github/' main/ _site/
+          # Copy staging branch content to /staging/ if it exists
+          if [ -d "staging-branch" ]; then
+            mkdir -p _site/staging
+            rsync -a --exclude='dev/' --exclude='.github/' staging-branch/ _site/staging/
+          fi
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
