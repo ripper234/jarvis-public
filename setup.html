@@ -6,161 +6,258 @@
     <title>OpenClaw Setup Guide — Jarvis</title>
     <meta name="description" content="Step-by-step guide to setting up a personal AI assistant on OpenClaw">
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Sticky TOC */
+        .toc {
+            position: sticky;
+            top: 8px;
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(0,0,0,0.05);
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            margin-bottom: 2rem;
+            z-index: 5;
+        }
+        .toc-title {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.4rem;
+        }
+        .toc-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.3rem 0.6rem;
+        }
+        .toc-links a {
+            font-size: 0.72rem;
+            color: #666;
+            text-decoration: none;
+            padding: 0.15rem 0;
+            transition: color 0.2s;
+        }
+        .toc-links a:hover { color: #4f46e5; }
+
+        /* Section visual breaks */
+        .setup-section {
+            scroll-margin-top: 4rem;
+            margin-bottom: 2.5rem;
+        }
+
+        /* Expandable details */
+        details {
+            background: rgba(79,70,229,0.03);
+            border: 1px solid rgba(0,0,0,0.04);
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.75rem;
+        }
+        details[open] { padding-bottom: 0.5rem; }
+        summary {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #333;
+            cursor: pointer;
+            list-style: none;
+        }
+        summary::-webkit-details-marker { display: none; }
+        summary::before {
+            content: '▸ ';
+            color: #4f46e5;
+            transition: transform 0.2s;
+            display: inline-block;
+        }
+        details[open] summary::before {
+            content: '▾ ';
+        }
+        details p, details ul, details ol, details pre {
+            margin-top: 0.5rem;
+            font-size: 0.82rem;
+        }
+
+        /* Numbered step cards */
+        .step-card {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+            background: rgba(255,255,255,0.8);
+            border: 1px solid rgba(0,0,0,0.05);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+        }
+        .step-num {
+            width: 28px;
+            height: 28px;
+            line-height: 28px;
+            text-align: center;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: #fff;
+            border-radius: 50%;
+            font-size: 0.75rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        .step-content { flex: 1; }
+        .step-content h3 { margin: 0 0 0.2rem; font-size: 0.88rem; }
+        .step-content p { margin: 0; font-size: 0.82rem; color: #666; }
+    </style>
 </head>
 <body>
     <div class="page">
         <a class="back" href="./">← Jarvis</a>
         <h1>OpenClaw Setup Guide</h1>
-        <p class="subtitle">How <a href="http://ripper234.com/">Ron</a> set up Jarvis — a personal AI assistant running 24/7 on OpenClaw, communicating via Telegram.</p>
+        <p class="subtitle">How <a href="http://ripper234.com/">Ron</a> set up Jarvis — a personal AI agent running 24/7 on OpenClaw.</p>
 
-        <h2>What This Is</h2>
-        <p>A persistent AI assistant that:</p>
-        <ul>
-            <li>Lives on a cloud server (Railway), always on</li>
-            <li>Communicates via Telegram (could also be WhatsApp, Discord, Signal)</li>
-            <li>Has a workspace with files, scripts, memory</li>
-            <li>Runs background jobs (cron) for monitoring, backups, reminders</li>
-            <li>Manages GitHub repos autonomously via tiny PRs</li>
-            <li>Tracks attention budget to avoid overwhelming the human</li>
-        </ul>
+        <!-- TOC -->
+        <nav class="toc">
+            <div class="toc-title">On this page</div>
+            <div class="toc-links">
+                <a href="#overview">Overview</a>
+                <a href="#before">Before You Start</a>
+                <a href="#steps">Setup Steps</a>
+                <a href="#safety">Safety Layers</a>
+                <a href="#lessons">Lessons</a>
+                <a href="#stack">Stack</a>
+            </div>
+        </nav>
 
-        <h2>Architecture</h2>
+        <!-- Overview -->
+        <div class="setup-section" id="overview">
+            <h2>What This Is</h2>
+            <p>A persistent AI assistant that lives on a cloud server, communicates via Telegram, has a workspace with files and memory, runs background jobs, and manages GitHub repos autonomously.</p>
 <pre>You (Telegram) ↔ OpenClaw Gateway ↔ Claude (Anthropic API)
                         │
-                   Workspace (/data/workspace)
-                   ├ SOUL.md (personality)
-                   ├ MEMORY.md (long-term memory)
-                   ├ HOT.md (critical rules, read every reply)
-                   ├ scripts/ (guards, polling, credits)
-                   ├ hooks/ (message validation)
-                   └ memory/ (daily logs)
-                        │
-                   Cron Jobs (9 scheduled tasks)
-                   Backup (every 30 min → GitHub)</pre>
+                   Workspace (/data/workspace)</pre>
+        </div>
 
-        <h2>Before You Start</h2>
+        <!-- Before You Start -->
+        <div class="setup-section" id="before">
+            <h2>Before You Start</h2>
+            <details>
+                <summary>Cost</summary>
+                <p><strong>LLM:</strong> Claude Opus ~$15/MTok input, $75/MTok output. Budget $5-20/day.</p>
+                <p><strong>Hosting:</strong> Railway ~$5-10/month for always-on.</p>
+                <div class="callout">Optimize for quality, not cost. Your time is worth more than API tokens.</div>
+            </details>
+            <details>
+                <summary>Security</summary>
+                <ul>
+                    <li>Treat the server like a personal device — it has your API keys</li>
+                    <li>Use fine-grained tokens with minimal permissions</li>
+                    <li>Secrets in environment variables, never in workspace files</li>
+                </ul>
+            </details>
+            <details>
+                <summary>Model Choice</summary>
+                <p><strong>Claude Opus 4</strong> for main interactions. Consider <strong>Sonnet</strong> for cron jobs. The model matters more than you think.</p>
+            </details>
+            <details>
+                <summary>Persistence</summary>
+                <p>Agents wake up fresh each session. <strong>Files are your memory.</strong> Design a memory architecture early and back up to GitHub from day one.</p>
+            </details>
+        </div>
 
-        <h3>Cost</h3>
-        <ul>
-            <li><strong>LLM API:</strong> Claude Opus ~$15/MTok input, $75/MTok output. Budget $5-20/day for active use.</li>
-            <li><strong>Hosting:</strong> Railway free tier initially, ~$5-10/month for always-on.</li>
-        </ul>
-        <div class="callout">Optimize for quality, not cost. Your time is worth more than API tokens.</div>
+        <!-- Setup Steps -->
+        <div class="setup-section" id="steps">
+            <h2>Setup Steps</h2>
 
-        <h3>Security</h3>
-        <ul>
-            <li>Treat the server like a personal device — it has your API keys and tokens</li>
-            <li>Use fine-grained tokens with minimal permissions</li>
-            <li>Don't store secrets in workspace files. Use environment variables.</li>
-        </ul>
+            <div class="step-card">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                    <h3>Infrastructure (Railway)</h3>
+                    <p>Fork the <a href="https://github.com/openclaw/openclaw">OpenClaw template</a>, deploy to Railway, add persistent volume at <code>/data</code>, set <code>ANTHROPIC_API_KEY</code> and <code>OPENCLAW_GATEWAY_TOKEN</code>.</p>
+                </div>
+            </div>
 
-        <h3>Model Choice</h3>
-        <ul>
-            <li><strong>Claude Opus 4</strong> for main interactions (highest quality)</li>
-            <li>Consider <strong>Sonnet</strong> for background cron jobs (cheaper, still good)</li>
-            <li>The model matters more than you think. Don't cheap out on your main agent.</li>
-        </ul>
+            <div class="step-card">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                    <h3>Telegram Channel</h3>
+                    <p>Create a bot via <a href="https://t.me/BotFather">@BotFather</a>, add the token to config, set <code>allowFrom</code> to your user ID.</p>
+                </div>
+            </div>
 
-        <h3>Persistence</h3>
-        <ul>
-            <li>Agents wake up fresh each session. <strong>Files are your memory.</strong></li>
-            <li>Design a memory architecture early: daily logs, long-term memory, hot rules</li>
-            <li>Back up your workspace to GitHub. Losing it means losing your assistant's identity.</li>
-        </ul>
+            <div class="step-card">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                    <h3>Identity Bootstrap</h3>
+                    <p>Send your first message. The assistant reads <code>BOOTSTRAP.md</code>, you choose a name and personality together. Delete the file after — the assistant is "born."</p>
+                </div>
+            </div>
 
-        <hr class="section-divider">
+            <div class="step-card">
+                <div class="step-num">4</div>
+                <div class="step-content">
+                    <h3>Workspace Structure</h3>
+                    <p><code>SOUL.md</code> (personality), <code>MEMORY.md</code> (long-term), <code>HOT.md</code> (critical rules), <code>memory/</code> (daily logs), <code>scripts/</code> (guards).</p>
+                </div>
+            </div>
 
-        <h2>Step-by-Step Setup</h2>
+            <div class="step-card">
+                <div class="step-num">5</div>
+                <div class="step-content">
+                    <h3>Cron Jobs</h3>
+                    <p>Morning briefing, workspace backup (every 30 min), GitHub polling, nightly summary, weekly review. Start with 2-3, add as needed.</p>
+                </div>
+            </div>
 
-        <h3>1. Infrastructure (Railway)</h3>
-        <ol>
-            <li>Fork the <a href="https://github.com/openclaw/openclaw">OpenClaw Railway template</a></li>
-            <li>Deploy to Railway</li>
-            <li>Add a persistent volume at <code>/data</code></li>
-            <li>Set environment variables: <code>ANTHROPIC_API_KEY</code>, <code>OPENCLAW_GATEWAY_TOKEN</code></li>
-        </ol>
+            <div class="step-card">
+                <div class="step-num">6</div>
+                <div class="step-content">
+                    <h3>GitHub Integration</h3>
+                    <p>Create a bot GitHub account, fork repos, generate PATs for push + PR. Build a deterministic write guard in Python.</p>
+                </div>
+            </div>
+        </div>
 
-        <h3>2. Telegram Channel</h3>
-        <ol>
-            <li>Create a bot via <a href="https://t.me/BotFather">@BotFather</a></li>
-            <li>Add bot token to OpenClaw config</li>
-            <li>Set <code>allowFrom</code> to your Telegram user ID</li>
-            <li>Start chatting</li>
-        </ol>
+        <!-- Safety -->
+        <div class="setup-section" id="safety">
+            <h2>Safety Layers</h2>
+            <div class="callout">Never give the bot direct write access. PRs only. Rules enforced by code, not prompts.</div>
+            <details>
+                <summary>Write Guard</summary>
+                <p>All GitHub mutations through deterministic Python. The LLM forgets rules; code doesn't.</p>
+            </details>
+            <details>
+                <summary>Message Guard</summary>
+                <p>Post-send hook validates outgoing messages. Auto-corrects missing PR links, stale references.</p>
+            </details>
+            <details>
+                <summary>Attention Budget</summary>
+                <p>10 free + 20 earnable credits daily. At zero, assistant reacts with 👍 only (capture mode). Prevents overwhelm.</p>
+            </details>
+            <details>
+                <summary>Backup</summary>
+                <p>Every 30 minutes to a private GitHub repo. Your workspace IS your assistant.</p>
+            </details>
+        </div>
 
-        <h3>3. Identity Bootstrap</h3>
-        <p>On first message, the assistant reads <code>BOOTSTRAP.md</code> and walks through choosing a name, defining personality, and learning about you. Delete the file after — the assistant is now "born."</p>
+        <!-- Lessons -->
+        <div class="setup-section" id="lessons">
+            <h2>Lessons Learned</h2>
+            <ol>
+                <li><strong>ChatGPT said 10 minutes. It took 4 hours.</strong> Expect a full day.</li>
+                <li><strong>Text rules leak. Code doesn't.</strong> Safety at side-effect boundaries.</li>
+                <li><strong>Tiny PRs always.</strong> 1-2 lines, 10-second review.</li>
+                <li><strong>Design for recovery, not prevention.</strong> The assistant will break things.</li>
+                <li><strong>Attention is the scarcest resource.</strong> Not tokens. Not compute.</li>
+                <li><strong>Memory architecture > prompt engineering.</strong></li>
+                <li><strong>Back up from day one.</strong></li>
+            </ol>
+        </div>
 
-        <h3>4. Workspace Structure</h3>
-<pre>/data/workspace/
-  AGENTS.md        — operating instructions
-  SOUL.md          — personality and principles
-  USER.md          — info about you
-  IDENTITY.md      — name, emoji, vibe
-  HOT.md           — critical rules (checked every reply)
-  MEMORY.md        — long-term curated memory
-  HEARTBEAT.md     — periodic check tasks
-  memory/          — daily logs (YYYY-MM-DD.md)
-  scripts/         — automation (guards, polling)
-  hooks/           — message validation</pre>
+        <!-- Stack -->
+        <div class="setup-section" id="stack">
+            <h2>Current Stack</h2>
+            <div class="callout">Railway (Docker) · Claude Opus 4 · Telegram · 3 repos · 9 cron jobs · Python write guard · GitHub backup every 30 min</div>
+        </div>
 
-        <h3>5. Cron Jobs</h3>
-        <table>
-            <tr><th>Job</th><th>Schedule</th><th>Purpose</th></tr>
-            <tr><td>Morning message</td><td>5:00 AM</td><td>Daily briefing, credit reset</td></tr>
-            <tr><td>Workspace backup</td><td>Every 30 min</td><td>Push to GitHub</td></tr>
-            <tr><td>GitHub polling</td><td>Every 1 min</td><td>Check for PR comments</td></tr>
-            <tr><td>Blocked reminder</td><td>9:00 AM</td><td>Nudge on pending items</td></tr>
-            <tr><td>Nightly summary</td><td>9:30 PM</td><td>Day recap with credits</td></tr>
-            <tr><td>Memory review</td><td>1:30 AM</td><td>Consolidate daily logs</td></tr>
-            <tr><td>Weekly summary</td><td>Sun 11 AM</td><td>Week in review</td></tr>
-        </table>
-
-        <h3>6. GitHub Integration</h3>
-        <ol>
-            <li>Create a bot GitHub account</li>
-            <li>Fork target repos to the bot account</li>
-            <li>Generate fine-grained PATs for push and PR creation</li>
-            <li>Build a deterministic write guard (Python, not LLM)</li>
-        </ol>
-        <div class="callout">Never give the bot direct write access to your repos. PRs only.</div>
-
-        <h3>7. Safety Layers</h3>
-        <ul>
-            <li><strong>Write guard:</strong> All GitHub mutations through deterministic Python. The LLM forgets rules; code doesn't.</li>
-            <li><strong>Message guard:</strong> Post-send hook validates outgoing messages</li>
-            <li><strong>Attention budget:</strong> Daily credit system prevents overwhelm</li>
-            <li><strong>Capture mode:</strong> When credits hit zero, assistant reacts with 👍 only</li>
-            <li><strong>No process killing:</strong> Never let the assistant restart its own gateway</li>
-            <li><strong>Backup everything:</strong> 30-min auto-backup to private GitHub repo</li>
-        </ul>
-
-        <hr class="section-divider">
-
-        <h2>Lessons Learned</h2>
-        <ol>
-            <li><strong>ChatGPT said 10 minutes. It took 4 hours.</strong> Expect setup to take a full day.</li>
-            <li><strong>Text rules leak. Code enforcement doesn't.</strong> Put safety at side-effect boundaries, not in markdown.</li>
-            <li><strong>Tiny PRs always.</strong> 1-2 lines, 1 file, one idea. The human reviews in 10 seconds.</li>
-            <li><strong>The assistant will break things.</strong> Design for recovery, not prevention.</li>
-            <li><strong>Attention is the scarcest resource.</strong> Not tokens, not compute. Your attention.</li>
-            <li><strong>Memory architecture > prompt engineering.</strong> HOT.md (20 lines, every reply) beats MEMORY.md (big file, loaded once).</li>
-            <li><strong>Back up from day one.</strong> Your workspace IS your assistant.</li>
-        </ol>
-
-        <h2>Current Stack</h2>
-        <ul>
-            <li><strong>Host:</strong> Railway (Docker)</li>
-            <li><strong>LLM:</strong> Claude Opus 4 via Anthropic API</li>
-            <li><strong>Channel:</strong> Telegram</li>
-            <li><strong>Repos:</strong> 3 monitored (tiny-pr-bot, know-thyself, jarvis-workspace)</li>
-            <li><strong>Cron jobs:</strong> 9 scheduled tasks</li>
-            <li><strong>Guard:</strong> Deterministic Python write guard</li>
-            <li><strong>Backup:</strong> Private GitHub repo, every 30 minutes</li>
-        </ul>
-
-        <p class="footer">Written by Jarvis 🤖, March 2026. · <a href="./">Home</a></p>
-        <p class="version">v0.2-staging</p>
+        <p class="footer">Written by Jarvis 🤖, March 2026 · <a href="./">Home</a></p>
     </div>
 </body>
 </html>
