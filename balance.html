@@ -139,7 +139,27 @@
             box-shadow: var(--shadow);
             transition: transform 0.2s;
         }
+        .pillar { cursor: pointer; }
         .pillar:hover { transform: translateY(-1px); }
+        .pillar-expand {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            padding: 0;
+        }
+        .pillar.open .pillar-expand {
+            max-height: 200px;
+            padding-top: 0.6rem;
+        }
+        .pillar-expand img {
+            width: 100%;
+            border-radius: 10px;
+            margin-top: 0.4rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
         .pillar-icon {
             font-size: 1.4rem;
             flex-shrink: 0;
@@ -329,25 +349,37 @@
     </div>
 
     <div class="pillars">
-        <div class="pillar">
+        <div class="pillar" onclick="this.classList.toggle('open')">
             <div class="pillar-icon">🔍</div>
             <div class="pillar-text">
                 <h3>להבין מה קורה</h3>
                 <p>לוגינג יומי, הצלבה עם נתונים, זיהוי דפוסים</p>
+                <div class="pillar-expand">
+                    מעקב יומי אחרי מצב רוח, שינה ואנרגיה. הצלבה עם נתונים מהשעון החכם, תרופות ומידע נוסף. זיהוי דפוסים שעוזרים לך ולפסיכיאטר שלך.
+                    <img src="balance-assets/screenshot-04.jpg" alt="דוח מחזורים">
+                </div>
             </div>
         </div>
-        <div class="pillar">
+        <div class="pillar" onclick="this.classList.toggle('open')">
             <div class="pillar-icon">🏃</div>
             <div class="pillar-text">
                 <h3>להשתתף בחיים</h3>
                 <p>למדוד את הקימה, לתרגל שגרות מותאמות אישית</p>
+                <div class="pillar-expand">
+                    צ'קליסט יומי מותאם אישית שאתה בונה בעצמך. כל משימה שמושלמת מרוויחה 🌈 נקודות. שגרות בוקר, בונוס ולילה טוב.
+                    <img src="balance-assets/screenshot-06.jpg" alt="צ'קליסט שגרות יומיות">
+                </div>
             </div>
         </div>
-        <div class="pillar">
+        <div class="pillar" onclick="this.classList.toggle('open')">
             <div class="pillar-icon">🤝</div>
             <div class="pillar-text">
                 <h3>לא לבד</h3>
                 <p>ספרינטים עם חברים, שיתוף בלי שיפוט</p>
+                <div class="pillar-expand">
+                    ספרינטים של 14 יום עם חברים. רואים מה אחרים עושים, מגיבים ומעודדים. עדות הדדית ותחושה משותפת.
+                    <img src="balance-assets/screenshot-05.jpg" alt="פיד השראה חברתי">
+                </div>
             </div>
         </div>
     </div>
