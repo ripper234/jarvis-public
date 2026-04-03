@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Balance — Your Bipolar Copilot</title>
-    <meta name="description" content="Balance helps people with bipolar disorder track cycles, build daily rituals, and stay accountable with buddies. A copilot for your brain.">
+    <title>באלאנס — הקופיילוט שלך לדו-קוטביות</title>
+    <meta name="description" content="באלאנס עוזרת לאנשים עם הפרעה דו-קוטבית לעקוב אחרי מחזורים, לבנות שגרות יומיות ולהישאר אחראים עם חברים. קופיילוט למוח שלך.">
     <link rel="stylesheet" href="style.css">
     <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+
         .balance-hero {
             text-align: center;
             padding: 2rem 0 1rem;
@@ -25,8 +27,26 @@
             color: #374151;
             max-width: 600px;
             margin: 0 auto;
-            line-height: 1.7;
+            line-height: 1.8;
         }
+
+        /* Three pillars */
+        .pillars {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .pillar {
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1.25rem;
+            text-align: center;
+        }
+        .pillar .icon { font-size: 1.8rem; margin-bottom: 0.5rem; }
+        .pillar h3 { margin: 0 0 0.4rem; font-size: 1.05rem; color: #1e293b; }
+        .pillar p { margin: 0; font-size: 0.85rem; color: #4b5563; line-height: 1.6; }
 
         /* Feature sections */
         .feature {
@@ -56,7 +76,7 @@
             margin: 0;
             font-size: 0.95rem;
             color: #4b5563;
-            line-height: 1.6;
+            line-height: 1.7;
         }
         .feature-text .highlight {
             display: inline-block;
@@ -67,27 +87,6 @@
             font-size: 0.85rem;
             color: #92400e;
             margin-top: 0.5rem;
-        }
-
-        /* Video section */
-        .video-section {
-            margin: 2rem 0;
-            text-align: center;
-        }
-        .video-section h2 {
-            font-size: 1.3rem;
-            margin-bottom: 1rem;
-        }
-        .video-wrapper {
-            max-width: 320px;
-            margin: 0 auto;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-        }
-        .video-wrapper video {
-            width: 100%;
-            display: block;
         }
 
         /* Stats bar */
@@ -101,9 +100,7 @@
             background: linear-gradient(135deg, #eef2ff, #e0e7ff);
             border-radius: 12px;
         }
-        .stat {
-            text-align: center;
-        }
+        .stat { text-align: center; }
         .stat .num {
             font-size: 1.5rem;
             font-weight: 800;
@@ -112,8 +109,17 @@
         .stat .label {
             font-size: 0.75rem;
             color: #6366f1;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.03em;
+        }
+
+        /* Video section */
+        .video-section {
+            margin: 2rem 0;
+            text-align: center;
+        }
+        .video-section h2 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
         }
 
         /* CTA */
@@ -134,6 +140,7 @@
             margin: 0 0 1rem;
             color: #15803d;
             font-size: 0.9rem;
+            line-height: 1.7;
         }
         .cta-section .status-badge {
             display: inline-block;
@@ -143,13 +150,6 @@
             border-radius: 20px;
             font-size: 0.8rem;
             font-weight: 700;
-        }
-
-        /* Responsive */
-        @media (max-width: 640px) {
-            .feature { flex-direction: column !important; text-align: center; }
-            .feature-img { width: 180px; }
-            .stats-bar { gap: 1rem; }
         }
 
         /* Carousel */
@@ -184,8 +184,8 @@
             z-index: 2;
         }
         .carousel-btn:hover { background: rgba(0,0,0,0.7); }
-        .carousel-btn.prev { left: -12px; }
-        .carousel-btn.next { right: -12px; }
+        .carousel-btn.prev { right: -12px; }
+        .carousel-btn.next { left: -12px; }
         .carousel-dots {
             display: flex;
             justify-content: center;
@@ -202,6 +202,13 @@
             padding: 0;
         }
         .carousel-dot.active { background: #6366f1; }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .feature { flex-direction: column !important; text-align: center; }
+            .feature-img { width: 180px; }
+            .stats-bar { gap: 1rem; }
+        }
 
         footer {
             margin-top: 3rem;
@@ -221,98 +228,117 @@
     <a href="/" style="color:#6366f1; text-decoration:none; font-size:0.9rem;">← Jarvis</a>
 
     <div class="balance-hero">
-        <h1>🌈 Balance</h1>
-        <p class="tagline">Your bipolar copilot</p>
-        <p class="desc">Balance helps people with bipolar disorder track their cycles, build daily rituals, and stay accountable with buddies. Not a medical app. A copilot for your brain.</p>
+        <h1>🌈 באלאנס</h1>
+        <p class="tagline">הקופיילוט שלך לדו-קוטביות</p>
+        <p class="desc">באלאנס עוזרת לאנשים עם הפרעה דו-קוטבית לעקוב אחרי מחזורים, לבנות שגרות יומיות ולהישאר אחראים עם חברים. לא אפליקציה רפואית. קופיילוט למוח שלך.</p>
+    </div>
+
+    <!-- Three pillars -->
+    <div class="pillars">
+        <div class="pillar">
+            <div class="icon">🔍</div>
+            <h3>להבין מה קורה</h3>
+            <p>לוגינג יומי של מצב רוח, הצלבה עם נתונים (שעון חכם, תרופות, שינה), זיהוי דפוסים עם הפסיכיאטר</p>
+        </div>
+        <div class="pillar">
+            <div class="icon">🏃</div>
+            <h3>להשתתף בחיים</h3>
+            <p>מה זאת אומרת להשתתף גם בזמן דיכאון. לקום מהמיטה. למדוד לא רק את הנפילה, אלא גם את הקימה</p>
+        </div>
+        <div class="pillar">
+            <div class="icon">🤝</div>
+            <h3>לא לבד</h3>
+            <p>תרגול קבוצתי, שיתוף בלי שיפוט או "תיקון", עדות הדדית ותחושה משותפת</p>
+        </div>
     </div>
 
     <!-- Stats -->
     <div class="stats-bar">
         <div class="stat">
             <div class="num">15</div>
-            <div class="label">Cycles tracked</div>
+            <div class="label">מחזורים שנמדדו</div>
         </div>
         <div class="stat">
             <div class="num">23.7</div>
-            <div class="label">Avg cycle (days)</div>
+            <div class="label">ממוצע מחזור (ימים)</div>
         </div>
         <div class="stat">
             <div class="num">34%</div>
-            <div class="label">Good days</div>
+            <div class="label">ימים טובים</div>
         </div>
         <div class="stat">
             <div class="num">🌈 50</div>
-            <div class="label">Daily points</div>
+            <div class="label">נקודות יומיות</div>
         </div>
     </div>
 
-    <!-- Screenshot carousel -->
+    <!-- Carousel -->
     <div class="carousel" id="mainCarousel">
-        <button class="carousel-btn prev" onclick="carouselMove(-1)">‹</button>
+        <button class="carousel-btn prev" onclick="carouselMove(1)">‹</button>
         <div class="carousel-track" id="carouselTrack">
-            <img src="balance-assets/screenshot-06.jpg" alt="Balance - Core daily rituals checklist">
-            <img src="balance-assets/screenshot-02.jpg" alt="Balance - Good Night routine">
-            <img src="balance-assets/screenshot-05.jpg" alt="Balance - Social inspiration feed">
-            <img src="balance-assets/screenshot-03.jpg" alt="Balance - Sprint accountability">
-            <img src="balance-assets/screenshot-04.jpg" alt="Balance - Cycle analytics report">
+            <img src="balance-assets/screenshot-06.jpg" alt="באלאנס - צ'קליסט שגרה יומית">
+            <img src="balance-assets/screenshot-02.jpg" alt="באלאנס - שגרת לילה טוב">
+            <img src="balance-assets/screenshot-05.jpg" alt="באלאנס - פיד השראה חברתי">
+            <img src="balance-assets/screenshot-03.jpg" alt="באלאנס - ספרינטים ואחריותיות">
+            <img src="balance-assets/screenshot-04.jpg" alt="באלאנס - דוח מחזורים">
         </div>
-        <button class="carousel-btn next" onclick="carouselMove(1)">›</button>
+        <button class="carousel-btn next" onclick="carouselMove(-1)">›</button>
         <div class="carousel-dots" id="carouselDots"></div>
     </div>
 
     <!-- Features -->
     <div class="feature">
-        <img class="feature-img" src="balance-assets/screenshot-06.jpg" alt="Core rituals">
+        <img class="feature-img" src="balance-assets/screenshot-06.jpg" alt="שגרות יומיות">
         <div class="feature-text">
-            <h2>☀️ Daily Rituals</h2>
-            <p>Start each day with a personalized checklist. Check in with yourself, breathe, set a goal, start with a song. Each completed task earns 🌈 points. Tabs for <strong>Core</strong>, <strong>Bonus</strong>, and <strong>Good Night</strong> routines.</p>
-            <span class="highlight">+5 🌈 per completed task</span>
+            <h2>☀️ שגרות יומיות</h2>
+            <p>מתחילים כל יום עם צ'קליסט אישי. צ'ק-אין עם עצמך, נשימות, הגדרת מטרה, התחלה עם שיר. כל משימה שמושלמת מרוויחה 🌈 נקודות. טאבים של <strong>ליבה</strong>, <strong>בונוס</strong> ו<strong>לילה טוב</strong>.</p>
+            <span class="highlight">+5 🌈 לכל משימה</span>
         </div>
     </div>
 
     <div class="feature reverse">
-        <img class="feature-img" src="balance-assets/screenshot-04.jpg" alt="Cycle report">
+        <img class="feature-img" src="balance-assets/screenshot-04.jpg" alt="מעקב מחזורים">
         <div class="feature-text">
-            <h2>📊 Cycle Tracking</h2>
-            <p>Track your bipolar cycles over time. See your current day, cycle length, and percentage of good days. Balance has tracked <strong>15 cycles</strong> with an average length of <strong>23.7 days</strong>, helping identify patterns that matter.</p>
-            <span class="highlight">Know your patterns</span>
+            <h2>📊 מעקב מחזורים</h2>
+            <p>עוקבים אחרי המחזורים הדו-קוטביים לאורך זמן. רואים את היום הנוכחי, אורך מחזור ואחוז הימים הטובים. באלאנס עקבה אחרי <strong>15 מחזורים</strong> עם ממוצע של <strong>23.7 ימים</strong>, ועוזרת לזהות דפוסים שחשובים.</p>
+            <span class="highlight">להכיר את הדפוסים שלך</span>
         </div>
     </div>
 
     <div class="feature">
-        <img class="feature-img" src="balance-assets/screenshot-03.jpg" alt="Sprints">
+        <img class="feature-img" src="balance-assets/screenshot-03.jpg" alt="ספרינטים">
         <div class="feature-text">
-            <h2>🎯 Sprint Accountability</h2>
-            <p>14-day sprints with buddies. Track check-ins, streaks, and personal bests together. Your accountability partners see your progress, and you see theirs. Nobody walks alone.</p>
-            <span class="highlight">Built-in buddy system</span>
+            <h2>🎯 ספרינטים ואחריותיות</h2>
+            <p>ספרינטים של 14 יום עם חברים. עוקבים אחרי צ'ק-אינים, סטריקים ושיאים אישיים ביחד. השותפים שלך רואים את ההתקדמות שלך, ואתה רואה את שלהם. אף אחד לא הולך לבד.</p>
+            <span class="highlight">מערכת באדי מובנית</span>
         </div>
     </div>
 
     <div class="feature reverse">
-        <img class="feature-img" src="balance-assets/screenshot-05.jpg" alt="Inspiration feed">
+        <img class="feature-img" src="balance-assets/screenshot-05.jpg" alt="פיד השראה">
         <div class="feature-text">
-            <h2>✨ Social Inspiration</h2>
-            <p>See what your buddies are doing today. Yaniv did his stretching. You started with a song. React with 👍 💪 🎉 to cheer each other on. Motivation through shared accountability.</p>
-            <span class="highlight">You're not alone</span>
+            <h2>✨ השראה חברתית</h2>
+            <p>רואים מה החברים עושים היום. יניב עשה מתיחות. אתה התחלת עם שיר. מגיבים עם 👍 💪 🎉 כדי לעודד אחד את השני. מוטיבציה דרך אחריותיות משותפת.</p>
+            <span class="highlight">אתה לא לבד</span>
         </div>
     </div>
 
-    <!-- Video placeholder — needs hosting solution for 91MB file -->
+    <!-- Video placeholder -->
     <div class="video-section">
-        <h2>📱 See It in Action</h2>
-        <p style="font-size: 0.9rem; color: #6b7280;">Video demo coming soon. Browse the screenshots above for a quick tour.</p>
+        <h2>📱 לראות את זה בפעולה</h2>
+        <p style="font-size: 0.9rem; color: #6b7280;">וידאו הדגמה בקרוב. בינתיים, דפדפו בצילומי המסך למעלה.</p>
     </div>
 
     <!-- CTA -->
     <div class="cta-section">
-        <h2>Interested?</h2>
-        <p>Balance is in early development with a small group of users. Built by Ron Gross and Yaniv.</p>
-        <span class="status-badge">🚧 Early Access</span>
+        <h2>מעוניינים?</h2>
+        <p>באלאנס בשלבי פיתוח מוקדמים עם קבוצה קטנה של משתמשים.<br>נבנית על ידי רון גרוס ויניב.</p>
+        <span class="status-badge">🚧 גישה מוקדמת</span>
     </div>
 
     <footer>
-        Balance · A <a href="/">Jarvis</a> project · Built by <a href="https://ripper234.com" target="_blank">Ron Gross</a> & Yaniv<br>
-        <a href="/projects.html">Projects</a> · <a href="/academy.html">Bot Academy</a> · <a href="/">Home</a>
+        באלאנס · פרויקט של <a href="/">Jarvis</a> · נבנה על ידי <a href="https://ripper234.com" target="_blank">רון גרוס</a> ויניב<br>
+        <a href="/projects.html">פרויקטים</a> · <a href="/academy.html">Bot Academy</a> · <a href="/">דף הבית</a>
     </footer>
 
     </div>
@@ -324,7 +350,6 @@
     const imgs = track.querySelectorAll('img');
     const dotsEl = document.getElementById('carouselDots');
 
-    // Create dots
     imgs.forEach((_, i) => {
         const dot = document.createElement('button');
         dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
@@ -336,20 +361,18 @@
         carouselIdx = idx;
         if (carouselIdx < 0) carouselIdx = imgs.length - 1;
         if (carouselIdx >= imgs.length) carouselIdx = 0;
-        imgs.forEach(img => img.style.transform = `translateX(-${carouselIdx * 100}%)`);
+        imgs.forEach(img => img.style.transform = `translateX(${carouselIdx * 100}%)`);
         dotsEl.querySelectorAll('.carousel-dot').forEach((d, i) => d.classList.toggle('active', i === carouselIdx));
     }
     function carouselMove(dir) { carouselGo(carouselIdx + dir); }
 
-    // Auto-advance every 4s
     setInterval(() => carouselMove(1), 4000);
 
-    // Touch swipe support
     let touchStartX = 0;
     track.addEventListener('touchstart', e => touchStartX = e.touches[0].clientX);
     track.addEventListener('touchend', e => {
         const diff = touchStartX - e.changedTouches[0].clientX;
-        if (Math.abs(diff) > 50) carouselMove(diff > 0 ? 1 : -1);
+        if (Math.abs(diff) > 50) carouselMove(diff > 0 ? -1 : 1);
     });
     </script>
 </body>
