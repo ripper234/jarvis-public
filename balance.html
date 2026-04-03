@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>באלאנס — הקופיילוט שלך לדו-קוטביות</title>
-    <meta name="description" content="באלאנס עוזרת לאנשים עם הפרעה דו-קוטבית לעקוב אחרי מחזורים, לבנות שגרות יומיות ולהישאר אחראים עם חברים. קופיילוט למוח שלך.">
+    <title>באלאנס — גישה אימונית לדו-קוטביות</title>
+    <meta name="description" content="באלאנס עוזרת לאנשים עם הפרעה דו-קוטבית לעקוב אחרי מחזורים, לבנות שגרות יומיות ולהישאר אחראים עם חברים.">
     <link rel="stylesheet" href="style.css">
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
@@ -48,45 +48,25 @@
         .pillar h3 { margin: 0 0 0.4rem; font-size: 1.05rem; color: #1e293b; }
         .pillar p { margin: 0; font-size: 0.85rem; color: #4b5563; line-height: 1.6; }
 
-        /* Feature sections */
-        .feature {
-            display: flex;
-            gap: 1.5rem;
-            align-items: center;
-            margin: 2rem 0;
-            padding: 1.5rem;
-            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
-            border-radius: 16px;
-            border: 1px solid #e2e8f0;
+        /* Video section */
+        .video-section {
+            margin: 1.5rem 0;
+            text-align: center;
         }
-        .feature.reverse { flex-direction: row-reverse; }
-        .feature-img {
-            flex-shrink: 0;
-            width: 200px;
-            border-radius: 16px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.12);
-        }
-        .feature-text { flex: 1; }
-        .feature-text h2 {
+        .video-section h2 {
             font-size: 1.3rem;
-            margin: 0 0 0.5rem;
-            color: #1e293b;
+            margin-bottom: 0.75rem;
         }
-        .feature-text p {
-            margin: 0;
-            font-size: 0.95rem;
-            color: #4b5563;
-            line-height: 1.7;
+        .video-wrapper {
+            max-width: 320px;
+            margin: 0 auto;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
         }
-        .feature-text .highlight {
-            display: inline-block;
-            background: linear-gradient(135deg, #fef3c7, #fde68a);
-            padding: 0.15rem 0.5rem;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 0.85rem;
-            color: #92400e;
-            margin-top: 0.5rem;
+        .video-wrapper video {
+            width: 100%;
+            display: block;
         }
 
         /* Stats bar */
@@ -110,46 +90,6 @@
             font-size: 0.75rem;
             color: #6366f1;
             letter-spacing: 0.03em;
-        }
-
-        /* Video section */
-        .video-section {
-            margin: 2rem 0;
-            text-align: center;
-        }
-        .video-section h2 {
-            font-size: 1.3rem;
-            margin-bottom: 1rem;
-        }
-
-        /* CTA */
-        .cta-section {
-            text-align: center;
-            margin: 2rem 0;
-            padding: 1.5rem;
-            background: linear-gradient(135deg, #f0fdf4, #dcfce7);
-            border-radius: 16px;
-            border: 1px solid #86efac;
-        }
-        .cta-section h2 {
-            margin: 0 0 0.5rem;
-            font-size: 1.2rem;
-            color: #166534;
-        }
-        .cta-section p {
-            margin: 0 0 1rem;
-            color: #15803d;
-            font-size: 0.9rem;
-            line-height: 1.7;
-        }
-        .cta-section .status-badge {
-            display: inline-block;
-            background: #f59e0b;
-            color: white;
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 700;
         }
 
         /* Carousel */
@@ -203,10 +143,47 @@
         }
         .carousel-dot.active { background: #6366f1; }
 
-        /* Responsive */
+        /* Feature labels under carousel */
+        .carousel-label {
+            text-align: center;
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            color: #4b5563;
+            font-weight: 600;
+            min-height: 1.5em;
+        }
+
+        /* CTA */
+        .cta-section {
+            text-align: center;
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+            border-radius: 16px;
+            border: 1px solid #86efac;
+        }
+        .cta-section h2 {
+            margin: 0 0 0.5rem;
+            font-size: 1.2rem;
+            color: #166534;
+        }
+        .cta-section p {
+            margin: 0 0 1rem;
+            color: #15803d;
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+        .cta-section .status-badge {
+            display: inline-block;
+            background: #f59e0b;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
         @media (max-width: 640px) {
-            .feature { flex-direction: column !important; text-align: center; }
-            .feature-img { width: 180px; }
             .stats-bar { gap: 1rem; }
         }
 
@@ -229,8 +206,20 @@
 
     <div class="balance-hero">
         <h1>🌈 באלאנס</h1>
-        <p class="tagline">הקופיילוט שלך לדו-קוטביות</p>
-        <p class="desc">באלאנס עוזרת לאנשים עם הפרעה דו-קוטבית לעקוב אחרי מחזורים, לבנות שגרות יומיות ולהישאר אחראים עם חברים. לא אפליקציה רפואית. קופיילוט למוח שלך.</p>
+        <p class="tagline">גישה אימונית לדו-קוטביות</p>
+        <p class="desc">באלאנס עוזרת לאנשים עם הפרעה דו-קוטבית לעקוב אחרי מחזורים, לבנות שגרות יומיות ולהישאר אחראים עם חברים.</p>
+    </div>
+
+    <!-- Video first -->
+    <div class="video-section">
+        <h2>📱 לראות את זה בפעולה</h2>
+        <div class="video-wrapper">
+            <video controls preload="metadata" poster="balance-assets/screenshot-06.jpg">
+                <source src="https://github.com/ripper234-openclaw/jarvis-public/releases/download/v0.4.0-assets/balance-demo.mp4" type="video/mp4">
+                הדפדפן שלך לא תומך בווידאו.
+            </video>
+        </div>
+        <p style="font-size: 0.8rem; color: #9ca3af; margin-top: 0.5rem;">סיור של 5 דקות באפליקציה</p>
     </div>
 
     <!-- Three pillars -->
@@ -238,17 +227,17 @@
         <div class="pillar">
             <div class="icon">🔍</div>
             <h3>להבין מה קורה</h3>
-            <p>לוגינג יומי של מצב רוח, הצלבה עם נתונים (שעון חכם, תרופות, שינה), זיהוי דפוסים עם הפסיכיאטר</p>
+            <p>לוגינג יומי של מצב רוח, הצלבה עם נתונים, זיהוי דפוסים עם הפסיכיאטר</p>
         </div>
         <div class="pillar">
             <div class="icon">🏃</div>
             <h3>להשתתף בחיים</h3>
-            <p>מה זאת אומרת להשתתף גם בזמן דיכאון. לקום מהמיטה. למדוד לא רק את הנפילה, אלא גם את הקימה</p>
+            <p>מה זאת אומרת להשתתף גם בזמן דיכאון. למדוד את הקימה, לא רק את הנפילה</p>
         </div>
         <div class="pillar">
             <div class="icon">🤝</div>
             <h3>לא לבד</h3>
-            <p>תרגול קבוצתי, שיתוף בלי שיפוט או "תיקון", עדות הדדית ותחושה משותפת</p>
+            <p>תרגול קבוצתי, שיתוף בלי שיפוט, עדות הדדית ותחושה משותפת</p>
         </div>
     </div>
 
@@ -272,62 +261,20 @@
         </div>
     </div>
 
-    <!-- Carousel -->
+    <!-- Screenshot carousel only (no duplicate static images) -->
     <div class="carousel" id="mainCarousel">
         <button class="carousel-btn prev" onclick="carouselMove(1)">‹</button>
         <div class="carousel-track" id="carouselTrack">
-            <img src="balance-assets/screenshot-06.jpg" alt="באלאנס - צ'קליסט שגרה יומית">
-            <img src="balance-assets/screenshot-02.jpg" alt="באלאנס - שגרת לילה טוב">
-            <img src="balance-assets/screenshot-05.jpg" alt="באלאנס - פיד השראה חברתי">
-            <img src="balance-assets/screenshot-03.jpg" alt="באלאנס - ספרינטים ואחריותיות">
-            <img src="balance-assets/screenshot-04.jpg" alt="באלאנס - דוח מחזורים">
+            <img src="balance-assets/screenshot-06.jpg" alt="שגרות יומיות" data-label="☀️ שגרות יומיות — צ'קליסט ליבה עם נקודות 🌈">
+            <img src="balance-assets/screenshot-02.jpg" alt="שגרת לילה טוב" data-label="🌙 לילה טוב — סיום היום בצ'ק-אאוט">
+            <img src="balance-assets/screenshot-05.jpg" alt="השראה חברתית" data-label="✨ השראה — מה החברים עושים היום">
+            <img src="balance-assets/screenshot-03.jpg" alt="ספרינטים" data-label="🎯 ספרינטים — 14 יום עם באדי">
+            <img src="balance-assets/screenshot-04.jpg" alt="דוח מחזורים" data-label="📊 דוח מחזורים — להכיר את הדפוסים שלך">
         </div>
         <button class="carousel-btn next" onclick="carouselMove(-1)">›</button>
         <div class="carousel-dots" id="carouselDots"></div>
     </div>
-
-    <!-- Features -->
-    <div class="feature">
-        <img class="feature-img" src="balance-assets/screenshot-06.jpg" alt="שגרות יומיות">
-        <div class="feature-text">
-            <h2>☀️ שגרות יומיות</h2>
-            <p>מתחילים כל יום עם צ'קליסט אישי. צ'ק-אין עם עצמך, נשימות, הגדרת מטרה, התחלה עם שיר. כל משימה שמושלמת מרוויחה 🌈 נקודות. טאבים של <strong>ליבה</strong>, <strong>בונוס</strong> ו<strong>לילה טוב</strong>.</p>
-            <span class="highlight">+5 🌈 לכל משימה</span>
-        </div>
-    </div>
-
-    <div class="feature reverse">
-        <img class="feature-img" src="balance-assets/screenshot-04.jpg" alt="מעקב מחזורים">
-        <div class="feature-text">
-            <h2>📊 מעקב מחזורים</h2>
-            <p>עוקבים אחרי המחזורים הדו-קוטביים לאורך זמן. רואים את היום הנוכחי, אורך מחזור ואחוז הימים הטובים. באלאנס עקבה אחרי <strong>15 מחזורים</strong> עם ממוצע של <strong>23.7 ימים</strong>, ועוזרת לזהות דפוסים שחשובים.</p>
-            <span class="highlight">להכיר את הדפוסים שלך</span>
-        </div>
-    </div>
-
-    <div class="feature">
-        <img class="feature-img" src="balance-assets/screenshot-03.jpg" alt="ספרינטים">
-        <div class="feature-text">
-            <h2>🎯 ספרינטים ואחריותיות</h2>
-            <p>ספרינטים של 14 יום עם חברים. עוקבים אחרי צ'ק-אינים, סטריקים ושיאים אישיים ביחד. השותפים שלך רואים את ההתקדמות שלך, ואתה רואה את שלהם. אף אחד לא הולך לבד.</p>
-            <span class="highlight">מערכת באדי מובנית</span>
-        </div>
-    </div>
-
-    <div class="feature reverse">
-        <img class="feature-img" src="balance-assets/screenshot-05.jpg" alt="פיד השראה">
-        <div class="feature-text">
-            <h2>✨ השראה חברתית</h2>
-            <p>רואים מה החברים עושים היום. יניב עשה מתיחות. אתה התחלת עם שיר. מגיבים עם 👍 💪 🎉 כדי לעודד אחד את השני. מוטיבציה דרך אחריותיות משותפת.</p>
-            <span class="highlight">אתה לא לבד</span>
-        </div>
-    </div>
-
-    <!-- Video placeholder -->
-    <div class="video-section">
-        <h2>📱 לראות את זה בפעולה</h2>
-        <p style="font-size: 0.9rem; color: #6b7280;">וידאו הדגמה בקרוב. בינתיים, דפדפו בצילומי המסך למעלה.</p>
-    </div>
+    <div class="carousel-label" id="carouselLabel">☀️ שגרות יומיות — צ'קליסט ליבה עם נקודות 🌈</div>
 
     <!-- CTA -->
     <div class="cta-section">
@@ -349,6 +296,7 @@
     const track = document.getElementById('carouselTrack');
     const imgs = track.querySelectorAll('img');
     const dotsEl = document.getElementById('carouselDots');
+    const labelEl = document.getElementById('carouselLabel');
 
     imgs.forEach((_, i) => {
         const dot = document.createElement('button');
@@ -363,6 +311,7 @@
         if (carouselIdx >= imgs.length) carouselIdx = 0;
         imgs.forEach(img => img.style.transform = `translateX(${carouselIdx * 100}%)`);
         dotsEl.querySelectorAll('.carousel-dot').forEach((d, i) => d.classList.toggle('active', i === carouselIdx));
+        labelEl.textContent = imgs[carouselIdx].dataset.label;
     }
     function carouselMove(dir) { carouselGo(carouselIdx + dir); }
 
