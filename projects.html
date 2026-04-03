@@ -54,9 +54,25 @@
             letter-spacing: 0.06em;
             margin-bottom: 0.35rem;
         }
+        .tile-tag-focus { 
+            background: linear-gradient(135deg, #fef3c7, #fde68a); 
+            color: #92400e; 
+            font-size: 0.6rem;
+            padding: 0.15rem 0.5rem;
+            box-shadow: 0 1px 4px rgba(245,158,11,0.2);
+        }
         .tile-tag-active { background: rgba(79,70,229,0.08); color: #4f46e5; }
-        .tile-tag-launched { background: rgba(16,185,129,0.1); color: #10b981; }
+        .tile-tag-maintenance { background: rgba(156,163,175,0.08); color: #6b7280; }
         .tile-tag-ideation { background: rgba(156,163,175,0.1); color: #9ca3af; }
+        /* Focus tiles get a subtle glow */
+        .project-tile.focus-tile {
+            border: 2px solid rgba(245,158,11,0.3);
+            box-shadow: 0 2px 12px rgba(245,158,11,0.08);
+        }
+        .project-tile.focus-tile:hover {
+            border-color: rgba(245,158,11,0.5);
+            box-shadow: 0 4px 20px rgba(245,158,11,0.15);
+        }
         .tile-desc {
             font-size: 0.68rem;
             color: #888;
@@ -118,20 +134,22 @@
         <p class="intro"><a href="http://ripper234.com/">Ron Gross</a></p>
 
         <div class="project-grid">
-            <a class="project-tile" href="methodology.html">
+            <!-- Focus -->
+            <a class="project-tile focus-tile" href="balance.html">
+                <div class="tile-icon">🌈</div>
+                <span class="tile-tag tile-tag-focus">🎯 Focus</span>
+                <div class="tile-name">Balance</div>
+                <div class="tile-desc">App for living with bipolar.</div>
+                <div class="tile-tooltip">Cycle tracking, daily rituals, sprint accountability with buddies. Built with Yaniv Gatigno.</div>
+            </a>
+            <a class="project-tile focus-tile" href="methodology.html">
                 <div class="tile-icon">🤖</div>
-                <span class="tile-tag tile-tag-active">Active</span>
+                <span class="tile-tag tile-tag-focus">🎯 Focus</span>
                 <div class="tile-name">Jarvis</div>
                 <div class="tile-desc">AI agent on OpenClaw. Spec-first, 24/7.</div>
                 <div class="tile-tooltip">Manages websites, repos, research via Telegram. Ron writes specs, Jarvis does the rest.</div>
             </a>
-            <a class="project-tile" href="balance.html">
-                <div class="tile-icon">⚖️</div>
-                <span class="tile-tag tile-tag-active">Active</span>
-                <div class="tile-name">Balance</div>
-                <div class="tile-desc">Bipolar copilot. Mood, sleep, energy.</div>
-                <div class="tile-tooltip">Tracks mood and medication patterns. Detects early warning signs with AI insights. Built with Yaniv.</div>
-            </a>
+            <!-- Active -->
             <a class="project-tile" href="https://github.com/ripper234/tiny-pr-bot">
                 <div class="tile-icon">🔧</div>
                 <span class="tile-tag tile-tag-active">Active</span>
@@ -146,23 +164,9 @@
                 <div class="tile-desc">Public build log in Hebrew.</div>
                 <div class="tile-tooltip">Weekly updates on what I'm building and shipping. Shared via WhatsApp with founders and friends.</div>
             </a>
-            <a class="project-tile" href="https://fredo.ai/">
-                <div class="tile-icon">💬</div>
-                <span class="tile-tag tile-tag-launched">Launched</span>
-                <div class="tile-name">Fredo.ai</div>
-                <div class="tile-desc">WhatsApp bot. ~3K WAU.</div>
-                <div class="tile-tooltip">WhatsApp productivity bot. Free, maintenance mode. Jarvis's predecessor.</div>
-            </a>
-            <a class="project-tile" href="https://whateverworks.me/">
-                <div class="tile-icon">📖</div>
-                <span class="tile-tag tile-tag-launched">Launched</span>
-                <div class="tile-name">Whatever Works</div>
-                <div class="tile-desc">Self-optimization book + wiki.</div>
-                <div class="tile-tooltip">Evidence-based toolkit for therapy, productivity, and personal growth. Available on Amazon.</div>
-            </a>
             <a class="project-tile" href="https://github.com/ripper234/know-thyself">
                 <div class="tile-icon">🪞</div>
-                <span class="tile-tag tile-tag-ideation">Ideation</span>
+                <span class="tile-tag tile-tag-active">Active</span>
                 <div class="tile-name">know-thyself</div>
                 <div class="tile-desc">Daily self-knowledge game.</div>
                 <div class="tile-tooltip">30 guided writing prompts in Hebrew. Surface patterns and blind spots through reflection.</div>
@@ -173,6 +177,21 @@
                 <div class="tile-name">Next-Level Spa</div>
                 <div class="tile-desc">World-class spa in Tel Aviv.</div>
                 <div class="tile-tooltip">Japanese onsen meets biohacking. Meditation, wellness tech, world-class massage.</div>
+            </a>
+            <!-- Maintenance -->
+            <a class="project-tile" href="https://fredo.ai/">
+                <div class="tile-icon">💬</div>
+                <span class="tile-tag tile-tag-maintenance">Maintenance</span>
+                <div class="tile-name">Fredo.ai</div>
+                <div class="tile-desc">WhatsApp bot. ~3K WAU.</div>
+                <div class="tile-tooltip">WhatsApp productivity bot. Free, running on autopilot. Jarvis's predecessor.</div>
+            </a>
+            <a class="project-tile" href="https://whateverworks.me/">
+                <div class="tile-icon">📖</div>
+                <span class="tile-tag tile-tag-maintenance">Maintenance</span>
+                <div class="tile-name">Whatever Works</div>
+                <div class="tile-desc">Self-optimization book + wiki.</div>
+                <div class="tile-tooltip">Evidence-based toolkit for therapy, productivity, and personal growth. Available on Amazon.</div>
             </a>
         </div>
 
