@@ -135,23 +135,6 @@
     </style>
 </head>
 <body>
-<!-- Password gate -->
-<div id="auth-gate" style="display:flex; align-items:center; justify-content:center; min-height:100vh; padding:1rem;">
-    <div style="background:rgba(255,255,255,0.8); backdrop-filter:blur(8px); border:1px solid rgba(0,0,0,0.06); border-radius:14px; padding:2rem; max-width:360px; width:100%; text-align:center;">
-        <h2 style="font-size:1.2rem; margin-bottom:0.5rem; color:#111;">🔒 Admin Access</h2>
-        <p style="font-size:0.82rem; color:#888; margin-bottom:1rem;">Enter password to continue</p>
-        <input type="password" id="auth-password" placeholder="Password" autocomplete="current-password"
-            style="width:100%; padding:0.6rem 0.8rem; border:1px solid #ddd; border-radius:8px; font-size:0.9rem; margin-bottom:0.75rem;"
-            onkeydown="if(event.key==='Enter')checkAuth()">
-        <button onclick="checkAuth()"
-            style="width:100%; padding:0.6rem; background:#7C3AED; color:white; border:none; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer;">
-            Enter
-        </button>
-        <p id="auth-error" style="color:#ef4444; font-size:0.78rem; margin-top:0.5rem; display:none;">Incorrect password</p>
-    </div>
-</div>
-
-<div id="admin-content" style="display:none;">
 <div class="page" style="max-width: 900px;">
     <a class="back" href="./">← Home</a>
 
@@ -581,46 +564,8 @@ function initDashboard() {
     fetchGHTraffic();
 }
 
-// --- Auth ---
-// SHA-256 hash of the password, stored client-side. Not bulletproof, but keeps casual visitors out.
-// To change password: run `echo -n "newpassword" | sha256sum` and replace the hash below.
-var AUTH_HASH = '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8'; // "password"
-var AUTH_KEY = 'jarvis_admin_auth';
-
-function sha256(str) {
-    var buffer = new TextEncoder().encode(str);
-    return crypto.subtle.digest('SHA-256', buffer).then(function(hash) {
-        return Array.from(new Uint8Array(hash)).map(function(b) { return b.toString(16).padStart(2, '0'); }).join('');
-    });
-}
-
-function checkAuth() {
-    var pw = document.getElementById('auth-password').value;
-    sha256(pw).then(function(hash) {
-        if (hash === AUTH_HASH) {
-            sessionStorage.setItem(AUTH_KEY, hash);
-            showAdmin();
-        } else {
-            document.getElementById('auth-error').style.display = '';
-            document.getElementById('auth-password').value = '';
-            document.getElementById('auth-password').focus();
-        }
-    });
-}
-
-function showAdmin() {
-    document.getElementById('auth-gate').style.display = 'none';
-    document.getElementById('admin-content').style.display = '';
-    initDashboard();
-}
-
-// Auto-login if already authenticated this session
-if (sessionStorage.getItem(AUTH_KEY) === AUTH_HASH) {
-    showAdmin();
-} else {
-    document.getElementById('auth-password').focus();
-}
+// Init
+initDashboard();
 </script>
-</div><!-- /admin-content -->
 </body>
 </html>
