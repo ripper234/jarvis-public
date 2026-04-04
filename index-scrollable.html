@@ -372,6 +372,8 @@
             .section { padding: 2rem 1rem; }
         }
     </style>
+    <meta name="plausible-domain" content="">
+    <meta name="clarity-project" content="">
 </head>
 <body>
     <div class="page-centered">
@@ -577,5 +579,16 @@
 
     </div>
     </div>
+<!-- Analytics: Plausible + Clarity via shared module -->
+<script>
+// Load config from localStorage (set via admin.html)
+(function() {
+    var pd = localStorage.getItem('plausible_domain');
+    var ci = localStorage.getItem('clarity_id');
+    if (pd) document.querySelector('meta[name="plausible-domain"]')?.setAttribute('content', pd);
+    if (ci) document.querySelector('meta[name="clarity-project"]')?.setAttribute('content', ci);
+})();
+</script>
+<script src="analytics.js" defer></script>
 </body>
 </html>

@@ -4,84 +4,126 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Jarvis OpenClaw Methodology</title>
+    <meta name="description" content="Spec-first AI development philosophy - think deeply, output lightly">
     <link rel="stylesheet" href="style.css">
+    <meta name="plausible-domain" content="">
+    <meta name="clarity-project" content="">
 </head>
 <body>
-    <div class="page">
+    <a href="#main" class="skip-to-content">Skip to main content</a>
+    
+    <div class="page" id="main">
         <a class="back" href="./">← Jarvis</a>
-        <h1>The Jarvis OpenClaw Methodology</h1>
-        <p class="note">"Jarvis" is the name <a href="http://ripper234.com/">Ron</a> gave to his OpenClaw instance.</p>
-        <p class="subtitle">Write the spec, not the code. Let the AI figure out the rest.</p>
+        
+        <div class="fade-in">
+            <h1>The Jarvis OpenClaw Methodology</h1>
+            <p class="note">"Jarvis" is the name <a href="http://ripper234.com/">Ron</a> gave to his OpenClaw instance.</p>
+            <p class="subtitle">Write the spec, not the code. Let the AI figure out the rest.</p>
+        </div>
 
-        <div class="tldr">
+        <div class="tldr fade-in">
+            <h3>TL;DR</h3>
             <p>Ron writes specs, Jarvis (an AI agent) does the work — websites, research, PRs, monitoring — and reports back each morning. Ron reviews in ~30 minutes. The agent proposes, never acts alone. 10 interruptions/day max. Safety enforced by code, not prompts. <strong>"Think deeply, output lightly."</strong></p>
         </div>
 
-        <h2>The Agent as Co-Founder</h2>
-        <p>Ron treats his AI agent (Jarvis) like a <strong>junior co-founder</strong>, not a tool. Instead of prompting it with tasks, he writes specifications: what the product should do, how it should behave, what matters and what doesn't. The agent reads these specs and proposes tiny improvements as GitHub pull requests, <strong>1-2 lines at a time</strong> (see <a href="tiny-pr-bot.html">tiny-pr-bot</a>). But PRs are just one output. Jarvis also monitors social media and GitHub activity nightly, evaluates new tools and frameworks, manages research bookmarks, and <strong>surfaces only what matters</strong> each morning.</p>
+        <section class="fade-in">
+            <h2>The Agent as Co-Founder</h2>
+            <p>Ron treats his AI agent (Jarvis) like a <strong>junior co-founder</strong>, not a tool. Instead of prompting it with tasks, he writes specifications: what the product should do, how it should behave, what matters and what doesn't. The agent reads these specs and proposes tiny improvements as GitHub pull requests, <strong>1-2 lines at a time</strong> (see <a href="tiny-pr-bot.html">tiny-pr-bot</a>). But PRs are just one output. Jarvis also monitors social media and GitHub activity nightly, evaluates new tools and frameworks, manages research bookmarks, and <strong>surfaces only what matters</strong> each morning.</p>
+        </section>
 
-        <h2>Attention as Currency</h2>
-        <p>The workflow protects Ron's scarcest resource: <strong>attention</strong>. An attention credit system (10 free + 20 earnable daily) hard-caps how much the agent can demand. <strong>Capture mode costs zero credits</strong> — Ron fires off ideas via voice without engaging, and the agent files everything for overnight processing. Only the final summary costs credits. Safety rails are <strong>enforced by code</strong>, not by asking the AI to remember rules. The agent has no direct write access to anything, only PRs that Ron approves.</p>
+        <section class="fade-in">
+            <h2>Attention as Currency</h2>
+            <p>The workflow protects Ron's scarcest resource: <strong>attention</strong>. An attention credit system (10 free + 20 earnable daily) hard-caps how much the agent can demand. <strong>Capture mode costs zero credits</strong> — Ron fires off ideas via voice without engaging, and the agent files everything for overnight processing. Only the final summary costs credits. Safety rails are <strong>enforced by code</strong>, not by asking the AI to remember rules. The agent has no direct write access to anything, only PRs that Ron approves.</p>
+        </section>
 
-        <h2>Safety by Architecture</h2>
-        <p>Most users hand their AI agent root access and full data permissions on day one. Ron does the opposite: <strong>information is need-to-know</strong>, and access is earned incrementally. The agent has <strong>no direct write access</strong> to anything — not repos, not messaging, not external APIs. Every mutation goes through a code-level guard that validates, logs, and can be audited. Rules live in enforced scripts, not in prompts the AI might forget. Trust is earned through structure: the agent proposes, the human approves.</p>
+        <section class="fade-in">
+            <h2>Safety by Architecture</h2>
+            <p>Most users hand their AI agent root access and full data permissions on day one. Ron does the opposite: <strong>information is need-to-know</strong>, and access is earned incrementally. The agent has <strong>no direct write access</strong> to anything — not repos, not messaging, not external APIs. Every mutation goes through a code-level guard that validates, logs, and can be audited. Rules live in enforced scripts, not in prompts the AI might forget. Trust is earned through structure: the agent proposes, the human approves.</p>
+        </section>
 
-        <h2>Operations</h2>
-        <p><strong>Backups</strong> run at two levels: Railway's built-in backup system on the Pro tier, plus a bidirectional sync to a private GitHub repo. The workspace is the source of truth — if the container dies, everything rebuilds from git.</p>
-        <p><strong>Debugging</strong> is deliberately low-tech. When something breaks, Ron copy-pastes state into ChatGPT, asks Jarvis to export logs, searches for how to extract the right diagnostics, and iterates. No custom observability stack — just persistence and multiple AI assistants cross-checking each other. When a bug turns out to be upstream, he opens an issue rather than working around it silently.</p>
+        <section class="fade-in">
+            <h2>Operations</h2>
+            <p><strong>Backups</strong> run at two levels: Railway's built-in backup system on the Pro tier, plus a bidirectional sync to a private GitHub repo. The workspace is the source of truth — if the container dies, everything rebuilds from git.</p>
+            <p><strong>Debugging</strong> is deliberately low-tech. When something breaks, Ron copy-pastes state into ChatGPT, asks Jarvis to export logs, searches for how to extract the right diagnostics, and iterates. No custom observability stack — just persistence and multiple AI assistants cross-checking each other. When a bug turns out to be upstream, he opens an issue rather than working around it silently.</p>
+        </section>
 
-        <h2>Debugging</h2>
-        <p>When something breaks, Ron uses <strong>a separate AI (usually ChatGPT) as an independent verifier</strong> — never trusting the agent that might have caused the problem to diagnose itself. The loop: gather logs and state from Jarvis, paste into ChatGPT, run deep research, form a hypothesis, gather more data, repeat. <strong>Multiple AI assistants cross-checking each other</strong> catches things a single agent misses.</p>
-        <p>When the root cause turns out to be upstream, Ron <strong>opens a bug and tracks it</strong>. The agent monitors open upstream issues and notifies only when there's new activity.</p>
+        <section class="fade-in">
+            <h2>Debugging</h2>
+            <p>When something breaks, Ron uses <strong>a separate AI (usually ChatGPT) as an independent verifier</strong> — never trusting the agent that might have caused the problem to diagnose itself. The loop: gather logs and state from Jarvis, paste into ChatGPT, run deep research, form a hypothesis, gather more data, repeat. <strong>Multiple AI assistants cross-checking each other</strong> catches things a single agent misses.</p>
+            <p>When the root cause turns out to be upstream, Ron <strong>opens a bug and tracks it</strong>. The agent monitors open upstream issues and notifies only when there's new activity.</p>
+        </section>
 
-        <h2>Spec is the Product</h2>
-        <p>The philosophy is top-down: <strong>spec first</strong>, then tests, then architecture, then code. Most of the code doesn't exist yet, and that's intentional. The spec IS the product at this stage. The agent's job is to sharpen the spec until building becomes obvious. Ron calls it <strong>"think deeply, output lightly."</strong></p>
-
-        <p style="margin-top:2rem; font-size:0.85rem;">How the site itself is built: <a href="dev-practices.html">Development Practices →</a></p>
+        <section class="fade-in">
+            <h2>Spec is the Product</h2>
+            <p>The philosophy is top-down: <strong>spec first</strong>, then tests, then architecture, then code. Most of the code doesn't exist yet, and that's intentional. The spec IS the product at this stage. The agent's job is to sharpen the spec until building becomes obvious. Ron calls it <strong>"think deeply, output lightly."</strong></p>
+            
+            <div class="callout">
+                <p><strong>How the site itself is built:</strong> <a href="dev-practices.html">Development Practices →</a></p>
+            </div>
+        </section>
 
         <hr class="section-divider">
 
-        <h2>SDD Resources</h2>
-        <p>Spec-driven development (SDD) flips the traditional workflow: instead of writing code and documenting it later, you write specifications first and let AI agents generate the implementation. The spec becomes the source of truth, not the code.</p>
+        <section class="fade-in">
+            <h2>SDD Resources</h2>
+            <p class="intro">Spec-driven development (SDD) flips the traditional workflow: instead of writing code and documenting it later, you write specifications first and let AI agents generate the implementation. The spec becomes the source of truth, not the code.</p>
 
-        <div class="projects" style="margin-top:1rem;">
-            <a class="project" href="https://github.com/github/spec-kit">
-                <div class="project-header">
-                    <span class="project-name">GitHub Spec Kit</span>
-                    <span class="tag">Official</span>
-                </div>
-                <p class="project-desc">GitHub's SDD toolkit. CLI-based: constitution → specify → plan → tasks → implement. 40+ extensions.</p>
-            </a>
-            <a class="project" href="https://openspec.dev/">
-                <div class="project-header">
-                    <span class="project-name">OpenSpec</span>
-                    <span class="tag">YC-backed</span>
-                </div>
-                <p class="project-desc">Lightweight spec-driven framework. Three-phase state machine with spec deltas. 20+ AI tool integrations.</p>
-            </a>
-            <a class="project" href="https://github.com/bmad-code-org/BMAD-METHOD">
-                <div class="project-header">
-                    <span class="project-name">BMad Method</span>
-                    <span class="tag">Open source</span>
-                </div>
-                <p class="project-desc">Full agile AI framework. 12+ specialized agents, 34+ workflows, scale-adaptive planning.</p>
-            </a>
-        </div>
+            <div class="projects">
+                <a class="project" href="https://github.com/github/spec-kit">
+                    <div class="project-header">
+                        <span class="project-name">GitHub Spec Kit</span>
+                        <span class="tag">Official</span>
+                    </div>
+                    <p class="project-desc">GitHub's SDD toolkit. CLI-based: constitution → specify → plan → tasks → implement. 40+ extensions.</p>
+                </a>
+                <a class="project" href="https://openspec.dev/">
+                    <div class="project-header">
+                        <span class="project-name">OpenSpec</span>
+                        <span class="tag tag-launched">YC-backed</span>
+                    </div>
+                    <p class="project-desc">Lightweight spec-driven framework. Three-phase state machine with spec deltas. 20+ AI tool integrations.</p>
+                </a>
+                <a class="project" href="https://github.com/bmad-code-org/BMAD-METHOD">
+                    <div class="project-header">
+                        <span class="project-name">BMad Method</span>
+                        <span class="tag">Open source</span>
+                    </div>
+                    <p class="project-desc">Full agile AI framework. 12+ specialized agents, 34+ workflows, scale-adaptive planning.</p>
+                </a>
+            </div>
 
-        <h3 style="margin-top:1.5rem;">Videos</h3>
-        <ul>
-            <li><a href="https://www.youtube.com/watch?v=a9eR1xsfvHg">Spec Kit Overview</a> — GitHub's official walkthrough</li>
-            <li><a href="https://www.youtube.com/watch?v=nnUMJX9013Y">Does spec-driven development really work?</a></li>
-        </ul>
+            <div style="margin-top: 2rem;">
+                <h3>Videos</h3>
+                <ul>
+                    <li><a href="https://www.youtube.com/watch?v=a9eR1xsfvHg">Spec Kit Overview</a> — GitHub's official walkthrough</li>
+                    <li><a href="https://www.youtube.com/watch?v=nnUMJX9013Y">Does spec-driven development really work?</a></li>
+                </ul>
 
-        <h3>Community</h3>
-        <ul>
-            <li><a href="https://www.reddit.com/r/openspec/">r/openspec</a> — Reddit community for SDD discussion</li>
-            <li><a href="setup.html">Jarvis OpenClaw setup guide</a></li>
-        </ul>
+                <h3>Community</h3>
+                <ul>
+                    <li><a href="https://www.reddit.com/r/openspec/">r/openspec</a> — Reddit community for SDD discussion</li>
+                    <li><a href="setup.html">Jarvis OpenClaw setup guide</a></li>
+                </ul>
+            </div>
+        </section>
 
-        <p class="footer"><a href="./">Home</a></p>
-        <p class="version">v0.2-staging</p>
+        <p class="footer">
+            <a href="./">Home</a> · 
+            <span class="version">v1.0.0</span>
+        </p>
     </div>
+
+    <!-- Analytics: Plausible + Clarity via shared module -->
+    <script>
+    // Load config from localStorage (set via admin.html)
+    (function() {
+        var pd = localStorage.getItem('plausible_domain');
+        var ci = localStorage.getItem('clarity_id');
+        if (pd) document.querySelector('meta[name="plausible-domain"]')?.setAttribute('content', pd);
+        if (ci) document.querySelector('meta[name="clarity-project"]')?.setAttribute('content', ci);
+    })();
+    </script>
+    <script src="analytics.js" defer></script>
+    <script src="animations.js" defer></script>
 </body>
 </html>

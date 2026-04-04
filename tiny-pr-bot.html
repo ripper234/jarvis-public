@@ -6,6 +6,8 @@
     <title>tiny-pr-bot — Autonomous Repo Improvement</title>
     <meta name="description" content="An AI bot that submits tiny, high-leverage PRs to improve your repos. Pure spec, no code.">
     <link rel="stylesheet" href="style.css">
+    <meta name="plausible-domain" content="">
+    <meta name="clarity-project" content="">
 </head>
 <body>
     <div class="page">
@@ -68,5 +70,16 @@
         <p class="footer"><a href="./">Home</a></p>
         <p class="version">v0.2-staging</p>
     </div>
+<!-- Analytics: Plausible + Clarity via shared module -->
+<script>
+// Load config from localStorage (set via admin.html)
+(function() {
+    var pd = localStorage.getItem('plausible_domain');
+    var ci = localStorage.getItem('clarity_id');
+    if (pd) document.querySelector('meta[name="plausible-domain"]')?.setAttribute('content', pd);
+    if (ci) document.querySelector('meta[name="clarity-project"]')?.setAttribute('content', ci);
+})();
+</script>
+<script src="analytics.js" defer></script>
 </body>
 </html>
