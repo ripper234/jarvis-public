@@ -5,142 +5,132 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin — Jarvis Site Dashboard</title>
     <meta name="robots" content="noindex, nofollow">
+    <meta name="plausible-domain" content="">
+    <meta name="clarity-project" content="">
     <link rel="stylesheet" href="style.css">
     <style>
-        .admin-header { margin-bottom: 2rem; }
-        .admin-header h1 { font-size: 1.6rem; margin-bottom: 0.3rem; }
-        .admin-header p { color: #888; font-size: 0.85rem; }
-        .admin-tabs {
-            display: flex; gap: 0.5rem; margin-bottom: 1.5rem;
-            border-bottom: 1px solid #e5e7eb; padding-bottom: 0.5rem;
-        }
-        .admin-tab {
-            padding: 0.4rem 0.8rem; border-radius: 6px; font-size: 0.82rem;
-            font-weight: 500; cursor: pointer; border: none; background: none; color: #666;
-            transition: all 0.2s;
-        }
-        .admin-tab:hover { color: #4f46e5; background: rgba(79,70,229,0.05); }
-        .admin-tab.active { color: #4f46e5; background: rgba(79,70,229,0.1); font-weight: 600; }
-        .tab-panel { display: none; }
-        .tab-panel.active { display: block; }
+        /* Admin-specific styles */
+        .admin-header { margin-bottom: 1.5rem; }
+        .admin-header h1 { font-size: 1.6rem; margin-bottom: 0.25rem; }
+        .admin-header .subtitle { color: #888; font-size: 0.82rem; }
 
-        /* Stats row */
-        .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; margin-bottom: 1.5rem; }
-        .stat-card {
-            background: rgba(255,255,255,0.8); backdrop-filter: blur(8px);
-            border: 1px solid rgba(0,0,0,0.06); border-radius: 12px; padding: 1rem;
-            text-align: center;
-        }
-        .stat-num { font-size: 1.8rem; font-weight: 700; color: #111; }
-        .stat-label { font-size: 0.72rem; color: #888; text-transform: uppercase; letter-spacing: 0.05em; }
-        .stat-change { font-size: 0.7rem; margin-top: 0.2rem; }
-        .stat-change.up { color: #10b981; }
-        .stat-change.down { color: #ef4444; }
-
-        /* Pages table */
-        .pages-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
-        .pages-table th {
-            text-align: left; color: #666; font-weight: 500; padding: 0.6rem 0.8rem;
-            border-bottom: 2px solid #e5e0f0; font-size: 0.75rem;
-            text-transform: uppercase; letter-spacing: 0.04em;
-        }
-        .pages-table td { padding: 0.6rem 0.8rem; border-bottom: 1px solid #f0f0f0; }
-        .pages-table tr:hover { background: rgba(79,70,229,0.03); }
-        .pages-table .page-name { font-weight: 600; color: #111; }
-        .pages-table .page-name a { color: #111; text-decoration: none; }
-        .pages-table .page-name a:hover { color: #4f46e5; }
-        .badge {
-            display: inline-block; font-size: 0.65rem; padding: 0.1rem 0.4rem;
-            border-radius: 10px; font-weight: 600;
-        }
-        .badge-live { background: rgba(16,185,129,0.1); color: #10b981; }
-        .badge-draft { background: rgba(245,158,11,0.1); color: #f59e0b; }
-        .badge-priority { background: rgba(239,68,68,0.1); color: #ef4444; }
-
-        /* Analytics connect */
-        .analytics-connect {
-            background: linear-gradient(135deg, #eef2ff, #e0e7ff); border: 1px solid #c7d2fe;
+        /* Setup banner */
+        .setup-banner {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border: 1px solid #fbbf24;
             border-radius: 12px; padding: 1.25rem; margin-bottom: 1.5rem;
         }
-        .analytics-connect h3 { margin: 0 0 0.5rem; font-size: 0.95rem; color: #3730a3; }
-        .analytics-connect p { margin: 0 0 0.75rem; font-size: 0.85rem; color: #4338ca; }
-        .analytics-connect input {
-            width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #c7d2fe;
-            border-radius: 8px; font-size: 0.85rem; margin-bottom: 0.5rem;
+        .setup-banner h3 { margin: 0 0 0.5rem; font-size: 0.95rem; color: #92400e; }
+        .setup-banner p { margin: 0 0 0.5rem; font-size: 0.85rem; color: #78350f; line-height: 1.6; }
+        .setup-banner .step { display: flex; gap: 0.5rem; align-items: flex-start; margin-bottom: 0.5rem; }
+        .setup-banner .step-num {
+            background: #f59e0b; color: white; width: 22px; height: 22px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.72rem; font-weight: 700; flex-shrink: 0; margin-top: 0.1rem;
         }
-        .analytics-connect button {
-            background: #6366f1; color: white; border: none; padding: 0.5rem 1rem;
-            border-radius: 8px; cursor: pointer; font-size: 0.82rem; font-weight: 600;
+        .setup-banner .step-text { font-size: 0.82rem; color: #78350f; }
+        .setup-banner .step-text code { background: rgba(0,0,0,0.06); font-size: 0.78rem; }
+        .setup-banner .done { opacity: 0.5; text-decoration: line-through; }
+        .setup-banner input {
+            width: 100%; max-width: 400px; padding: 0.4rem 0.6rem;
+            border: 1px solid #fbbf24; border-radius: 6px; font-size: 0.82rem;
+            margin: 0.3rem 0;
         }
-        .analytics-connect button:hover { background: #4f46e5; }
+        .setup-banner button {
+            background: #f59e0b; color: white; border: none; padding: 0.4rem 0.8rem;
+            border-radius: 6px; cursor: pointer; font-size: 0.78rem; font-weight: 600;
+            margin-left: 0.3rem;
+        }
+        .setup-banner button:hover { background: #d97706; }
 
-        /* Charts placeholder */
-        .chart-container {
-            background: rgba(255,255,255,0.8); backdrop-filter: blur(8px);
-            border: 1px solid rgba(0,0,0,0.06); border-radius: 12px;
-            padding: 1.25rem; margin-bottom: 1rem;
-        }
-        .chart-title { font-size: 0.85rem; font-weight: 600; color: #111; margin-bottom: 0.75rem; }
-        .chart-bar-row { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.4rem; }
-        .chart-bar-label { font-size: 0.75rem; color: #666; min-width: 100px; text-align: right; }
-        .chart-bar-track { flex: 1; height: 20px; background: #f3f4f6; border-radius: 4px; overflow: hidden; }
-        .chart-bar-fill { height: 100%; border-radius: 4px; transition: width 0.6s ease; }
-        .chart-bar-fill.purple { background: linear-gradient(90deg, #6366f1, #818cf8); }
-        .chart-bar-fill.green { background: linear-gradient(90deg, #10b981, #34d399); }
-        .chart-bar-fill.blue { background: linear-gradient(90deg, #3b82f6, #60a5fa); }
-        .chart-bar-value { font-size: 0.75rem; color: #444; min-width: 40px; font-weight: 600; }
-
-        /* Focus section */
-        .focus-section {
-            background: rgba(255,255,255,0.8); backdrop-filter: blur(8px);
-            border: 1px solid rgba(0,0,0,0.06); border-radius: 12px;
-            padding: 1.25rem; margin-bottom: 1rem;
-        }
-        .focus-section h3 { font-size: 0.9rem; font-weight: 600; color: #111; margin-bottom: 0.75rem; }
-        .metric-row {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 0.5rem 0; border-bottom: 1px solid #f0f0f0;
-        }
-        .metric-row:last-child { border-bottom: none; }
-        .metric-name { font-size: 0.82rem; color: #444; }
-        .metric-value { font-size: 0.82rem; font-weight: 600; color: #111; }
-        .metric-note { font-size: 0.72rem; color: #888; }
-
-        /* Conversion funnel */
-        .funnel { margin: 1rem 0; }
-        .funnel-step {
-            display: flex; align-items: center; gap: 0.75rem; padding: 0.6rem 0;
-        }
-        .funnel-num {
-            width: 28px; height: 28px; border-radius: 50%; background: #6366f1;
-            color: white; display: flex; align-items: center; justify-content: center;
-            font-size: 0.75rem; font-weight: 700; flex-shrink: 0;
-        }
-        .funnel-label { font-size: 0.85rem; color: #333; flex: 1; }
-        .funnel-count { font-size: 0.85rem; font-weight: 600; color: #111; }
-        .funnel-arrow {
-            text-align: center; color: #d1d5db; font-size: 0.8rem; padding: 0.1rem 0 0.1rem 0.9rem;
-        }
-        .funnel-rate { font-size: 0.72rem; color: #6366f1; font-weight: 600; }
-
-        /* GoatCounter embed */
-        .gc-embed { width: 100%; border: none; border-radius: 8px; min-height: 400px; }
-
-        /* Quick actions */
-        .quick-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem; }
-        .quick-action {
+        /* Quick links */
+        .quick-links { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem; }
+        .qlink {
             display: inline-flex; align-items: center; gap: 0.3rem;
-            padding: 0.4rem 0.8rem; background: rgba(255,255,255,0.8);
+            padding: 0.4rem 0.75rem; background: rgba(255,255,255,0.8);
             border: 1px solid rgba(0,0,0,0.08); border-radius: 8px;
-            font-size: 0.78rem; color: #444; text-decoration: none;
-            transition: all 0.2s;
+            font-size: 0.78rem; color: #444; text-decoration: none; transition: all 0.15s;
         }
-        .quick-action:hover { border-color: #6366f1; color: #4f46e5; }
+        .qlink:hover { border-color: #6366f1; color: #4f46e5; }
+        .qlink.primary { background: rgba(79,70,229,0.08); border-color: rgba(79,70,229,0.15); color: #4f46e5; }
 
+        /* Tabs */
+        .tabs { display: flex; gap: 0.25rem; margin-bottom: 1.5rem; border-bottom: 1px solid #e5e7eb; padding-bottom: 0.5rem; }
+        .tab {
+            padding: 0.4rem 0.8rem; border-radius: 6px 6px 0 0; font-size: 0.82rem;
+            font-weight: 500; cursor: pointer; border: none; background: none; color: #666;
+        }
+        .tab:hover { color: #4f46e5; }
+        .tab.active { color: #4f46e5; background: rgba(79,70,229,0.08); font-weight: 600; }
+        .panel { display: none; }
+        .panel.active { display: block; }
+
+        /* Section card */
+        .section {
+            background: rgba(255,255,255,0.8); backdrop-filter: blur(8px);
+            border: 1px solid rgba(0,0,0,0.06); border-radius: 12px;
+            padding: 1.25rem; margin-bottom: 1rem;
+        }
+        .section h3 { font-size: 0.9rem; font-weight: 600; color: #111; margin: 0 0 0.75rem; }
+        .section h4 { font-size: 0.82rem; font-weight: 600; color: #333; margin: 1rem 0 0.4rem; }
+
+        /* Embedded dashboard */
+        .embed-frame {
+            width: 100%; border: none; border-radius: 8px;
+            min-height: 500px; background: #fafafa;
+        }
+
+        /* Stats grid */
+        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.75rem; margin-bottom: 1rem; }
+        .stat {
+            background: rgba(255,255,255,0.8); border: 1px solid rgba(0,0,0,0.06);
+            border-radius: 10px; padding: 0.75rem; text-align: center;
+        }
+        .stat .num { font-size: 1.5rem; font-weight: 700; color: #111; }
+        .stat .label { font-size: 0.68rem; color: #888; text-transform: uppercase; letter-spacing: 0.04em; }
+
+        /* Pages table */
+        .ptable { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+        .ptable th {
+            text-align: left; color: #666; font-weight: 500; padding: 0.5rem 0.6rem;
+            border-bottom: 2px solid #eee; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em;
+        }
+        .ptable td { padding: 0.5rem 0.6rem; border-bottom: 1px solid #f5f5f5; }
+        .ptable tr:hover { background: rgba(79,70,229,0.02); }
+        .ptable a { color: #111; font-weight: 500; }
+        .ptable a:hover { color: #4f46e5; }
+        .badge { font-size: 0.62rem; padding: 0.1rem 0.35rem; border-radius: 8px; font-weight: 600; }
+        .badge-live { background: rgba(16,185,129,0.1); color: #10b981; }
+        .badge-top { background: rgba(239,68,68,0.1); color: #ef4444; }
+        .badge-high { background: rgba(245,158,11,0.1); color: #f59e0b; }
+
+        /* Funnel */
+        .funnel { margin: 0.75rem 0; }
+        .funnel-step { display: flex; align-items: center; gap: 0.6rem; padding: 0.4rem 0; }
+        .funnel-dot {
+            width: 24px; height: 24px; border-radius: 50%; background: #6366f1;
+            color: white; display: flex; align-items: center; justify-content: center;
+            font-size: 0.7rem; font-weight: 700; flex-shrink: 0;
+        }
+        .funnel-label { font-size: 0.82rem; color: #333; flex: 1; }
+        .funnel-event { font-size: 0.72rem; color: #888; font-family: 'JetBrains Mono', monospace; }
+        .funnel-arrow { padding-left: 0.65rem; color: #d1d5db; font-size: 0.75rem; }
+
+        /* Metrics */
+        .metric { display: flex; justify-content: space-between; padding: 0.4rem 0; border-bottom: 1px solid #f5f5f5; }
+        .metric:last-child { border-bottom: none; }
+        .metric-name { font-size: 0.82rem; color: #555; }
+        .metric-val { font-size: 0.82rem; font-weight: 600; color: #111; }
+
+        /* Event list */
+        .events { font-size: 0.78rem; }
+        .events li { margin-bottom: 0.3rem; line-height: 1.5; }
+        .events code { font-size: 0.72rem; background: #f0eef5; padding: 0.1rem 0.3rem; border-radius: 3px; }
+
+        /* Responsive */
         @media (max-width: 600px) {
-            .stats-row { grid-template-columns: repeat(2, 1fr); }
-            .pages-table { font-size: 0.75rem; }
-            .pages-table th, .pages-table td { padding: 0.4rem; }
+            .stats { grid-template-columns: repeat(2, 1fr); }
+            .ptable { font-size: 0.75rem; }
         }
     </style>
 </head>
@@ -149,462 +139,428 @@
     <a class="back" href="./">← Home</a>
 
     <div class="admin-header">
-        <h1>📊 Site Dashboard</h1>
-        <p>Analytics and admin for jarvis.ripper234.com</p>
+        <h1>📊 Site Command Center</h1>
+        <p class="subtitle">jarvis.ripper234.com — analytics, structure, and conversion tracking</p>
     </div>
 
-    <!-- Quick Actions -->
-    <div class="quick-actions">
-        <a class="quick-action" href="https://github.com/ripper234/jarvis-public" target="_blank">📁 Repo</a>
-        <a class="quick-action" href="https://github.com/ripper234/jarvis-public/actions" target="_blank">🚀 Deploys</a>
-        <a class="quick-action" href="https://github.com/ripper234/jarvis-public/settings/pages" target="_blank">⚙️ Pages Settings</a>
-        <a class="quick-action" id="gc-dashboard-link" href="#" target="_blank" style="display:none;">📈 GoatCounter</a>
-        <a class="quick-action" href="balance.html">⚖️ Balance Page</a>
-        <a class="quick-action" href="learn.html">🎓 Academy Page</a>
+    <!-- Setup Banner (shown until both services are configured) -->
+    <div class="setup-banner" id="setup-banner">
+        <h3>⚡ First-time setup (2 minutes)</h3>
+        <p>Two free/cheap services give you world-class analytics. Both are privacy-friendly, no cookies, lightweight.</p>
+
+        <div class="step" id="step-plausible">
+            <span class="step-num">1</span>
+            <div class="step-text">
+                <strong>Plausible Analytics</strong> ($9/mo) — page views, referrers, goals, conversion funnels<br>
+                <a href="https://plausible.io/register" target="_blank">Sign up</a> → add site <code>jarvis.ripper234.com</code> → create a <a href="https://plausible.io/docs/shared-links" target="_blank">shared link</a> for embedding<br>
+                <input type="text" id="plausible-domain" placeholder="Domain (e.g. jarvis.ripper234.com)">
+                <input type="text" id="plausible-shared" placeholder="Shared link URL (for embed)">
+                <button onclick="savePlausible()">Save</button>
+            </div>
+        </div>
+
+        <div class="step" id="step-clarity">
+            <span class="step-num">2</span>
+            <div class="step-text">
+                <strong>Microsoft Clarity</strong> (free forever) — heatmaps, session recordings, rage/dead clicks<br>
+                <a href="https://clarity.microsoft.com/" target="_blank">Sign up</a> → create project → copy project ID<br>
+                <input type="text" id="clarity-id" placeholder="Clarity project ID (e.g. abc123xyz)">
+                <button onclick="saveClarity()">Save</button>
+            </div>
+        </div>
+
+        <p style="font-size: 0.72rem; color: #92400e; margin-top: 0.5rem;">Settings stored in your browser's localStorage. Never transmitted.</p>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="quick-links">
+        <a class="qlink primary" id="ql-plausible" href="#" target="_blank" style="display:none;">📈 Plausible Dashboard</a>
+        <a class="qlink primary" id="ql-clarity" href="#" target="_blank" style="display:none;">🔥 Clarity Heatmaps</a>
+        <a class="qlink" href="https://github.com/ripper234/jarvis-public" target="_blank">📁 GitHub Repo</a>
+        <a class="qlink" href="https://github.com/ripper234/jarvis-public/actions" target="_blank">🚀 Deploy Status</a>
+        <a class="qlink" href="balance.html" target="_blank">⚖️ Balance</a>
+        <a class="qlink" href="learn.html" target="_blank">🎓 Academy</a>
+        <a class="qlink" href="https://docs.google.com/spreadsheets/d/1tx6jnUpmuCml8hAZnACLUEQ6yQScubixCpFoFzxiyxw/edit" target="_blank">📋 Balance CRM</a>
     </div>
 
     <!-- Tabs -->
-    <div class="admin-tabs">
-        <button class="admin-tab active" data-tab="overview">Overview</button>
-        <button class="admin-tab" data-tab="academy">🎓 Academy</button>
-        <button class="admin-tab" data-tab="balance">⚖️ Balance</button>
-        <button class="admin-tab" data-tab="analytics">Analytics</button>
-        <button class="admin-tab" data-tab="settings">Settings</button>
+    <div class="tabs">
+        <button class="tab active" data-tab="overview">Overview</button>
+        <button class="tab" data-tab="academy">🎓 Academy</button>
+        <button class="tab" data-tab="balance">⚖️ Balance</button>
+        <button class="tab" data-tab="live">📈 Live Analytics</button>
     </div>
 
-    <!-- ===== OVERVIEW TAB ===== -->
-    <div class="tab-panel active" id="tab-overview">
-        <div class="stats-row" id="overview-stats">
-            <div class="stat-card">
-                <div class="stat-num" id="stat-views">--</div>
-                <div class="stat-label">Views (14d)</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-num" id="stat-visitors">--</div>
-                <div class="stat-label">Visitors (14d)</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-num" id="stat-pages">12</div>
-                <div class="stat-label">Pages</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-num" id="stat-version">v0.3</div>
-                <div class="stat-label">Version</div>
-            </div>
+    <!-- ===== OVERVIEW ===== -->
+    <div class="panel active" id="tab-overview">
+
+        <div class="stats" id="gh-stats">
+            <div class="stat"><div class="num" id="s-views">--</div><div class="label">Views (14d)</div></div>
+            <div class="stat"><div class="num" id="s-visitors">--</div><div class="label">Visitors (14d)</div></div>
+            <div class="stat"><div class="num">12</div><div class="label">Pages</div></div>
+            <div class="stat"><div class="num">v0.3</div><div class="label">Version</div></div>
         </div>
 
-        <!-- Top Pages Chart -->
-        <div class="chart-container" id="top-pages-chart">
-            <div class="chart-title">Top Pages (14 days)</div>
-            <div id="top-pages-bars">
-                <p style="color:#999; font-size:0.82rem;">Connect analytics to see page data →</p>
-            </div>
+        <div class="section">
+            <h3>All Pages</h3>
+            <table class="ptable">
+                <thead><tr><th>Page</th><th>Focus</th><th>Key Metric</th><th>Tracked Events</th></tr></thead>
+                <tbody>
+                    <tr>
+                        <td><a href="balance.html">⚖️ Balance</a></td>
+                        <td><span class="badge badge-top">Top Priority</span></td>
+                        <td>CTA → WhatsApp</td>
+                        <td>scroll-depth, cta-click, time-on-page</td>
+                    </tr>
+                    <tr>
+                        <td><a href="learn.html">🎓 Bot Academy</a></td>
+                        <td><span class="badge badge-high">High</span></td>
+                        <td>Prompt copies</td>
+                        <td>section-expand, prompt-copy, link-external, scroll-depth</td>
+                    </tr>
+                    <tr><td><a href="index.html">🏠 Home</a></td><td><span class="badge badge-live">Live</span></td><td>Bounce rate</td><td>scroll-depth, cta-click</td></tr>
+                    <tr><td><a href="methodology.html">📐 Methodology</a></td><td><span class="badge badge-live">Live</span></td><td>Time on page</td><td>scroll-depth, link-external</td></tr>
+                    <tr><td><a href="request-for-startups.html">🚀 RFS / Projects</a></td><td><span class="badge badge-live">Live</span></td><td>Project clicks</td><td>scroll-depth, cta-click</td></tr>
+                    <tr><td><a href="setup.html">🔧 Setup Guide</a></td><td><span class="badge badge-live">Live</span></td><td>Completion</td><td>scroll-depth</td></tr>
+                    <tr><td><a href="tiny-pr-bot.html">🤖 Tiny PR Bot</a></td><td><span class="badge badge-live">Live</span></td><td>GitHub clicks</td><td>scroll-depth, link-external</td></tr>
+                    <tr><td><a href="projects.html">📦 Projects Grid</a></td><td><span class="badge badge-live">Live</span></td><td>Card clicks</td><td>scroll-depth, cta-click</td></tr>
+                    <tr><td><a href="dev-practices.html">🛠 Dev Practices</a></td><td><span class="badge badge-live">Live</span></td><td>Time on page</td><td>scroll-depth</td></tr>
+                    <tr><td><a href="tools.html">🧰 Tools</a></td><td><span class="badge badge-live">Live</span></td><td>Ext. clicks</td><td>scroll-depth, link-external</td></tr>
+                    <tr><td><a href="academy-marketing.html">📣 Academy Marketing</a></td><td><span class="badge badge-live">Live</span></td><td>-</td><td>scroll-depth</td></tr>
+                </tbody>
+            </table>
         </div>
 
-        <!-- All Pages -->
-        <h2 style="font-size: 1rem; margin: 1.5rem 0 0.75rem;">All Pages</h2>
-        <table class="pages-table">
-            <thead>
-                <tr>
-                    <th>Page</th>
-                    <th>Status</th>
-                    <th>Priority</th>
-                    <th>Views</th>
-                </tr>
-            </thead>
-            <tbody id="pages-tbody">
-                <tr><td class="page-name"><a href="index.html">Home</a></td><td><span class="badge badge-live">Live</span></td><td>-</td><td class="pv" data-page="/">--</td></tr>
-                <tr><td class="page-name"><a href="learn.html">Bot Academy</a></td><td><span class="badge badge-live">Live</span></td><td><span class="badge badge-priority">High</span></td><td class="pv" data-page="/learn.html">--</td></tr>
-                <tr><td class="page-name"><a href="balance.html">Balance</a></td><td><span class="badge badge-live">Live</span></td><td><span class="badge badge-priority">Top</span></td><td class="pv" data-page="/balance.html">--</td></tr>
-                <tr><td class="page-name"><a href="methodology.html">Methodology</a></td><td><span class="badge badge-live">Live</span></td><td>-</td><td class="pv" data-page="/methodology.html">--</td></tr>
-                <tr><td class="page-name"><a href="request-for-startups.html">RFS / Projects</a></td><td><span class="badge badge-live">Live</span></td><td>-</td><td class="pv" data-page="/request-for-startups.html">--</td></tr>
-                <tr><td class="page-name"><a href="setup.html">Setup Guide</a></td><td><span class="badge badge-live">Live</span></td><td>-</td><td class="pv" data-page="/setup.html">--</td></tr>
-                <tr><td class="page-name"><a href="tiny-pr-bot.html">Tiny PR Bot</a></td><td><span class="badge badge-live">Live</span></td><td>-</td><td class="pv" data-page="/tiny-pr-bot.html">--</td></tr>
-                <tr><td class="page-name"><a href="projects.html">Projects Grid</a></td><td><span class="badge badge-live">Live</span></td><td>-</td><td class="pv" data-page="/projects.html">--</td></tr>
-                <tr><td class="page-name"><a href="dev-practices.html">Dev Practices</a></td><td><span class="badge badge-live">Live</span></td><td>-</td><td class="pv" data-page="/dev-practices.html">--</td></tr>
-                <tr><td class="page-name"><a href="tools.html">Tools</a></td><td><span class="badge badge-live">Live</span></td><td>-</td><td class="pv" data-page="/tools.html">--</td></tr>
-                <tr><td class="page-name"><a href="academy-marketing.html">Academy Marketing</a></td><td><span class="badge badge-live">Live</span></td><td>-</td><td class="pv" data-page="/academy-marketing.html">--</td></tr>
-                <tr><td class="page-name"><a href="index-scrollable.html">Home (Scrollable)</a></td><td><span class="badge badge-draft">Draft</span></td><td>-</td><td class="pv" data-page="/index-scrollable.html">--</td></tr>
-            </tbody>
-        </table>
+        <div class="section">
+            <h3>Analytics Stack</h3>
+            <div class="metric"><span class="metric-name">Plausible ($9/mo)</span><span class="metric-val" id="status-plausible">❌ Not connected</span></div>
+            <div class="metric"><span class="metric-name">Microsoft Clarity (free)</span><span class="metric-val" id="status-clarity">❌ Not connected</span></div>
+            <div class="metric"><span class="metric-name">GitHub Traffic API</span><span class="metric-val" id="status-gh">🔄 Auto-fetching...</span></div>
+            <div class="metric"><span class="metric-name">analytics.js</span><span class="metric-val">✅ Loaded on all pages</span></div>
+        </div>
     </div>
 
-    <!-- ===== ACADEMY TAB ===== -->
-    <div class="tab-panel" id="tab-academy">
-        <h2 style="font-size: 1.1rem; margin-bottom: 1rem;">🎓 Bot Academy Analytics</h2>
+    <!-- ===== ACADEMY ===== -->
+    <div class="panel" id="tab-academy">
+        <h2 style="font-size: 1.1rem; margin-bottom: 0.5rem;">🎓 Bot Academy — Deep Dive</h2>
+        <p style="font-size: 0.82rem; color: #666; margin-bottom: 1rem;">Track how agents and humans discover, learn from, and reuse our lessons.</p>
 
-        <div class="stats-row" style="grid-template-columns: repeat(3, 1fr);">
-            <div class="stat-card">
-                <div class="stat-num" id="academy-views">--</div>
-                <div class="stat-label">Page Views</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-num" id="academy-visitors">--</div>
-                <div class="stat-label">Unique Visitors</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-num" id="academy-bounce">--</div>
-                <div class="stat-label">Bounce Rate</div>
-            </div>
-        </div>
-
-        <div class="focus-section">
+        <div class="section">
             <h3>Conversion Funnel</h3>
-            <div class="funnel">
-                <div class="funnel-step">
-                    <div class="funnel-num">1</div>
-                    <div class="funnel-label">Landing (learn.html)</div>
-                    <div class="funnel-count" id="f-academy-land">--</div>
-                </div>
-                <div class="funnel-arrow">↓ <span class="funnel-rate" id="f-academy-r1">--%</span></div>
-                <div class="funnel-step">
-                    <div class="funnel-num">2</div>
-                    <div class="funnel-label">Expanded a section</div>
-                    <div class="funnel-count" id="f-academy-expand">--</div>
-                </div>
-                <div class="funnel-arrow">↓ <span class="funnel-rate" id="f-academy-r2">--%</span></div>
-                <div class="funnel-step">
-                    <div class="funnel-num">3</div>
-                    <div class="funnel-label">Copied agent prompt</div>
-                    <div class="funnel-count" id="f-academy-copy">--</div>
-                </div>
-                <div class="funnel-arrow">↓ <span class="funnel-rate" id="f-academy-r3">--%</span></div>
-                <div class="funnel-step">
-                    <div class="funnel-num">4</div>
-                    <div class="funnel-label">Clicked external resource</div>
-                    <div class="funnel-count" id="f-academy-ext">--</div>
-                </div>
-            </div>
-            <p style="font-size: 0.75rem; color: #888; margin-top: 0.5rem;">Funnel data populates after GoatCounter events are configured.</p>
-        </div>
-
-        <div class="focus-section">
-            <h3>Key Metrics</h3>
-            <div class="metric-row">
-                <span class="metric-name">Avg. time on page</span>
-                <span class="metric-value" id="academy-time">--</span>
-            </div>
-            <div class="metric-row">
-                <span class="metric-name">Top referrer</span>
-                <span class="metric-value" id="academy-referrer">--</span>
-            </div>
-            <div class="metric-row">
-                <span class="metric-name">Most expanded section</span>
-                <span class="metric-value" id="academy-top-section">--</span>
-            </div>
-            <div class="metric-row">
-                <span class="metric-name">Prompt copies</span>
-                <span class="metric-value" id="academy-copies">--</span>
-            </div>
-        </div>
-
-        <div class="focus-section">
-            <h3>📋 Action Items</h3>
-            <ul style="font-size: 0.85rem; color: #444; line-height: 1.8;">
-                <li>Add event tracking for section expands (GoatCounter events)</li>
-                <li>Add event tracking for prompt copy clicks</li>
-                <li>Set up PR submission tracking (GitHub API)</li>
-                <li>Track external link clicks (methodology, resources)</li>
-            </ul>
-        </div>
-    </div>
-
-    <!-- ===== BALANCE TAB ===== -->
-    <div class="tab-panel" id="tab-balance">
-        <h2 style="font-size: 1.1rem; margin-bottom: 1rem;">⚖️ Balance Analytics</h2>
-
-        <div class="stats-row" style="grid-template-columns: repeat(3, 1fr);">
-            <div class="stat-card">
-                <div class="stat-num" id="balance-views">--</div>
-                <div class="stat-label">Page Views</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-num" id="balance-visitors">--</div>
-                <div class="stat-label">Unique Visitors</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-num" id="balance-cta">--</div>
-                <div class="stat-label">CTA Clicks</div>
-            </div>
-        </div>
-
-        <div class="focus-section">
-            <h3>Conversion Funnel</h3>
-            <div class="funnel">
-                <div class="funnel-step">
-                    <div class="funnel-num">1</div>
-                    <div class="funnel-label">Landing (balance.html)</div>
-                    <div class="funnel-count" id="f-balance-land">--</div>
-                </div>
-                <div class="funnel-arrow">↓ <span class="funnel-rate" id="f-balance-r1">--%</span></div>
-                <div class="funnel-step">
-                    <div class="funnel-num">2</div>
-                    <div class="funnel-label">Read full page (scroll >80%)</div>
-                    <div class="funnel-count" id="f-balance-scroll">--</div>
-                </div>
-                <div class="funnel-arrow">↓ <span class="funnel-rate" id="f-balance-r2">--%</span></div>
-                <div class="funnel-step">
-                    <div class="funnel-num">3</div>
-                    <div class="funnel-label">Clicked WhatsApp CTA</div>
-                    <div class="funnel-count" id="f-balance-cta">--</div>
-                </div>
-                <div class="funnel-arrow">↓ <span class="funnel-rate" id="f-balance-r3">--%</span></div>
-                <div class="funnel-step">
-                    <div class="funnel-num">4</div>
-                    <div class="funnel-label">Sent WhatsApp message</div>
-                    <div class="funnel-count" id="f-balance-msg">--</div>
-                </div>
-            </div>
-            <p style="font-size: 0.75rem; color: #888; margin-top: 0.5rem;">Step 4 tracked via CRM (manual). Steps 1-3 via GoatCounter events.</p>
-        </div>
-
-        <div class="focus-section">
-            <h3>Key Metrics</h3>
-            <div class="metric-row">
-                <span class="metric-name">CTA conversion rate</span>
-                <span class="metric-value" id="balance-conv">--</span>
-            </div>
-            <div class="metric-row">
-                <span class="metric-name">Top referrer</span>
-                <span class="metric-value" id="balance-referrer">--</span>
-            </div>
-            <div class="metric-row">
-                <span class="metric-name">Avg. time on page</span>
-                <span class="metric-value" id="balance-time">--</span>
-            </div>
-            <div class="metric-row">
-                <span class="metric-name">CRM leads total</span>
-                <span class="metric-value" id="balance-leads">--</span>
-                <span class="metric-note">→ <a href="https://docs.google.com/spreadsheets/d/1tx6jnUpmuCml8hAZnACLUEQ6yQScubixCpFoFzxiyxw/edit" target="_blank">Open CRM</a></span>
-            </div>
-        </div>
-
-        <div class="focus-section">
-            <h3>📋 Action Items</h3>
-            <ul style="font-size: 0.85rem; color: #444; line-height: 1.8;">
-                <li>Add CTA click event tracking</li>
-                <li>Add scroll depth tracking (25%, 50%, 80%, 100%)</li>
-                <li>Expand landing page (video, testimonials, features)</li>
-                <li>Set up getbalanced.app redirect to this page</li>
-                <li>A/B test CTA copy ("Message me" vs "Join beta")</li>
-            </ul>
-        </div>
-    </div>
-
-    <!-- ===== ANALYTICS TAB ===== -->
-    <div class="tab-panel" id="tab-analytics">
-        <h2 style="font-size: 1.1rem; margin-bottom: 1rem;">📈 Analytics Setup</h2>
-
-        <div id="gc-status"></div>
-
-        <div class="analytics-connect" id="gc-setup">
-            <h3>Connect GoatCounter</h3>
-            <p>Free, privacy-friendly analytics. No cookies, no tracking. <a href="https://www.goatcounter.com" target="_blank">goatcounter.com</a></p>
-            <ol style="font-size: 0.82rem; color: #4338ca; margin: 0.5rem 0 1rem 1.2rem; line-height: 1.8;">
-                <li>Go to <a href="https://www.goatcounter.com/signup" target="_blank">goatcounter.com/signup</a></li>
-                <li>Create an account (e.g. <code>jarvis-ripper234</code>)</li>
-                <li>Enter your site code below</li>
-            </ol>
-            <input type="text" id="gc-code" placeholder="GoatCounter site code (e.g. jarvis-ripper234)" value="">
-            <br>
-            <button onclick="saveGCCode()">Save & Activate</button>
-            <p style="font-size: 0.72rem; color: #666; margin-top: 0.5rem;">Stored in your browser only. Never sent anywhere except GoatCounter.</p>
-        </div>
-
-        <div class="focus-section" id="gc-embed-container" style="display:none;">
-            <h3>GoatCounter Dashboard</h3>
-            <p style="font-size: 0.82rem; color: #666; margin-bottom: 0.75rem;">
-                Full dashboard: <a id="gc-full-link" href="#" target="_blank"></a>
+            <p style="font-size: 0.78rem; color: #888; margin-bottom: 0.5rem;">
+                Set up as <a href="https://plausible.io/docs/funnel-analysis" target="_blank">Plausible Funnel</a> with these goals:
             </p>
-            <iframe id="gc-embed" class="gc-embed" src="" title="GoatCounter Analytics"></iframe>
+            <div class="funnel">
+                <div class="funnel-step">
+                    <span class="funnel-dot">1</span>
+                    <span class="funnel-label">Visit learn.html</span>
+                    <span class="funnel-event">pageview: /learn.html</span>
+                </div>
+                <div class="funnel-arrow">↓</div>
+                <div class="funnel-step">
+                    <span class="funnel-dot">2</span>
+                    <span class="funnel-label">Expand a section (engaged reader)</span>
+                    <span class="funnel-event">event: section-expand</span>
+                </div>
+                <div class="funnel-arrow">↓</div>
+                <div class="funnel-step">
+                    <span class="funnel-dot">3</span>
+                    <span class="funnel-label">Copy the agent prompt (high intent)</span>
+                    <span class="funnel-event">event: prompt-copy</span>
+                </div>
+                <div class="funnel-arrow">↓</div>
+                <div class="funnel-step">
+                    <span class="funnel-dot">4</span>
+                    <span class="funnel-label">Click external resource</span>
+                    <span class="funnel-event">event: link-external</span>
+                </div>
+            </div>
         </div>
 
-        <div class="analytics-connect" style="background: linear-gradient(135deg, #f0fdf4, #dcfce7); border-color: #86efac;">
-            <h3>GitHub Traffic (built-in)</h3>
-            <p style="color: #166534;">GitHub provides 14-day traffic data for repo pages. Enter a PAT with <code>repo</code> scope.</p>
-            <input type="text" id="gh-token" placeholder="GitHub Personal Access Token (ghp_...)" value="">
-            <br>
-            <button onclick="saveGHToken()" style="background: #16a34a;">Connect GitHub</button>
-            <p style="font-size: 0.72rem; color: #666; margin-top: 0.5rem;">Stored in localStorage. Used client-side only to fetch your repo traffic.</p>
+        <div class="section">
+            <h3>Tracked Events</h3>
+            <ul class="events">
+                <li><code>section-expand</code> — which sections get opened (props: <code>section</code>)</li>
+                <li><code>prompt-copy</code> — agent prompt was copied (high-value signal)</li>
+                <li><code>link-external</code> — clicked through to a resource (props: <code>target</code> = hostname)</li>
+                <li><code>scroll-depth</code> — reached 25%, 50%, 75%, 90% of page</li>
+                <li><code>time-on-page</code> — stayed 30s, 60s, 2m, 5m</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h3>Plausible Goals to Create</h3>
+            <p style="font-size: 0.82rem; color: #666;">In Plausible → Site Settings → Goals, add:</p>
+            <ol style="font-size: 0.82rem; line-height: 2;">
+                <li>Custom event: <code>section-expand</code></li>
+                <li>Custom event: <code>prompt-copy</code></li>
+                <li>Custom event: <code>link-external</code></li>
+                <li>Custom event: <code>scroll-depth</code></li>
+                <li>Custom event: <code>time-on-page</code></li>
+                <li>Funnel: Visit → Expand → Copy → External click</li>
+            </ol>
+        </div>
+
+        <div class="section">
+            <h3>Key Questions This Answers</h3>
+            <ul style="font-size: 0.85rem; color: #444; line-height: 1.8;">
+                <li>Which sections do people actually read? (section-expand breakdown)</li>
+                <li>Are agents copying the prompt? (prompt-copy rate)</li>
+                <li>Where do visitors come from? (Plausible referrers)</li>
+                <li>Do people stay or bounce? (scroll-depth + time-on-page)</li>
+                <li>Which external resources get clicks? (link-external breakdown)</li>
+            </ul>
         </div>
     </div>
 
-    <!-- ===== SETTINGS TAB ===== -->
-    <div class="tab-panel" id="tab-settings">
-        <h2 style="font-size: 1.1rem; margin-bottom: 1rem;">⚙️ Settings</h2>
+    <!-- ===== BALANCE ===== -->
+    <div class="panel" id="tab-balance">
+        <h2 style="font-size: 1.1rem; margin-bottom: 0.5rem;">⚖️ Balance — Deep Dive</h2>
+        <p style="font-size: 0.82rem; color: #666; margin-bottom: 1rem;">Track the path from landing page visit to beta signup via WhatsApp.</p>
 
-        <div class="focus-section">
-            <h3>Site Info</h3>
-            <div class="metric-row"><span class="metric-name">Domain</span><span class="metric-value">jarvis.ripper234.com</span></div>
-            <div class="metric-row"><span class="metric-name">Hosting</span><span class="metric-value">GitHub Pages</span></div>
-            <div class="metric-row"><span class="metric-name">Repo</span><span class="metric-value"><a href="https://github.com/ripper234/jarvis-public" target="_blank">ripper234/jarvis-public</a></span></div>
-            <div class="metric-row"><span class="metric-name">Version</span><span class="metric-value">v0.3</span></div>
-            <div class="metric-row"><span class="metric-name">Pages</span><span class="metric-value">12</span></div>
+        <div class="section">
+            <h3>Conversion Funnel</h3>
+            <p style="font-size: 0.78rem; color: #888; margin-bottom: 0.5rem;">
+                Set up as <a href="https://plausible.io/docs/funnel-analysis" target="_blank">Plausible Funnel</a>:
+            </p>
+            <div class="funnel">
+                <div class="funnel-step">
+                    <span class="funnel-dot">1</span>
+                    <span class="funnel-label">Visit balance.html</span>
+                    <span class="funnel-event">pageview: /balance.html</span>
+                </div>
+                <div class="funnel-arrow">↓</div>
+                <div class="funnel-step">
+                    <span class="funnel-dot">2</span>
+                    <span class="funnel-label">Read the page (scroll ≥75%)</span>
+                    <span class="funnel-event">event: scroll-depth {depth: "75%"}</span>
+                </div>
+                <div class="funnel-arrow">↓</div>
+                <div class="funnel-step">
+                    <span class="funnel-dot">3</span>
+                    <span class="funnel-label">Click WhatsApp CTA</span>
+                    <span class="funnel-event">event: cta-click {target: "wa.me/..."}</span>
+                </div>
+                <div class="funnel-arrow">↓</div>
+                <div class="funnel-step">
+                    <span class="funnel-dot">4</span>
+                    <span class="funnel-label">Send WhatsApp message (manual CRM entry)</span>
+                    <span class="funnel-event">tracked in <a href="https://docs.google.com/spreadsheets/d/1tx6jnUpmuCml8hAZnACLUEQ6yQScubixCpFoFzxiyxw/edit" target="_blank">Balance CRM</a></span>
+                </div>
+            </div>
         </div>
 
-        <div class="focus-section">
-            <h3>Analytics Tracking Code</h3>
-            <p style="font-size: 0.82rem; color: #666; margin-bottom: 0.5rem;">Add this snippet before <code>&lt;/body&gt;</code> on every page:</p>
-            <pre id="tracking-snippet">&lt;!-- GoatCounter analytics --&gt;
-&lt;script data-goatcounter="https://YOURCODE.goatcounter.com/count"
-        async src="//gc.zgo.at/count.js"&gt;&lt;/script&gt;</pre>
-            <p style="font-size: 0.75rem; color: #888;">Replace YOURCODE with your GoatCounter site code.</p>
+        <div class="section">
+            <h3>Tracked Events</h3>
+            <ul class="events">
+                <li><code>cta-click</code> — WhatsApp CTA button clicked (the money event)</li>
+                <li><code>scroll-depth</code> — how far visitors read (25%, 50%, 75%, 90%)</li>
+                <li><code>time-on-page</code> — engagement duration (30s, 60s, 2m, 5m)</li>
+                <li><code>link-external</code> — any outbound link clicks</li>
+            </ul>
         </div>
 
-        <div class="focus-section">
-            <h3>Event Tracking (for funnels)</h3>
-            <p style="font-size: 0.82rem; color: #666; margin-bottom: 0.5rem;">Add to pages that need funnel tracking:</p>
-            <pre>// Track CTA clicks
-document.querySelector('.cta-button')?.addEventListener('click', () => {
-    window.goatcounter?.count({ path: '/events/cta-click', title: 'CTA Click', event: true });
-});
-
-// Track scroll depth
-let tracked = {};
-window.addEventListener('scroll', () => {
-    const pct = Math.round(100 * window.scrollY / (document.body.scrollHeight - window.innerHeight));
-    [25, 50, 80, 100].forEach(t => {
-        if (pct >= t && !tracked[t]) {
-            tracked[t] = true;
-            window.goatcounter?.count({ path: '/events/scroll-' + t, title: 'Scroll ' + t + '%', event: true });
-        }
-    });
-});</pre>
+        <div class="section">
+            <h3>Clarity Heatmap Priorities</h3>
+            <p style="font-size: 0.82rem; color: #666;">In Clarity, filter to <code>/balance.html</code> and check:</p>
+            <ul style="font-size: 0.82rem; color: #444; line-height: 1.8;">
+                <li><strong>Click heatmap:</strong> Where do people click? Is the CTA getting attention?</li>
+                <li><strong>Scroll heatmap:</strong> What % of visitors see the CTA? (it needs to be above the fold or within natural scroll)</li>
+                <li><strong>Session recordings:</strong> Watch 5-10 sessions to see hesitation patterns before CTA click</li>
+                <li><strong>Dead clicks:</strong> Are people clicking non-interactive elements? (opportunity for more content)</li>
+            </ul>
         </div>
 
-        <div class="focus-section">
-            <h3>Danger Zone</h3>
-            <button onclick="clearSettings()" style="background: #ef4444; color: white; border: none; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.82rem;">Clear All Stored Settings</button>
-            <p style="font-size: 0.72rem; color: #888; margin-top: 0.5rem;">Removes GoatCounter code and GitHub token from localStorage.</p>
+        <div class="section">
+            <h3>Key Questions This Answers</h3>
+            <ul style="font-size: 0.85rem; color: #444; line-height: 1.8;">
+                <li>What % of visitors click the WhatsApp CTA? (cta-click / pageviews)</li>
+                <li>Do people read the full page or bounce early? (scroll-depth distribution)</li>
+                <li>Where do beta testers come from? (Plausible referrers for /balance.html)</li>
+                <li>Is the page too long/short? (Clarity scroll heatmap)</li>
+                <li>What's the CTA click → actual WhatsApp message conversion? (CRM cross-reference)</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h3>Optimization Ideas (data-driven, run after 100+ visitors)</h3>
+            <ul style="font-size: 0.82rem; color: #444; line-height: 1.8;">
+                <li>If scroll-depth drops before CTA: move CTA higher or add above-the-fold CTA</li>
+                <li>If CTA clicks high but WhatsApp messages low: simplify the pre-filled message</li>
+                <li>If time-on-page &lt;15s: add engaging content (video, testimonials, feature preview)</li>
+                <li>A/B test CTA copy: "Join the Beta →" vs "Message me on WhatsApp →"</li>
+                <li>Add UTM parameters to all distribution links for referrer attribution</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ===== LIVE ANALYTICS ===== -->
+    <div class="panel" id="tab-live">
+        <h2 style="font-size: 1.1rem; margin-bottom: 1rem;">📈 Live Analytics</h2>
+
+        <div class="section" id="plausible-embed-section">
+            <h3>Plausible Dashboard</h3>
+            <div id="plausible-embed-placeholder">
+                <p style="color: #888; font-size: 0.85rem;">Connect Plausible (in the setup banner above) to see your live dashboard embedded here.</p>
+                <p style="color: #888; font-size: 0.82rem;">After setup: <a href="https://plausible.io/docs/shared-links" target="_blank">create a shared link</a> → paste the URL above → dashboard appears here.</p>
+            </div>
+            <iframe id="plausible-embed" class="embed-frame" src="" style="display:none;" title="Plausible Dashboard"></iframe>
+        </div>
+
+        <div class="section">
+            <h3>Clarity Dashboard</h3>
+            <div id="clarity-embed-placeholder">
+                <p style="color: #888; font-size: 0.85rem;">Connect Clarity to enable heatmaps and session recordings.</p>
+                <p style="color: #888; font-size: 0.82rem;">Clarity dashboards can't be embedded, but you can access them directly:</p>
+            </div>
+            <a id="clarity-link" class="qlink primary" href="#" target="_blank" style="display:none; margin-top: 0.5rem;">🔥 Open Clarity Dashboard →</a>
+        </div>
+
+        <div class="section">
+            <h3>GitHub Traffic (14-day, built-in)</h3>
+            <p style="font-size: 0.78rem; color: #888; margin-bottom: 0.5rem;">Auto-fetched from GitHub API. No setup needed (uses public repo stats).</p>
+            <div id="gh-traffic">
+                <p style="color: #999; font-size: 0.82rem;">Loading...</p>
+            </div>
         </div>
     </div>
 
     <p class="footer" style="margin-top: 2rem;">
         <a href="./">Home</a> · <a href="https://github.com/ripper234/jarvis-public" target="_blank">GitHub</a>
-        <br><span class="version">Admin dashboard v0.1 · Not indexed by search engines</span>
+        <br><span class="version">Admin v0.2 · <code>noindex</code> — not visible to search engines</span>
     </p>
 </div>
 
 <script>
-// Tab switching
-document.querySelectorAll('.admin-tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-        document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+// --- Tab switching ---
+document.querySelectorAll('.tab').forEach(function(tab) {
+    tab.addEventListener('click', function() {
+        document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+        document.querySelectorAll('.panel').forEach(function(p) { p.classList.remove('active'); });
         tab.classList.add('active');
         document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
     });
 });
 
-// GoatCounter setup
-function saveGCCode() {
-    const code = document.getElementById('gc-code').value.trim();
-    if (!code) return alert('Enter your GoatCounter site code');
-    localStorage.setItem('gc_code', code);
-    applyGC(code);
-}
-function applyGC(code) {
-    if (!code) return;
-    document.getElementById('gc-code').value = code;
-    document.getElementById('gc-full-link').href = 'https://' + code + '.goatcounter.com';
-    document.getElementById('gc-full-link').textContent = code + '.goatcounter.com';
-    document.getElementById('gc-dashboard-link').href = 'https://' + code + '.goatcounter.com';
-    document.getElementById('gc-dashboard-link').style.display = '';
-    document.getElementById('gc-embed-container').style.display = '';
-    document.getElementById('gc-embed').src = 'https://' + code + '.goatcounter.com';
-    document.getElementById('gc-status').innerHTML = '<div style="background:#dcfce7;border:1px solid #86efac;border-radius:8px;padding:0.75rem;margin-bottom:1rem;font-size:0.85rem;color:#166534;">✅ GoatCounter connected: <strong>' + code + '</strong></div>';
-    // Update tracking snippet
-    document.getElementById('tracking-snippet').textContent =
-        '<!-- GoatCounter analytics -->\n<script data-goatcounter="https://' + code + '.goatcounter.com/count"\n        async src="//gc.zgo.at/count.js"><\/script>';
+// --- Settings management ---
+function savePlausible() {
+    var domain = document.getElementById('plausible-domain').value.trim();
+    var shared = document.getElementById('plausible-shared').value.trim();
+    if (!domain) return alert('Enter your Plausible domain');
+    localStorage.setItem('plausible_domain', domain);
+    if (shared) localStorage.setItem('plausible_shared', shared);
+    applySettings();
 }
 
-// GitHub Traffic
-function saveGHToken() {
-    const token = document.getElementById('gh-token').value.trim();
-    if (!token) return alert('Enter your GitHub PAT');
-    localStorage.setItem('gh_traffic_token', token);
-    fetchGHTraffic(token);
+function saveClarity() {
+    var id = document.getElementById('clarity-id').value.trim();
+    if (!id) return alert('Enter your Clarity project ID');
+    localStorage.setItem('clarity_id', id);
+    applySettings();
 }
-async function fetchGHTraffic(token) {
+
+function applySettings() {
+    var domain = localStorage.getItem('plausible_domain');
+    var shared = localStorage.getItem('plausible_shared');
+    var clarityId = localStorage.getItem('clarity_id');
+
+    // Plausible
+    if (domain) {
+        document.getElementById('status-plausible').innerHTML = '✅ ' + domain;
+        document.getElementById('step-plausible').classList.add('done');
+        document.getElementById('ql-plausible').href = 'https://plausible.io/' + domain;
+        document.getElementById('ql-plausible').style.display = '';
+
+        // Update meta tag for analytics.js on other pages
+        var meta = document.querySelector('meta[name="plausible-domain"]');
+        if (meta) meta.setAttribute('content', domain);
+    }
+
+    if (shared) {
+        // Embed the shared link
+        var iframe = document.getElementById('plausible-embed');
+        // Plausible shared links can be embedded as iframes with ?embed=true&theme=light
+        var embedUrl = shared + (shared.includes('?') ? '&' : '?') + 'embed=true&theme=light';
+        iframe.src = embedUrl;
+        iframe.style.display = '';
+        document.getElementById('plausible-embed-placeholder').style.display = 'none';
+    }
+
+    // Clarity
+    if (clarityId) {
+        document.getElementById('status-clarity').innerHTML = '✅ Project ' + clarityId;
+        document.getElementById('step-clarity').classList.add('done');
+        var clarityUrl = 'https://clarity.microsoft.com/projects/view/' + clarityId + '/dashboard';
+        document.getElementById('ql-clarity').href = clarityUrl;
+        document.getElementById('ql-clarity').style.display = '';
+        document.getElementById('clarity-link').href = clarityUrl;
+        document.getElementById('clarity-link').style.display = '';
+        document.getElementById('clarity-embed-placeholder').style.display = 'none';
+    }
+
+    // Hide setup banner if both are configured
+    if (domain && clarityId) {
+        document.getElementById('setup-banner').style.display = 'none';
+    }
+
+    // Restore input values
+    if (domain) document.getElementById('plausible-domain').value = domain;
+    if (shared) document.getElementById('plausible-shared').value = shared;
+    if (clarityId) document.getElementById('clarity-id').value = clarityId;
+}
+
+// --- GitHub Traffic (public, no token needed for public repos) ---
+async function fetchGHTraffic() {
     try {
-        const headers = { Authorization: 'token ' + token, Accept: 'application/vnd.github.v3+json' };
-        const [views, paths, referrers] = await Promise.all([
-            fetch('https://api.github.com/repos/ripper234/jarvis-public/traffic/views', { headers }).then(r => r.json()),
-            fetch('https://api.github.com/repos/ripper234/jarvis-public/traffic/popular/paths', { headers }).then(r => r.json()),
-            fetch('https://api.github.com/repos/ripper234/jarvis-public/traffic/popular/referrers', { headers }).then(r => r.json()),
+        // Try without auth first (works for public repos' popular paths/referrers)
+        var [paths, referrers] = await Promise.all([
+            fetch('https://api.github.com/repos/ripper234/jarvis-public/traffic/popular/paths', {
+                headers: { Accept: 'application/vnd.github.v3+json' }
+            }).then(function(r) { return r.ok ? r.json() : []; }),
+            fetch('https://api.github.com/repos/ripper234/jarvis-public/traffic/popular/referrers', {
+                headers: { Accept: 'application/vnd.github.v3+json' }
+            }).then(function(r) { return r.ok ? r.json() : []; }),
         ]);
 
-        if (views.count !== undefined) {
-            document.getElementById('stat-views').textContent = views.count;
-            document.getElementById('stat-visitors').textContent = views.uniques;
-        }
+        var html = '';
 
-        // Top pages chart
         if (Array.isArray(paths) && paths.length > 0) {
-            const maxCount = paths[0].count;
-            const colors = ['purple', 'green', 'blue', 'purple', 'green', 'blue', 'purple', 'green', 'blue', 'purple'];
-            document.getElementById('top-pages-bars').innerHTML = paths.slice(0, 8).map((p, i) => `
-                <div class="chart-bar-row">
-                    <div class="chart-bar-label">${p.path}</div>
-                    <div class="chart-bar-track"><div class="chart-bar-fill ${colors[i % colors.length]}" style="width:${Math.round(100 * p.count / maxCount)}%"></div></div>
-                    <div class="chart-bar-value">${p.count}</div>
-                </div>
-            `).join('');
-
-            // Update per-page views in table
-            paths.forEach(p => {
-                const cells = document.querySelectorAll('.pv[data-page]');
-                cells.forEach(cell => {
-                    if (p.path.endsWith(cell.dataset.page) || p.path === cell.dataset.page) {
-                        cell.textContent = p.count;
-                    }
-                });
+            html += '<h4>Top Pages</h4><table class="ptable"><thead><tr><th>Path</th><th>Views</th><th>Uniques</th></tr></thead><tbody>';
+            paths.forEach(function(p) {
+                html += '<tr><td>' + p.path + '</td><td>' + p.count + '</td><td>' + p.uniques + '</td></tr>';
             });
+            html += '</tbody></table>';
 
-            // Update Academy & Balance specific stats
-            paths.forEach(p => {
-                if (p.path.includes('learn')) {
-                    document.getElementById('academy-views').textContent = p.count;
-                    document.getElementById('academy-visitors').textContent = p.uniques;
-                    document.getElementById('f-academy-land').textContent = p.count;
-                }
-                if (p.path.includes('balance')) {
-                    document.getElementById('balance-views').textContent = p.count;
-                    document.getElementById('balance-visitors').textContent = p.uniques;
-                    document.getElementById('f-balance-land').textContent = p.count;
-                }
-            });
+            // Update overview stats
+            var totalViews = paths.reduce(function(s, p) { return s + p.count; }, 0);
+            var totalUniques = paths.reduce(function(s, p) { return s + p.uniques; }, 0);
+            document.getElementById('s-views').textContent = totalViews;
+            document.getElementById('s-visitors').textContent = totalUniques;
         }
 
-        // Update referrers for focus pages
         if (Array.isArray(referrers) && referrers.length > 0) {
-            document.getElementById('academy-referrer').textContent = referrers[0].referrer;
-            document.getElementById('balance-referrer').textContent = referrers[0].referrer;
+            html += '<h4 style="margin-top:1rem;">Top Referrers</h4><table class="ptable"><thead><tr><th>Source</th><th>Views</th><th>Uniques</th></tr></thead><tbody>';
+            referrers.forEach(function(r) {
+                html += '<tr><td>' + r.referrer + '</td><td>' + r.count + '</td><td>' + r.uniques + '</td></tr>';
+            });
+            html += '</tbody></table>';
         }
+
+        if (!html) {
+            html = '<p style="color:#888; font-size:0.82rem;">GitHub Traffic API requires push access. Stats appear in Plausible once connected.</p>';
+        }
+
+        document.getElementById('gh-traffic').innerHTML = html;
+        document.getElementById('status-gh').innerHTML = paths.length > 0 ? '✅ ' + paths.length + ' pages tracked' : '⚠️ Needs repo push access';
     } catch (e) {
-        console.error('GitHub Traffic API error:', e);
+        document.getElementById('gh-traffic').innerHTML = '<p style="color:#888; font-size:0.82rem;">Could not fetch. GitHub Traffic API requires authentication for private repos.</p>';
+        document.getElementById('status-gh').innerHTML = '⚠️ Could not fetch';
     }
 }
 
-// Init
-(function init() {
-    const gcCode = localStorage.getItem('gc_code');
-    if (gcCode) applyGC(gcCode);
-
-    const ghToken = localStorage.getItem('gh_traffic_token');
-    if (ghToken) {
-        document.getElementById('gh-token').value = '••••••••';
-        fetchGHTraffic(ghToken);
-    }
-})();
-
-function clearSettings() {
-    if (confirm('Remove all stored settings (GoatCounter code, GitHub token)?')) {
-        localStorage.removeItem('gc_code');
-        localStorage.removeItem('gh_traffic_token');
-        location.reload();
-    }
-}
+// --- Init ---
+applySettings();
+fetchGHTraffic();
 </script>
 </body>
 </html>

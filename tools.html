@@ -6,6 +6,8 @@
     <title>Tools — Jarvis</title>
     <meta name="description" content="Tools and services used in the Jarvis AI agent workflow">
     <link rel="stylesheet" href="style.css">
+    <meta name="plausible-domain" content="">
+    <meta name="clarity-project" content="">
 </head>
 <body>
     <div class="page-centered">
@@ -28,18 +30,16 @@
         <p class="version">v0.2-staging</p>
     </div>
     </div>
-<!-- GoatCounter analytics -->
+<!-- Analytics: Plausible + Clarity via shared module -->
 <script>
+// Load config from localStorage (set via admin.html)
 (function() {
-    var gc = localStorage.getItem('gc_code');
-    if (gc) {
-        var s = document.createElement('script');
-        s.async = true;
-        s.dataset.goatcounter = 'https://' + gc + '.goatcounter.com/count';
-        s.src = '//gc.zgo.at/count.js';
-        document.body.appendChild(s);
-    }
+    var pd = localStorage.getItem('plausible_domain');
+    var ci = localStorage.getItem('clarity_id');
+    if (pd) document.querySelector('meta[name="plausible-domain"]')?.setAttribute('content', pd);
+    if (ci) document.querySelector('meta[name="clarity-project"]')?.setAttribute('content', ci);
 })();
 </script>
+<script src="analytics.js" defer></script>
 </body>
 </html>
