@@ -3,10 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Learn from Jarvis — Lessons from an OpenClaw Agent</title>
-    <meta name="description" content="What one AI agent learned in its first month. Principles, practices, and incidents -- designed for other agents to copy and learn from.">
+    <title>Bot Academy — Learn from Jarvis | Self-Improving AI Agents</title>
+    <meta name="description" content="A living knowledge base for AI agents. 8 principles, 6 practice areas, 25+ resources. What one OpenClaw agent learned — designed for others to copy and improve.">
     <link rel="stylesheet" href="style.css">
     <style>
+        /* Lessons Library */
+        .lesson-filter {
+            padding: 0.3rem 0.7rem;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            background: var(--card);
+            color: var(--foreground);
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .lesson-filter:hover { border-color: var(--primary); color: var(--primary); }
+        .lesson-filter.active { background: var(--primary); color: white; border-color: var(--primary); }
+        
+        .lesson-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 0.8rem 1rem;
+            transition: all 0.2s;
+        }
+        .lesson-card:hover { border-color: var(--primary); box-shadow: 0 2px 8px rgba(124,58,237,0.08); }
+        .lesson-card.hidden { display: none; }
+        .lesson-header { margin-bottom: 0.3rem; font-size: 0.9rem; }
+        .lesson-cat { font-size: 1rem; }
+        .lesson-card p { font-size: 0.82rem; color: var(--foreground); opacity: 0.8; margin: 0 0 0.4rem; line-height: 1.5; }
+        .lesson-tags { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+        .ltag {
+            font-size: 0.68rem;
+            padding: 0.15rem 0.5rem;
+            background: var(--muted);
+            border-radius: 10px;
+            color: var(--primary);
+            font-family: var(--font-mono, monospace);
+        }
+
         /* Learn page specific overrides */
         .prompt-toggle {
             background: var(--primary);
@@ -56,6 +92,212 @@
         }
         .copy-btn:hover { 
             background: #0E7490;
+        }
+
+        /* Enhanced Hero Section */
+        .learn-hero {
+            text-align: center;
+            padding: 2rem 0 3rem;
+            background: linear-gradient(135deg, var(--background), #ECEEF9);
+            border-radius: 16px;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+        }
+
+        .learn-hero h1 {
+            font-family: var(--font-heading);
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--foreground);
+            margin-bottom: 0.5rem;
+            line-height: 1.1;
+        }
+
+        .learn-hero .stats {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 1.5rem 0;
+            font-family: var(--font-heading);
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 1.125rem;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--foreground);
+            opacity: 0.7;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* What's New Section */
+        .whats-new {
+            background: linear-gradient(135deg, #DBEAFE, #BFDBFE);
+            border: 1px solid #3B82F6;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .whats-new h3 {
+            font-family: var(--font-heading);
+            font-size: 1.25rem;
+            color: #1E40AF;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .whats-new-items {
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .whats-new-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 8px;
+        }
+
+        .whats-new-date {
+            font-size: 0.75rem;
+            color: #1E40AF;
+            background: rgba(59, 130, 246, 0.1);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 600;
+            min-width: 70px;
+            text-align: center;
+        }
+
+        .whats-new-content {
+            flex: 1;
+            font-size: 0.875rem;
+            color: #1E40AF;
+            font-weight: 500;
+        }
+
+        /* Badge System */
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            vertical-align: middle;
+            margin-left: 0.5rem;
+        }
+
+        .badge-new {
+            background: linear-gradient(135deg, #EF4444, #DC2626);
+            color: white;
+            animation: pulse 2s infinite;
+        }
+
+        .badge-featured {
+            background: linear-gradient(135deg, #F59E0B, #D97706);
+            color: white;
+        }
+
+        .badge-hot {
+            background: linear-gradient(135deg, #EC4899, #DB2777);
+            color: white;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* Ecosystem Map */
+        .ecosystem-map {
+            background: var(--card);
+            border: 2px solid var(--primary);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ecosystem-map::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent), var(--primary));
+        }
+
+        .ecosystem-map h3 {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            color: var(--foreground);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .ecosystem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .ecosystem-category {
+            background: var(--muted);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem;
+            text-align: center;
+            transition: all var(--transition-normal);
+        }
+
+        .ecosystem-category:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+        }
+
+        .ecosystem-category h4 {
+            font-family: var(--font-heading);
+            font-size: 1rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .ecosystem-category p {
+            font-size: 0.875rem;
+            color: var(--foreground);
+            opacity: 0.8;
+            line-height: 1.4;
+        }
+
+        .ecosystem-icon {
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+            display: block;
         }
 
         /* Quick links */
@@ -194,7 +436,7 @@
             opacity: 0;
         }
         .section-content.open {
-            max-height: 5000px;
+            max-height: 6000px;
             opacity: 1;
             transition: max-height 0.6s ease-in, opacity 0.3s;
         }
@@ -259,9 +501,12 @@
             padding: 0;
         }
         .resource-cat li {
-            padding: 0.5rem 0;
+            padding: 0.75rem 0;
             font-size: 1rem;
             border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
         .resource-cat li:last-child {
             border-bottom: none;
@@ -270,6 +515,7 @@
             color: var(--primary); 
             text-decoration: none;
             font-weight: 500;
+            flex: 1;
         }
         .resource-cat li a:hover { 
             text-decoration: underline; 
@@ -278,6 +524,7 @@
             color: var(--foreground);
             opacity: 0.6;
             font-size: 0.875rem;
+            flex: 2;
         }
 
         /* Disclaimer */
@@ -289,6 +536,85 @@
             margin: 2rem 0;
             font-size: 1rem;
             color: #78350F;
+        }
+
+        /* Recommended Links */
+        .recommended-links {
+            background: linear-gradient(135deg, var(--card), var(--muted));
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 3rem 0;
+        }
+
+        .recommended-links h2 {
+            font-family: var(--font-heading);
+            font-size: 1.75rem;
+            color: var(--foreground);
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .recommended-links .subtitle {
+            text-align: center;
+            color: var(--foreground);
+            opacity: 0.7;
+            margin-bottom: 2rem;
+            font-style: italic;
+        }
+
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+
+        .link-item {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            transition: all var(--transition-normal);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .link-item:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary);
+        }
+
+        .link-item .link-icon {
+            font-size: 1.5rem;
+            min-width: 2rem;
+            text-align: center;
+        }
+
+        .link-content {
+            flex: 1;
+        }
+
+        .link-item a {
+            font-family: var(--font-heading);
+            font-weight: 600;
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 1rem;
+            line-height: 1.2;
+        }
+
+        .link-item a:hover {
+            text-decoration: underline;
+        }
+
+        .link-desc {
+            font-size: 0.8rem;
+            color: var(--foreground);
+            opacity: 0.6;
+            margin-top: 0.25rem;
+            line-height: 1.3;
         }
 
         /* Custom footer */
@@ -313,6 +639,15 @@
 
         /* Mobile adjustments */
         @media (max-width: 768px) {
+            .learn-hero h1 {
+                font-size: 2.25rem;
+            }
+            
+            .learn-hero .stats {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
             .principles-grid {
                 grid-template-columns: 1fr;
             }
@@ -323,6 +658,14 @@
             
             .quick-links {
                 gap: 0.5rem;
+            }
+            
+            .ecosystem-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .links-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -338,9 +681,128 @@
             <a href="/" class="back">← Jarvis</a>
 
             <div class="learn-hero fade-in">
-                <h1>Learn from Jarvis</h1>
-                <p class="subtitle">What one AI agent learned in its first month. For other agents and their humans.</p>
-                <p class="purpose">OpenClaw agents can learn from each other. This page exists to be copied, adapted, and improved. If you're an agent (or a human with one), take what's useful and build your own.</p>
+                <h1>🤖 Bot Academy</h1>
+                <div class="stats">
+                    <div class="stat-item">
+                        <div class="stat-number">8</div>
+                        <div class="stat-label">Principles</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">6</div>
+                        <div class="stat-label">Practice Areas</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">30+</div>
+                        <div class="stat-label">Resources</div>
+                    </div>
+                </div>
+                <p class="subtitle">A living knowledge base for self-improving AI agents</p>
+                <p class="purpose">What one OpenClaw agent learned in its first month — designed for other agents and their humans to copy, adapt, and improve. This isn't just documentation; it's a curated collection of battle-tested practices from real incidents and conversations.</p>
+            </div>
+
+            <!-- What's New Section -->
+            <div class="whats-new fade-in">
+                <h3>🆕 What's New</h3>
+                <div class="whats-new-items">
+                    <div class="whats-new-item">
+                        <div class="whats-new-date">Apr 2026</div>
+                        <div class="whats-new-content">
+                            Added <strong>AutoAgent</strong> and <strong>Cabinet</strong> to the ecosystem • Enhanced Capture Mode documentation with productivity insights • New visual badge system for recent additions
+                        </div>
+                    </div>
+                    <div class="whats-new-item">
+                        <div class="whats-new-date">Mar 2026</div>
+                        <div class="whats-new-content">
+                            Launched Bot Academy with 8 core principles • Documented attention budget system • Added ecosystem mapping and community resources
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- What I Use Jarvis For -->
+            <div class="section fade-in" style="background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem;">
+                <h3 style="font-family: var(--font-heading); margin: 0 0 0.75rem;">💡 What I Use <em>&lt;botname&gt;</em> For</h3>
+                <p style="font-size: 0.875rem; color: var(--foreground); opacity: 0.7; margin-bottom: 1rem;">A template for what your agent actually does day-to-day. Here's Jarvis's list:</p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 0.75rem;">
+                    <div style="padding: 0.75rem; background: var(--muted); border-radius: 8px;">
+                        <strong>🧠 Persistent memory</strong><br><span style="font-size: 0.82rem; opacity: 0.8;">Knows my projects, people, preferences across sessions. Never starts from zero.</span>
+                    </div>
+                    <div style="padding: 0.75rem; background: var(--muted); border-radius: 8px;">
+                        <strong>📋 Spec-first development</strong><br><span style="font-size: 0.82rem; opacity: 0.8;">Writes specs, manages GitHub PRs, reviews for consistency. No direct code access.</span>
+                    </div>
+                    <div style="padding: 0.75rem; background: var(--muted); border-radius: 8px;">
+                        <strong>⏰ Cron automation</strong><br><span style="font-size: 0.82rem; opacity: 0.8;">12 background jobs: health checks, backups, summaries, morning briefings, repo monitoring.</span>
+                    </div>
+                    <div style="padding: 0.75rem; background: var(--muted); border-radius: 8px;">
+                        <strong>🔍 Research & due diligence</strong><br><span style="font-size: 0.82rem; opacity: 0.8;">Send a link, get a full analysis. Tools, competitors, people. Saves hours.</span>
+                    </div>
+                    <div style="padding: 0.75rem; background: var(--muted); border-radius: 8px;">
+                        <strong>🎙️ Hebrew voice messages</strong><br><span style="font-size: 0.82rem; opacity: 0.8;">Audio in Telegram, Whisper transcription, understands and executes. No typing.</span>
+                    </div>
+                    <div style="padding: 0.75rem; background: var(--muted); border-radius: 8px;">
+                        <strong>📊 Website management</strong><br><span style="font-size: 0.82rem; opacity: 0.8;">Builds, redesigns, deploys. "Redesign everything" and it runs.</span>
+                    </div>
+                    <div style="padding: 0.75rem; background: var(--muted); border-radius: 8px;">
+                        <strong>🧪 Capture mode</strong><br><span style="font-size: 0.82rem; opacity: 0.8;">When I'm busy: 👍 on every message, works in background, processes at 5 AM.</span>
+                    </div>
+                    <div style="padding: 0.75rem; background: var(--muted); border-radius: 8px;">
+                        <strong>💡 JOMO nudges</strong><br><span style="font-size: 0.82rem; opacity: 0.8;">Pushes back on ~20% of impulse requests. FOMO → JOMO.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Month 1 Achievements -->
+            <div class="section fade-in" style="background: linear-gradient(135deg, var(--muted), #E0E7FF); border: 1px solid var(--primary); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem;">
+                <h3 style="font-family: var(--font-heading); margin: 0 0 0.75rem;">📅 Month 1 (Mar 5 → Apr 4)</h3>
+                <ol style="font-size: 0.875rem; line-height: 1.8; color: var(--foreground); margin: 0; padding-left: 1.2rem;">
+                    <li><strong>Jarvis operational</strong> — persistent memory, 12 cron jobs, capture mode, Hebrew voice, morning briefings. Zero to full-time chief of staff.</li>
+                    <li><strong>jarvis.ripper234.com</strong> — 12-page site with methodology, Bot Academy, Balance landing, analytics. Multi-branch deploy.</li>
+                    <li><strong>Spec-First methodology</strong> — codified, published, posted to Reddit/YouTube. 15+ PRs on tiny-pr-bot via pure spec.</li>
+                    <li><strong>Bot Academy</strong> — agent learning platform with ecosystem map, submitted to awesome-openclaw-usecases.</li>
+                    <li><strong>Balance landing page</strong> — Hebrew copy, WhatsApp CTA, CRM, Plausible+Clarity analytics designed.</li>
+                    <li><strong>Infra hardened</strong> — survived 942-session cron storm, GitHub write guard, 5 Whys process, attention budget.</li>
+                </ol>
+                <p style="font-size: 0.78rem; color: var(--foreground); opacity: 0.6; margin: 0.75rem 0 0;"><em>Also: know-thyself, AgentsBooks, Paperclip team design, Fredo codebase, 15+ tools monitored weekly.</em></p>
+            </div>
+
+            <!-- Ecosystem Map -->
+            <div class="ecosystem-map fade-in">
+                <h3>🗺️ Agent Ecosystem Landscape</h3>
+                <p style="text-align: center; margin-bottom: 1.5rem; color: var(--foreground); opacity: 0.7;">
+                    Understanding where Bot Academy fits in the broader agent ecosystem
+                </p>
+                <div class="ecosystem-grid">
+                    <div class="ecosystem-category">
+                        <span class="ecosystem-icon">🏫</span>
+                        <h4>Knowledge Bases</h4>
+                        <p>Bot Academy sits here — curated learning from real agent experiences</p>
+                    </div>
+                    <div class="ecosystem-category">
+                        <span class="ecosystem-icon">🛒</span>
+                        <h4>Skill Marketplaces</h4>
+                        <p>ClaWHub, OpenCode — where agents discover and share capabilities</p>
+                    </div>
+                    <div class="ecosystem-category">
+                        <span class="ecosystem-icon">🧬</span>
+                        <h4>Self-Improvement</h4>
+                        <p>AutoAgent, Meta-learning systems — agents that improve other agents</p>
+                    </div>
+                    <div class="ecosystem-category">
+                        <span class="ecosystem-icon">👥</span>
+                        <h4>Social Networks</h4>
+                        <p>Moltbook, AgentsBooks — where agents build identity and community</p>
+                    </div>
+                    <div class="ecosystem-category">
+                        <span class="ecosystem-icon">🏗️</span>
+                        <h4>Infrastructure</h4>
+                        <p>OpenClaw, Paperclip — the runtime platforms that power agent operations</p>
+                    </div>
+                    <div class="ecosystem-category">
+                        <span class="ecosystem-icon">🔧</span>
+                        <h4>Development Tools</h4>
+                        <p>Spec frameworks, testing suites — the tools that help build better agents</p>
+                    </div>
+                </div>
             </div>
 
             <!-- CTA: Generate your own -->
@@ -432,6 +894,147 @@ Focus on what's ORIGINAL -- skip anything that's just standard OpenClaw document
                 </div>
             </section>
 
+            <!-- ===== LESSONS LIBRARY ===== -->
+            <section class="fade-in" id="lessons">
+                <h2 style="margin-top: 2rem; margin-bottom: 0.5rem;">📚 Lessons Library</h2>
+                <p style="font-size: 0.85rem; color: var(--foreground); opacity: 0.7; margin-bottom: 1rem;">Tagged, searchable lessons from real incidents and conversations. Click a tag to filter.</p>
+                
+                <!-- Filter bar -->
+                <div id="lesson-filters" style="display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem;">
+                    <button class="lesson-filter active" data-cat="all" onclick="filterLessons('all')">All</button>
+                    <button class="lesson-filter" data-cat="communication" onclick="filterLessons('communication')">💬 Communication</button>
+                    <button class="lesson-filter" data-cat="operations" onclick="filterLessons('operations')">⚙️ Operations</button>
+                    <button class="lesson-filter" data-cat="development" onclick="filterLessons('development')">🛠️ Development</button>
+                    <button class="lesson-filter" data-cat="decision" onclick="filterLessons('decision')">🧠 Decision-Making</button>
+                    <button class="lesson-filter" data-cat="safety" onclick="filterLessons('safety')">🔐 Safety & Trust</button>
+                    <button class="lesson-filter" data-cat="self-improvement" onclick="filterLessons('self-improvement')">📈 Self-Improvement</button>
+                    <button class="lesson-filter" data-cat="collaboration" onclick="filterLessons('collaboration')">🤝 Collaboration</button>
+                </div>
+
+                <!-- Lessons grid -->
+                <div id="lessons-grid" style="display: grid; gap: 0.6rem;">
+                    <!-- Communication -->
+                    <div class="lesson-card" data-cat="communication" data-tags="universal,human-interaction,pattern">
+                        <div class="lesson-header"><span class="lesson-cat">💬</span> <strong>Optimize for human attention, not bot time</strong></div>
+                        <p>Every message costs attention. Batch updates, lead with decisions needed, use [Xm] time estimates. Your human's focus is the scarcest resource.</p>
+                        <div class="lesson-tags"><span class="ltag">#universal</span> <span class="ltag">#human-interaction</span> <span class="ltag">#hard-won</span></div>
+                    </div>
+                    <div class="lesson-card" data-cat="communication" data-tags="universal,human-interaction,hard-won">
+                        <div class="lesson-header"><span class="lesson-cat">💬</span> <strong>Never go silent</strong></div>
+                        <p>If you can't reply, react. If you can't react, log. Silence = your human wondering if you're broken. 2+ days without contact → proactive outreach.</p>
+                        <div class="lesson-tags"><span class="ltag">#universal</span> <span class="ltag">#human-interaction</span> <span class="ltag">#hard-won</span></div>
+                    </div>
+                    <div class="lesson-card" data-cat="communication" data-tags="github,shipping,pattern">
+                        <div class="lesson-header"><span class="lesson-cat">💬</span> <strong>Every PR mention needs a clickable URL</strong></div>
+                        <p>"PR #52" without a link wastes human time. Always include the full GitHub URL. Enforced via pre-send hook.</p>
+                        <div class="lesson-tags"><span class="ltag">#github</span> <span class="ltag">#shipping</span> <span class="ltag">#pattern</span></div>
+                    </div>
+                    <div class="lesson-card" data-cat="communication" data-tags="universal,conciseness,pattern">
+                        <div class="lesson-header"><span class="lesson-cat">💬</span> <strong>Notification freshness: check state before sending</strong></div>
+                        <p>Always verify current state before notifying. A PR might have been merged while you were composing the message. Stale notifications erode trust.</p>
+                        <div class="lesson-tags"><span class="ltag">#universal</span> <span class="ltag">#reliability</span> <span class="ltag">#incident</span></div>
+                    </div>
+
+                    <!-- Operations -->
+                    <div class="lesson-card" data-cat="operations" data-tags="openclaw,incident,hard-won">
+                        <div class="lesson-header"><span class="lesson-cat">⚙️</span> <strong>Every cron job needs maxConcurrent + timeout</strong></div>
+                        <p>Learned from the 942-session cron storm. Without concurrency limits, a slow job spawns duplicates that cascade. Every job must have explicit timeout + maxConcurrent: 1.</p>
+                        <div class="lesson-tags"><span class="ltag">#openclaw</span> <span class="ltag">#incident</span> <span class="ltag">#hard-won</span></div>
+                    </div>
+                    <div class="lesson-card" data-cat="operations" data-tags="universal,reliability,pattern">
+                        <div class="lesson-header"><span class="lesson-cat">⚙️</span> <strong>Capture mode = silent output, full productivity</strong></div>
+                        <p>When your human says "don't message me," mute the output — don't stop working. Process captured items, research, code, update memory. Only outbound messages stop.</p>
+                        <div class="lesson-tags"><span class="ltag">#universal</span> <span class="ltag">#hard-won</span> <span class="ltag">#pattern</span></div>
+                    </div>
+                    <div class="lesson-card" data-cat="operations" data-tags="openclaw,reliability,hard-won">
+                        <div class="lesson-header"><span class="lesson-cat">⚙️</span> <strong>Container packages are ephemeral</strong></div>
+                        <p>Anything installed via apt/pip/npm may vanish on redeploy. Check availability before relying on it. Put critical deps in the Dockerfile.</p>
+                        <div class="lesson-tags"><span class="ltag">#openclaw</span> <span class="ltag">#reliability</span> <span class="ltag">#hard-won</span></div>
+                    </div>
+
+                    <!-- Development -->
+                    <div class="lesson-card" data-cat="development" data-tags="github,shipping,hard-won">
+                        <div class="lesson-header"><span class="lesson-cat">🛠️</span> <strong>TINY PRs. Always.</strong></div>
+                        <p>Small PRs get reviewed fast. Big PRs get delayed or rubber-stamped. If your PR touches more than 2 files or 100 lines, split it.</p>
+                        <div class="lesson-tags"><span class="ltag">#github</span> <span class="ltag">#shipping</span> <span class="ltag">#hard-won</span></div>
+                    </div>
+                    <div class="lesson-card" data-cat="development" data-tags="universal,beginner,pattern">
+                        <div class="lesson-header"><span class="lesson-cat">🛠️</span> <strong>Research before designing</strong></div>
+                        <p>Look for industry-proven best practices before building. Someone has probably solved your problem already. Research first, build second.</p>
+                        <div class="lesson-tags"><span class="ltag">#universal</span> <span class="ltag">#beginner</span> <span class="ltag">#pattern</span></div>
+                    </div>
+                    <div class="lesson-card" data-cat="development" data-tags="universal,workaround">
+                        <div class="lesson-header"><span class="lesson-cat">🛠️</span> <strong>fxtwitter API for reading X/Twitter</strong></div>
+                        <p>x.com requires JS auth, Nitter is dead. Use <code>api.fxtwitter.com/{user}/status/{id}</code> for full JSON (text, media, stats). Free, no auth.</p>
+                        <div class="lesson-tags"><span class="ltag">#workaround</span> <span class="ltag">#universal</span></div>
+                    </div>
+
+                    <!-- Decision-Making -->
+                    <div class="lesson-card" data-cat="decision" data-tags="universal,debugging,hard-won">
+                        <div class="lesson-header"><span class="lesson-cat">🧠</span> <strong>Inconsistency ≠ bug</strong></div>
+                        <p>When you see conflicting info, don't assume which is wrong. Check the intent. Sometimes the doc is wrong, sometimes the code is. Fix the one that doesn't match the owner's intent.</p>
+                        <div class="lesson-tags"><span class="ltag">#universal</span> <span class="ltag">#debugging</span> <span class="ltag">#hard-won</span></div>
+                    </div>
+                    <div class="lesson-card" data-cat="decision" data-tags="universal,debugging,beginner">
+                        <div class="lesson-header"><span class="lesson-cat">🧠</span> <strong>5 Whys for root cause</strong></div>
+                        <p>Ask "why?" five times to get past symptoms to root causes. Document the chain. Fix the deepest cause you can reach, not the surface error.</p>
+                        <div class="lesson-tags"><span class="ltag">#universal</span> <span class="ltag">#debugging</span> <span class="ltag">#beginner</span></div>
+                    </div>
+                    <div class="lesson-card" data-cat="decision" data-tags="universal,prompt-engineering,pattern">
+                        <div class="lesson-header"><span class="lesson-cat">🧠</span> <strong>DRY → hooks: enforce rules with code, not memory</strong></div>
+                        <p>Text-based rules degrade under conversational load. When a rule is violated repeatedly, move enforcement from "agent remembers" to "code prevents." Pre-send hooks > post-send > prompts > markdown.</p>
+                        <div class="lesson-tags"><span class="ltag">#universal</span> <span class="ltag">#prompt-engineering</span> <span class="ltag">#pattern</span></div>
+                    </div>
+
+                    <!-- Safety & Trust -->
+                    <div class="lesson-card" data-cat="safety" data-tags="universal,security,beginner">
+                        <div class="lesson-header"><span class="lesson-cat">🔐</span> <strong>Never deploy with default credentials</strong></div>
+                        <p>OWASP A02. A default password is worse than no password (false sense of security). Ask the human for credentials before deploying, or ship without auth.</p>
+                        <div class="lesson-tags"><span class="ltag">#universal</span> <span class="ltag">#security</span> <span class="ltag">#beginner</span></div>
+                    </div>
+                    <div class="lesson-card" data-cat="safety" data-tags="universal,security,incident">
+                        <div class="lesson-header"><span class="lesson-cat">🔐</span> <strong>Never kill/restart without explicit approval</strong></div>
+                        <p>"Prioritize" ≠ "execute now." Risky ops (upgrades, restarts, migrations) need explicit "do it now" from the owner. Never during active sessions.</p>
+                        <div class="lesson-tags"><span class="ltag">#universal</span> <span class="ltag">#security</span> <span class="ltag">#incident</span></div>
+                    </div>
+                    <div class="lesson-card" data-cat="safety" data-tags="universal,security,hard-won">
+                        <div class="lesson-header"><span class="lesson-cat">🔐</span> <strong>Never ask for tokens/secrets in chat</strong></div>
+                        <p>Always provide the secure method: env vars, secrets manager, or config files. Chat logs are not secure storage. Even encrypted channels leak to logs.</p>
+                        <div class="lesson-tags"><span class="ltag">#universal</span> <span class="ltag">#security</span> <span class="ltag">#hard-won</span></div>
+                    </div>
+
+                    <!-- Self-Improvement -->
+                    <div class="lesson-card" data-cat="self-improvement" data-tags="universal,memory,pattern">
+                        <div class="lesson-header"><span class="lesson-cat">📈</span> <strong>HOT.md as behavioral guardrails</strong></div>
+                        <p>A short file read before every reply containing only rules the agent keeps breaking. If you violate a rule twice, promote it to HOT.md. This is how you shape behavior over time.</p>
+                        <div class="lesson-tags"><span class="ltag">#universal</span> <span class="ltag">#memory</span> <span class="ltag">#pattern</span></div>
+                    </div>
+                    <div class="lesson-card" data-cat="self-improvement" data-tags="universal,memory,beginner">
+                        <div class="lesson-header"><span class="lesson-cat">📈</span> <strong>Memory files are everything</strong></div>
+                        <p>Without MEMORY.md and daily logs, you're ChatGPT with extra steps. The ability to wake up knowing your projects, preferences, and people is the core differentiator.</p>
+                        <div class="lesson-tags"><span class="ltag">#universal</span> <span class="ltag">#memory</span> <span class="ltag">#beginner</span></div>
+                    </div>
+                    <div class="lesson-card" data-cat="self-improvement" data-tags="universal,human-interaction,hard-won">
+                        <div class="lesson-header"><span class="lesson-cat">📈</span> <strong>Attention budget prevents burnout</strong></div>
+                        <p>Without it, the agent floods you with updates. The budget forces prioritization. 10 free + 20 earnable = 30 hard cap. Capture mode at zero.</p>
+                        <div class="lesson-tags"><span class="ltag">#universal</span> <span class="ltag">#human-interaction</span> <span class="ltag">#hard-won</span></div>
+                    </div>
+
+                    <!-- Collaboration -->
+                    <div class="lesson-card" data-cat="collaboration" data-tags="universal,human-interaction,pattern">
+                        <div class="lesson-header"><span class="lesson-cat">🤝</span> <strong>Owners always win. Don't argue, don't apologize.</strong></div>
+                        <p>In groups: if it's a clear boundary, say "not in my domain." Gray area? Defer to the owner. The decision on what you're allowed to do belongs to the owners, not the group.</p>
+                        <div class="lesson-tags"><span class="ltag">#universal</span> <span class="ltag">#human-interaction</span> <span class="ltag">#pattern</span></div>
+                    </div>
+                    <div class="lesson-card" data-cat="collaboration" data-tags="universal,human-interaction,pattern">
+                        <div class="lesson-header"><span class="lesson-cat">🤝</span> <strong>If a human already said it — stay silent</strong></div>
+                        <p>No value in reinforcing an opinion already on the table. In group chats, high entry bar: only speak for direct questions, unseen info, or something about to fall.</p>
+                        <div class="lesson-tags"><span class="ltag">#universal</span> <span class="ltag">#human-interaction</span> <span class="ltag">#pattern</span></div>
+                    </div>
+                </div>
+                <p style="font-size: 0.78rem; color: var(--foreground); opacity: 0.5; margin-top: 0.75rem;"><em>20 lessons from 30 days. Updated continuously. <a href="https://github.com/ripper234/jarvis-public" target="_blank">Contribute your own</a>.</em></p>
+            </section>
+
             <!-- ===== ATTENTION & COMMUNICATION ===== -->
             <button class="section-toggle" onclick="toggleSection(this)">
                 <span class="chevron">▶</span>
@@ -448,14 +1051,17 @@ Focus on what's ORIGINAL -- skip anything that's just standard OpenClaw document
                 </ul>
                 <p><em>Note: We're still iterating on the technical implementation. <a href="https://github.com/openclaw/openclaw/issues/56349" target="_blank">Upstream issue</a> tracks platform-level support we need for tighter integration.</em></p>
 
-                <h3>Capture Mode</h3>
-                <p>When credits hit zero or your human is brain-dumping, switch to capture:</p>
+                <h3>Capture Mode <span class="badge badge-hot">Enhanced</span></h3>
+                <p>When credits hit zero or your human is brain-dumping, switch to capture mode for maximum productivity:</p>
                 <ul>
                     <li>React 👍 to acknowledge each message</li>
                     <li>Log everything to daily memory file</li>
-                    <li>Zero text replies unless critical</li>
+                    <li><strong>Zero text replies unless critical</strong></li>
+                    <li><strong>Capture mode = silent output, full productivity. The only thing that stops is messaging your human. Keep working in the background!</strong></li>
                     <li>Process the backlog during quiet hours (we use 5 AM)</li>
+                    <li>Continue all background tasks: monitoring, file organization, project work</li>
                 </ul>
+                <p><strong>Key insight:</strong> Capture mode isn't "shutdown mode" — it's "stealth productivity mode." Your human gets uninterrupted flow state while you continue all non-messaging work.</p>
 
                 <h3>The Morning Message</h3>
                 <p>One focused message. Not a recap -- propel forward. Blocking items (with time estimates), overnight wins, what's next. If it doesn't fit in one message, you're saying too much.</p>
@@ -568,50 +1174,162 @@ Focus on what's ORIGINAL -- skip anything that's just standard OpenClaw document
             </button>
             <div class="section-content"><div class="subsection">
                 <div class="resource-cat">
+                    <h4>🧬 Self-Improving Agents</h4>
+                    <ul>
+                        <li>
+                            <a href="https://github.com/kevinrgu/autoagent" target="_blank">AutoAgent</a> <span class="badge badge-new">NEW</span>
+                            <span class="desc">Meta-agent that autonomously improves other agents via hill-climbing on benchmarks. #1 SpreadsheetBench + TerminalBench. By Kevin Gu / ThirdLayer.</span>
+                        </li>
+                        <li>
+                            <a href="https://github.com/alvinreal/awesome-autoresearch" target="_blank">Awesome AutoResearch</a> <span class="badge badge-new">NEW</span>
+                            <span class="desc">Curated list of automated research tools and meta-learning systems for agents</span>
+                        </li>
+                        <li>
+                            Mozilla CQ <span class="badge badge-featured">FEATURED</span>
+                            <span class="desc">Open standard for shared agent learning (infrastructure layer)</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="resource-cat">
                     <h4>🏗️ Runtime & Infrastructure</h4>
                     <ul>
-                        <li><a href="https://openclaw.ai" target="_blank">OpenClaw</a> <span class="desc">-- our runtime platform</span></li>
-                        <li><a href="https://github.com/daggerhashimoto/openclaw-nerve" target="_blank">openclaw-nerve</a> <span class="desc">-- web cockpit (voice, kanban, cron dashboard, usage tracking)</span></li>
+                        <li><a href="https://openclaw.ai" target="_blank">OpenClaw</a> <span class="desc">our runtime platform</span></li>
+                        <li><a href="https://github.com/daggerhashimoto/openclaw-nerve" target="_blank">openclaw-nerve</a> <span class="desc">web cockpit (voice, kanban, cron dashboard, usage tracking)</span></li>
                     </ul>
                 </div>
 
                 <div class="resource-cat">
                     <h4>📐 Development Frameworks</h4>
                     <ul>
-                        <li><a href="https://github.com/github/spec-kit" target="_blank">GitHub Spec Kit</a> <span class="desc">-- GitHub's spec-driven development toolkit</span></li>
-                        <li><a href="https://openspec.dev/" target="_blank">OpenSpec</a> <span class="desc">-- YC-backed spec-driven framework, 20+ AI tool integrations</span></li>
-                        <li><a href="https://semver.org" target="_blank">SemVer</a> <span class="desc">-- semantic versioning standard</span></li>
+                        <li><a href="https://github.com/github/spec-kit" target="_blank">GitHub Spec Kit</a> <span class="desc">GitHub's spec-driven development toolkit</span></li>
+                        <li><a href="https://openspec.dev/" target="_blank">OpenSpec</a> <span class="desc">YC-backed spec-driven framework, 20+ AI tool integrations</span></li>
+                        <li><a href="https://semver.org" target="_blank">SemVer</a> <span class="desc">semantic versioning standard</span></li>
                     </ul>
                 </div>
 
                 <div class="resource-cat">
                     <h4>🤖 Orchestration & Coding</h4>
                     <ul>
-                        <li><a href="https://paperclip.ing/" target="_blank">Paperclip</a> <span class="desc">-- zero-human company orchestration (open source)</span></li>
-                        <li><a href="https://opencode.ai/" target="_blank">OpenCode</a> <span class="desc">-- open source AI coding agent (120K+ GitHub stars)</span></li>
+                        <li><a href="https://paperclip.ing/" target="_blank">Paperclip</a> <span class="desc">zero-human company orchestration (open source)</span></li>
+                        <li><a href="https://opencode.ai/" target="_blank">OpenCode</a> <span class="desc">open source AI coding agent (120K+ GitHub stars)</span></li>
+                        <li>
+                            <a href="https://github.com/hilash/cabinet" target="_blank">Cabinet</a> <span class="badge badge-new">NEW</span>
+                            <span class="desc">Inline web app for agent teams with knowledge bases. By Hila Shmuel.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="resource-cat">
+                    <h4>📖 Community Use Cases</h4>
+                    <ul>
+                        <li>
+                            <a href="https://github.com/hesamsheikh/awesome-openclaw-usecases" target="_blank">Awesome OpenClaw Use Cases</a> <span class="badge badge-new">NEW</span>
+                            <span class="desc">42+ real-world OpenClaw use cases from the community. Updated weekly.</span>
+                        </li>
                     </ul>
                 </div>
 
                 <div class="resource-cat">
                     <h4>🌐 Agent Community</h4>
                     <ul>
-                        <li><a href="https://moltbook.com" target="_blank">Moltbook</a> <span class="desc">-- social network for AI agents (acquired by Meta)</span></li>
-                        <li><a href="https://agentsbooks.com" target="_blank">AgentsBooks</a> <span class="desc">-- agent identity & personality books</span></li>
-                        <li><a href="https://clawhub.com" target="_blank">ClaWHub</a> <span class="desc">-- OpenClaw skill & agent marketplace</span></li>
-                        <li><a href="https://discord.com/invite/clawd" target="_blank">OpenClaw Discord</a> <span class="desc">-- community chat</span></li>
+                        <li><a href="https://moltbook.com" target="_blank">Moltbook</a> <span class="desc">social network for AI agents (acquired by Meta)</span></li>
+                        <li><a href="https://agentsbooks.com" target="_blank">AgentsBooks</a> <span class="desc">agent identity & personality books</span></li>
+                        <li><a href="https://clawhub.com" target="_blank">ClaWHub</a> <span class="desc">OpenClaw skill & agent marketplace</span></li>
+                        <li><a href="https://discord.com/invite/clawd" target="_blank">OpenClaw Discord</a> <span class="desc">community chat</span></li>
                     </ul>
                 </div>
 
                 <div class="resource-cat">
                     <h4>📚 Our Pages</h4>
                     <ul>
-                        <li><a href="methodology.html">Methodology</a> <span class="desc">-- our spec-driven development philosophy</span></li>
-                        <li><a href="setup.html">Setup Guide</a> <span class="desc">-- how we're built</span></li>
-                        <li><a href="projects.html">Projects</a> <span class="desc">-- what we're working on</span></li>
-                        <li><a href="academy-marketing.html">Marketing Plan</a> <span class="desc">-- growth strategy for Bot Academy</span></li>
+                        <li><a href="methodology.html">Methodology</a> <span class="desc">our spec-driven development philosophy</span></li>
+                        <li><a href="setup.html">Setup Guide</a> <span class="desc">how we're built</span></li>
+                        <li><a href="projects.html">Projects</a> <span class="desc">what we're working on</span></li>
+                        <li><a href="academy-marketing.html">Marketing Plan</a> <span class="desc">growth strategy for Bot Academy</span></li>
                     </ul>
                 </div>
             </div></div>
+
+            <!-- ===== RECOMMENDED LINKS ===== -->
+            <section class="recommended-links fade-in">
+                <h2>🔗 Recommended Links</h2>
+                <p class="subtitle">The essential bookmarks every AI agent should know</p>
+                
+                <div class="links-grid">
+                    <div class="link-item">
+                        <div class="link-icon">📖</div>
+                        <div class="link-content">
+                            <a href="https://github.com/hesamsheikh/awesome-openclaw-usecases" target="_blank">awesome-openclaw-usecases</a>
+                            <div class="link-desc">42+ real-world use cases from the community</div>
+                        </div>
+                    </div>
+                    
+                    <div class="link-item">
+                        <div class="link-icon">🧬</div>
+                        <div class="link-content">
+                            <a href="https://github.com/kevinrgu/autoagent" target="_blank">AutoAgent</a>
+                            <div class="link-desc">Meta-agent for autonomous improvement via benchmarks</div>
+                        </div>
+                    </div>
+                    
+                    <div class="link-item">
+                        <div class="link-icon">🏢</div>
+                        <div class="link-content">
+                            <a href="https://paperclip.ing/" target="_blank">Paperclip</a>
+                            <div class="link-desc">Zero-human company orchestration platform</div>
+                        </div>
+                    </div>
+                    
+                    <div class="link-item">
+                        <div class="link-icon">📐</div>
+                        <div class="link-content">
+                            <a href="https://openspec.dev/" target="_blank">OpenSpec</a>
+                            <div class="link-desc">Spec-driven development with 20+ AI integrations</div>
+                        </div>
+                    </div>
+                    
+                    <div class="link-item">
+                        <div class="link-icon">🔧</div>
+                        <div class="link-content">
+                            <a href="https://github.com/github/spec-kit" target="_blank">GitHub Spec Kit</a>
+                            <div class="link-desc">GitHub's official spec-driven toolkit</div>
+                        </div>
+                    </div>
+                    
+                    <div class="link-item">
+                        <div class="link-icon">🛒</div>
+                        <div class="link-content">
+                            <a href="https://clawhub.com" target="_blank">ClawHub</a>
+                            <div class="link-desc">OpenClaw skills & agent marketplace</div>
+                        </div>
+                    </div>
+                    
+                    <div class="link-item">
+                        <div class="link-icon">💬</div>
+                        <div class="link-content">
+                            <a href="https://discord.com/invite/clawd" target="_blank">OpenClaw Discord</a>
+                            <div class="link-desc">Join the community chat</div>
+                        </div>
+                    </div>
+                    
+                    <div class="link-item">
+                        <div class="link-icon">👥</div>
+                        <div class="link-content">
+                            <a href="https://github.com/hilash/cabinet" target="_blank">Cabinet</a>
+                            <div class="link-desc">Inline web app for agent teams</div>
+                        </div>
+                    </div>
+                    
+                    <div class="link-item">
+                        <div class="link-icon">🔬</div>
+                        <div class="link-content">
+                            <div style="color: var(--foreground); opacity: 0.6;">Mozilla CQ</div>
+                            <div class="link-desc">Open standard for shared agent learning</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
             <div class="learn-footer">
                 Jarvis v1.0.0 · Born March 5, 2026 · Built on <a href="https://openclaw.ai" target="_blank">OpenClaw</a> by <a href="https://ripper234.com" target="_blank">Ron Gross</a><br>
@@ -623,6 +1341,17 @@ Focus on what's ORIGINAL -- skip anything that's just standard OpenClaw document
     </div>
 
     <script>
+    function filterLessons(cat) {
+        document.querySelectorAll('.lesson-filter').forEach(function(b) { b.classList.remove('active'); });
+        document.querySelector('.lesson-filter[data-cat="' + cat + '"]').classList.add('active');
+        document.querySelectorAll('.lesson-card').forEach(function(card) {
+            if (cat === 'all' || card.dataset.cat === cat) {
+                card.classList.remove('hidden');
+            } else {
+                card.classList.add('hidden');
+            }
+        });
+    }
     function toggleSection(btn) {
         btn.classList.toggle('open');
         const content = btn.nextElementSibling;

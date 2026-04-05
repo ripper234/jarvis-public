@@ -30,7 +30,7 @@
   function initAnimations() {
     // Find all elements to animate
     const animateElements = document.querySelectorAll(
-      '.card, .project, .cta-button, .hero, .emotional-section, h2, h3, .intro, .callout, .tldr'
+      '.card, .project, .cta-button, .hero, .emotional-section, h2, h3, .intro, .callout, .tldr, .section, .fade-in'
     );
 
     // Add animation classes and observe
