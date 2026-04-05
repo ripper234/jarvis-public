@@ -188,6 +188,7 @@
         <button class="tab active" data-tab="overview">Overview</button>
         <button class="tab" data-tab="academy">🎓 Academy</button>
         <button class="tab" data-tab="balance">⚖️ Balance</button>
+        <button class="tab" data-tab="costs">💰 Costs</button>
         <button class="tab" data-tab="live">📈 Live Analytics</button>
     </div>
 
@@ -394,6 +395,43 @@
         </div>
     </div>
 
+    <!-- ===== COSTS ===== -->
+    <div class="panel" id="tab-costs">
+        <h2 style="font-size: 1.1rem; margin-bottom: 1rem;">💰 Cost Tracking</h2>
+
+        <div class="stats" id="cost-stats">
+            <div class="stat"><div class="num" id="c-llm-total">--</div><div class="label">LLM Total</div></div>
+            <div class="stat"><div class="num" id="c-infra-total">--</div><div class="label">Infra Total</div></div>
+            <div class="stat"><div class="num" id="c-grand-total">--</div><div class="label">Grand Total</div></div>
+            <div class="stat"><div class="num" id="c-sessions">--</div><div class="label">Sessions</div></div>
+        </div>
+
+        <div class="section">
+            <h3>📊 Daily LLM Costs</h3>
+            <p style="font-size: 0.75rem; color: #888; margin-bottom: 0.75rem;">Claude Opus 4 — input, output, and cache read costs</p>
+            <canvas id="chart-llm" height="280"></canvas>
+        </div>
+
+        <div class="section">
+            <h3>📊 Total Daily Costs (LLM + Infrastructure)</h3>
+            <p style="font-size: 0.75rem; color: #888; margin-bottom: 0.75rem;">All costs: LLM API + Railway hosting</p>
+            <canvas id="chart-total" height="280"></canvas>
+        </div>
+
+        <div class="section">
+            <h3>📋 Daily Breakdown</h3>
+            <table class="ptable" id="cost-table">
+                <thead><tr><th>Date</th><th>Sessions</th><th>LLM</th><th>Infra</th><th>Total</th></tr></thead>
+                <tbody id="cost-tbody"></tbody>
+            </table>
+        </div>
+
+        <p style="font-size: 0.68rem; color: #999; margin-top: 0.5rem;">
+            Data generated from OpenClaw session logs. Updated via cron.
+            Pricing: Claude Opus 4 ($15/M input, $75/M output, $1.50/M cache read). Railway Hobby $5/mo.
+        </p>
+    </div>
+
     <!-- ===== LIVE ANALYTICS ===== -->
     <div class="panel" id="tab-live">
         <h2 style="font-size: 1.1rem; margin-bottom: 1rem;">📈 Live Analytics</h2>
@@ -558,10 +596,129 @@ async function fetchGHTraffic() {
     }
 }
 
+// --- Cost Charts ---
+async function loadCostData() {
+    try {
+        const resp = await fetch('data/costs.json');
+        if (!resp.ok) throw new Error('No cost data');
+        const data = await resp.json();
+
+        // Update stats
+        document.getElementById('c-llm-total').textContent = '$' + data.totals.llm.toFixed(2);
+        document.getElementById('c-infra-total').textContent = '$' + data.totals.infra.toFixed(2);
+        document.getElementById('c-grand-total').textContent = '$' + data.totals.total.toFixed(2);
+        document.getElementById('c-sessions').textContent = data.totals.sessions;
+
+        // Populate table
+        var tbody = document.getElementById('cost-tbody');
+        var rows = '';
+        data.daily.forEach(function(d) {
+            rows += '<tr><td>' + d.date + '</td><td>' + d.sessions + '</td>'
+                + '<td>$' + d.llm.toFixed(2) + '</td>'
+                + '<td>$' + d.infra.toFixed(2) + '</td>'
+                + '<td><strong>$' + d.total.toFixed(2) + '</strong></td></tr>';
+        });
+        tbody.innerHTML = rows;
+
+        // Load Chart.js dynamically
+        if (!window.Chart) {
+            await new Promise(function(resolve) {
+                var s = document.createElement('script');
+                s.src = 'https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js';
+                s.onload = resolve;
+                document.head.appendChild(s);
+            });
+        }
+
+        var labels = data.daily.map(function(d) { return d.date; });
+        var llmValues = data.daily.map(function(d) { return d.llm; });
+        var infraValues = data.daily.map(function(d) { return d.infra; });
+        var totalValues = data.daily.map(function(d) { return d.total; });
+
+        // LLM Cost Chart
+        new Chart(document.getElementById('chart-llm'), {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'LLM Cost ($)',
+                    data: llmValues,
+                    backgroundColor: 'rgba(124, 58, 237, 0.7)',
+                    borderColor: '#7C3AED',
+                    borderWidth: 1,
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(ctx) { return '$' + ctx.raw.toFixed(2); }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { callback: function(v) { return '$' + v; } }
+                    }
+                }
+            }
+        });
+
+        // Total Cost Chart (stacked)
+        new Chart(document.getElementById('chart-total'), {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'LLM',
+                        data: llmValues,
+                        backgroundColor: 'rgba(124, 58, 237, 0.7)',
+                        borderRadius: 4
+                    },
+                    {
+                        label: 'Infrastructure',
+                        data: infraValues,
+                        backgroundColor: 'rgba(8, 145, 178, 0.7)',
+                        borderRadius: 4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'top', labels: { font: { size: 11 } } },
+                    tooltip: {
+                        callbacks: {
+                            label: function(ctx) { return ctx.dataset.label + ': $' + ctx.raw.toFixed(2); }
+                        }
+                    }
+                },
+                scales: {
+                    x: { stacked: true },
+                    y: {
+                        stacked: true,
+                        beginAtZero: true,
+                        ticks: { callback: function(v) { return '$' + v; } }
+                    }
+                }
+            }
+        });
+
+    } catch (e) {
+        console.log('Cost data not available:', e);
+    }
+}
+
 // --- Init (only after auth) ---
 function initDashboard() {
     applySettings();
     fetchGHTraffic();
+    loadCostData();
 }
 
 // Init

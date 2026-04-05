@@ -1,0 +1,48 @@
+{
+  "generated_at": "2026-04-05T14:09:41.871153+00:00",
+  "daily": [
+    {
+      "date": "2026-04-03",
+      "llm": 0.45,
+      "infra": 0.17,
+      "sessions": 5,
+      "input_tokens": 24,
+      "output_tokens": 1591,
+      "cache_tokens": 219258,
+      "total": 0.62
+    },
+    {
+      "date": "2026-04-04",
+      "llm": 19.45,
+      "infra": 0.17,
+      "sessions": 274,
+      "input_tokens": 1122,
+      "output_tokens": 71711,
+      "cache_tokens": 9368501,
+      "total": 19.62
+    },
+    {
+      "date": "2026-04-05",
+      "llm": 29.32,
+      "infra": 0.17,
+      "sessions": 382,
+      "input_tokens": 1645,
+      "output_tokens": 103446,
+      "cache_tokens": 14359999,
+      "total": 29.49
+    }
+  ],
+  "models": {
+    "claude-opus-4-6": {
+      "cost": 49.2196020000002,
+      "sessions": 661,
+      "tokens": 179539
+    }
+  },
+  "totals": {
+    "llm": 49.22,
+    "infra": 0.51,
+    "total": 49.73,
+    "sessions": 661
+  }
+}
