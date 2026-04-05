@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ron.build</title>
+
+  <!-- SEO & Social Meta -->
+  <meta name="description" content="בלוג על בנייה עם AI — רון גרוס">
+  <meta name="author" content="Ron Gross">
+  <link rel="canonical" href="https://jarvis.ripper234.com/ronbuild.html">
+  <link rel="alternate" type="application/rss+xml" title="ron.build RSS" href="/feed.xml">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="ron.build">
+  <meta property="og:description" content="בלוג על בנייה עם AI — רון גרוס">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://jarvis.ripper234.com/ronbuild.html">
+  <meta property="og:locale" content="he_IL">
+  <meta property="og:image" content="https://jarvis.ripper234.com/og-ronbuild.png">
+  <meta property="og:site_name" content="ron.build">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ron.build">
+  <meta name="twitter:description" content="בלוג על בנייה עם AI — רון גרוס">
+  <meta name="twitter:image" content="https://jarvis.ripper234.com/og-ronbuild.png">
+
+  <!-- Schema.org JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "name": "ron.build",
+    "description": "בלוג על בנייה עם AI — רון גרוס",
+    "url": "https://jarvis.ripper234.com/ronbuild.html",
+    "inLanguage": "he",
+    "author": {
+      "@type": "Person",
+      "name": "Ron Gross",
+      "url": "https://ripper234.com"
+    }
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #7C3AED;
+      --primary-light: #EDE9FE;
+      --accent: #0891B2;
+      --accent-light: #CFFAFE;
+      --background: #FAF5FF;
+      --card: #FFFFFF;
+      --foreground: #1E1B2E;
+      --text-muted: #6B7280;
+      --border: #E5E1EE;
+      --font-heading: 'Heebo', 'Space Grotesk', sans-serif;
+      --font-body: 'Heebo', 'DM Sans', sans-serif;
+      --shadow-sm: 0 1px 3px rgba(124,58,237,0.06);
+      --shadow-md: 0 4px 16px rgba(124,58,237,0.1);
+      --shadow-lg: 0 8px 30px rgba(124,58,237,0.12);
+      --transition-fast: 0.15s ease;
+      --transition-normal: 0.25s ease;
+      --radius: 16px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-body);
+      font-size: 18px;
+      background: var(--background);
+      color: var(--foreground);
+      direction: rtl;
+      text-align: right;
+      min-height: 100dvh;
+      line-height: 1.75;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    a { color: var(--primary); text-decoration: none; }
+    a:hover { color: var(--accent); }
+
+    .page {
+      max-width: 800px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 1.5rem 1.25rem 3rem;
+    }
+
+    /* ─── Top bar ─── */
+    .blog-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 0;
+      font-size: 0.85rem;
+    }
+
+    .blog-nav a {
+      color: var(--primary);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-family: var(--font-heading);
+      font-weight: 500;
+    }
+
+    /* ─── Header ─── */
+    .blog-header {
+      text-align: center;
+      padding: 2.5rem 0 1.5rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 2rem;
+    }
+
+    .blog-header h1 {
+      font-family: var(--font-heading);
+      font-size: 2.75rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .blog-header .author {
+      font-family: var(--font-heading);
+      font-size: 1.25rem;
+      color: var(--foreground);
+      opacity: 0.9;
+      margin-bottom: 0.25rem;
+    }
+
+    .blog-header .author a {
+      color: var(--primary);
+      text-decoration: none;
+      transition: opacity var(--transition-fast, 0.15s);
+    }
+
+    .blog-header .author a:hover {
+      opacity: 0.7;
+    }
+
+    .blog-header .tagline {
+      font-size: 1.05rem;
+      color: var(--foreground);
+      opacity: 0.6;
+      font-style: italic;
+    }
+
+    .post-count-badge {
+      display: inline-block;
+      margin-top: 0.75rem;
+      font-family: var(--font-heading);
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--primary);
+      background: var(--primary-light);
+      padding: 0.25rem 0.75rem;
+      border-radius: 100px;
+    }
+
+    /* ─── Search ─── */
+    .search-wrapper {
+      max-width: 720px;
+      margin: 0 auto 1.5rem;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      font-family: var(--font-body);
+      font-size: 1rem;
+      padding: 0.75rem 1.25rem 0.75rem 2.75rem;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      background: var(--card);
+      color: var(--foreground);
+      outline: none;
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+      direction: rtl;
+    }
+
+    .search-input::placeholder {
+      color: var(--text-muted);
+      opacity: 0.7;
+    }
+
+    .search-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(124,58,237,0.1);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      pointer-events: none;
+    }
+
+    .search-clear {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 1.1rem;
+      display: none;
+      padding: 0.25rem;
+    }
+
+    .search-clear.visible { display: block; }
+
+    .no-results {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--text-muted);
+      font-size: 1.1rem;
+    }
+
+    /* ─── Table of Contents ─── */
+    .toc {
+      max-width: 720px;
+      margin: 0 auto 2rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.5rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .toc-header {
+      font-family: var(--font-heading);
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--primary);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .toc-header .toggle-icon {
+      transition: transform var(--transition-fast);
+      font-size: 0.75rem;
+    }
+
+    .toc-header .toggle-icon.collapsed {
+      transform: rotate(-90deg);
+    }
+
+    .toc-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      max-height: 400px;
+      overflow-y: auto;
+      transition: max-height 0.3s ease, opacity 0.3s ease;
+    }
+
+    .toc-list.collapsed {
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+    }
+
+    .toc-item a {
+      font-size: 0.9rem;
+      color: var(--foreground);
+      opacity: 0.75;
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+      padding: 0.3rem 0.5rem;
+      border-radius: 8px;
+      transition: background var(--transition-fast), opacity var(--transition-fast);
+    }
+
+    .toc-item a:hover {
+      background: var(--primary-light);
+      opacity: 1;
+      color: var(--primary);
+    }
+
+    .toc-num {
+      font-family: var(--font-heading);
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--accent);
+      min-width: 1.75rem;
+      text-align: center;
+      opacity: 0.7;
+    }
+
+    /* ─── Blog posts container ─── */
+    .blog-posts {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    /* ─── Hero (latest post) ─── */
+    .blog-post.hero-post {
+      background: linear-gradient(135deg, var(--primary-light) 0%, #F5F3FF 40%, #ECFEFF 100%);
+      border: 2px solid rgba(124,58,237,0.2);
+      padding: 2.5rem 2.5rem;
+      box-shadow: var(--shadow-md);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .blog-post.hero-post::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, rgba(124,58,237,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      font-family: var(--font-heading);
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: white;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      padding: 0.2rem 0.75rem;
+      border-radius: 100px;
+      margin-bottom: 0.75rem;
+    }
+
+    .blog-post.hero-post .post-title {
+      font-size: 1.85rem;
+      line-height: 1.25;
+    }
+
+    .blog-post.hero-post .post-content {
+      font-size: 1.05rem;
+    }
+
+    /* ─── Regular post card ─── */
+    .blog-post {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.75rem 2rem;
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow var(--transition-normal), transform var(--transition-normal);
+    }
+
+    .blog-post:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-1px);
+    }
+
+    /* ─── Post header row ─── */
+    .post-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .post-date {
+      font-size: 0.8rem;
+      color: var(--accent);
+      font-weight: 600;
+      font-family: var(--font-heading);
+      letter-spacing: 0.03em;
+      text-decoration: none;
+      transition: opacity 0.15s;
+    }
+
+    a.post-date:hover {
+      opacity: 0.7;
+    }
+
+    .reading-time {
+      font-family: var(--font-heading);
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      background: rgba(107,114,128,0.08);
+      padding: 0.15rem 0.5rem;
+      border-radius: 100px;
+    }
+
+    .post-title {
+      font-family: var(--font-heading);
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: var(--foreground);
+      margin-bottom: 0.5rem;
+      line-height: 1.3;
+    }
+
+    .post-title a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .post-title a:hover {
+      color: var(--primary);
+    }
+
+    .post-tldr {
+      font-size: 1.1rem;
+      color: var(--primary);
+      opacity: 0.85;
+      font-weight: 500;
+      margin-bottom: 1.25rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .post-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .post-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--accent);
+      cursor: pointer;
+      user-select: none;
+      transition: opacity 0.15s;
+    }
+
+    .post-toggle:hover {
+      opacity: 0.7;
+    }
+
+    .post-toggle .arrow {
+      display: inline-block;
+      transition: transform 0.2s;
+    }
+
+    .post-toggle.expanded .arrow {
+      transform: rotate(90deg);
+    }
+
+    .post-content {
+      font-size: 1.1rem;
+      line-height: 1.9;
+      color: var(--foreground);
+      opacity: 0.88;
+    }
+
+    .post-content p {
+      margin-bottom: 1rem;
+    }
+
+    .post-content p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* First paragraph emphasis for visual rhythm */
+    .post-content p:first-of-type {
+      font-size: 1.05em;
+      opacity: 1;
+    }
+
+    .post-content strong {
+      color: var(--foreground);
+      font-weight: 700;
+    }
+
+    .post-content a {
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-color: rgba(8, 145, 178, 0.3);
+      text-underline-offset: 3px;
+      transition: text-decoration-color var(--transition-fast);
+      word-break: break-all;
+    }
+
+    .post-content a:hover {
+      text-decoration-color: var(--accent);
+    }
+
+    .post-content hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 1.5rem 0;
+    }
+
+    /* Pull quote style for lines starting with > */
+    .post-content blockquote {
+      border-right: 3px solid var(--primary);
+      padding: 0.75rem 1.25rem 0.75rem 0;
+      margin: 1.25rem 0;
+      font-style: italic;
+      color: var(--primary);
+      opacity: 0.85;
+      background: rgba(124,58,237,0.03);
+      border-radius: 0 8px 8px 0;
+    }
+
+    /* ─── Post footer (share) ─── */
+    .post-footer {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      margin-top: 1.25rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .share-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-family: var(--font-heading);
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      background: none;
+      border: 1px solid var(--border);
+      padding: 0.35rem 0.75rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+
+    .share-btn:hover {
+      color: var(--primary);
+      border-color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .share-btn.copied {
+      color: #059669;
+      border-color: #059669;
+      background: #ECFDF5;
+    }
+
+    /* ─── Loading / Error ─── */
+    .blog-loading {
+      text-align: center;
+      padding: 4rem 0;
+      color: var(--foreground);
+      opacity: 0.5;
+      font-size: 1.1rem;
+    }
+
+    .blog-loading .spinner {
+      display: inline-block;
+      width: 28px;
+      height: 28px;
+      border: 3px solid var(--border);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-bottom: 1rem;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .blog-error {
+      text-align: center;
+      padding: 3rem;
+      background: #FEF2F2;
+      border: 1px solid #FECACA;
+      border-radius: 12px;
+      color: #991B1B;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    /* ─── Footer ─── */
+    .blog-footer {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--foreground);
+      opacity: 0.45;
+    }
+
+    .last-updated {
+      font-size: 0.8rem;
+      color: var(--foreground);
+      opacity: 0.4;
+      text-align: center;
+      margin-top: 0.75rem;
+    }
+
+    /* ─── Back to top ─── */
+    .back-to-top {
+      position: fixed;
+      bottom: 2rem;
+      left: 2rem;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-md);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.3s ease, transform 0.3s ease, background 0.2s ease;
+      pointer-events: none;
+      z-index: 50;
+    }
+
+    .back-to-top.visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .back-to-top:hover {
+      background: var(--accent);
+    }
+
+    /* ─── Fade in animation ─── */
+    .blog-post {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+
+    .blog-post.visible {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    /* ─── Subscribe Section ─── */
+    .subscribe-section {
+      max-width: 720px;
+      margin: 2.5rem auto 0;
+      background: linear-gradient(135deg, var(--primary-light) 0%, #F5F3FF 50%, #ECFEFF 100%);
+      border: 2px solid rgba(124,58,237,0.15);
+      border-radius: var(--radius);
+      padding: 2rem 2.5rem;
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .subscribe-section h3 {
+      font-family: var(--font-heading);
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--foreground);
+      margin-bottom: 0.5rem;
+    }
+
+    .subscribe-section p {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-bottom: 1.25rem;
+    }
+
+    .subscribe-form {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .subscribe-form input[type="email"] {
+      font-family: var(--font-body);
+      font-size: 1rem;
+      padding: 0.7rem 1.25rem;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      background: var(--card);
+      color: var(--foreground);
+      outline: none;
+      width: 280px;
+      max-width: 100%;
+      direction: ltr;
+      text-align: left;
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+    }
+
+    .subscribe-form input[type="email"]:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(124,58,237,0.1);
+    }
+
+    .subscribe-form button {
+      font-family: var(--font-heading);
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 0.7rem 1.5rem;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: white;
+      cursor: pointer;
+      transition: opacity var(--transition-fast), transform var(--transition-fast);
+    }
+
+    .subscribe-form button:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .subscribe-rss {
+      margin-top: 1rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .subscribe-rss a {
+      color: var(--accent);
+    }
+
+    /* ─── Single post view ─── */
+    .single-post-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--font-heading);
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 1.5rem;
+      transition: opacity var(--transition-fast);
+    }
+
+    .single-post-back:hover {
+      opacity: 0.7;
+      color: var(--accent);
+    }
+
+    body.single-post-mode .blog-post {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 768px) {
+      .blog-header h1 {
+        font-size: 2.25rem;
+      }
+
+      .blog-post {
+        padding: 1.5rem 1.25rem;
+      }
+
+      .blog-post.hero-post {
+        padding: 1.75rem 1.5rem;
+      }
+
+      .blog-post.hero-post .post-title {
+        font-size: 1.5rem;
+      }
+
+      .post-title {
+        font-size: 1.25rem;
+      }
+
+      .toc {
+        padding: 1rem 1.25rem;
+      }
+
+      .back-to-top {
+        bottom: 1.25rem;
+        left: 1.25rem;
+        width: 40px;
+        height: 40px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <nav class="blog-nav">
+      <a href="https://jarvis.ripper234.com">→ jarvis.ripper234.com</a>
+      <span class="last-updated" id="lastUpdated"></span>
+    </nav>
+
+    <header class="blog-header">
+      <h1>ron.build</h1>
+      <div class="tagline">בלוג על בנייה עם AI</div>
+      <div class="author"><a href="https://ripper234.com" target="_blank" rel="noopener">רון גרוס</a></div>
+      <div class="post-count-badge" id="postCount" style="display:none;"></div>
+    </header>
+
+    <!-- Search -->
+    <div class="search-wrapper" id="searchWrapper" style="display:none;">
+      <input type="text" class="search-input" id="searchInput" placeholder="🔍 חיפוש בפוסטים..." autocomplete="off">
+      <button class="search-clear" id="searchClear" onclick="clearSearch()">✕</button>
+    </div>
+
+    <!-- Table of Contents -->
+    <nav class="toc" id="toc" style="display:none;">
+      <div class="toc-header" onclick="toggleToc()">
+        <span class="toggle-icon" id="tocToggle">▼</span>
+        <span>📑 תוכן עניינים</span>
+      </div>
+      <ol class="toc-list" id="tocList"></ol>
+    </nav>
+
+    <main id="blogPosts">
+      <div class="blog-loading" id="loadingIndicator">
+        <div class="spinner"></div>
+        <div>טוען פוסטים...</div>
+      </div>
+    </main>
+
+    <div class="no-results" id="noResults" style="display:none;">
+      😕 לא נמצאו פוסטים תואמים
+    </div>
+
+    <!-- Subscribe Section -->
+    <section class="subscribe-section">
+      <h3>📬 רוצים לקבל עדכונים?</h3>
+      <p>הירשמו וקבלו פוסט חדש ישירות למייל</p>
+      <!--
+        TODO: Ron — set up an email service and update the form action URL.
+        Options:
+        - Buttondown.email (free tier): change action to https://buttondown.com/api/emails/embed-subscribe/YOUR_USERNAME
+        - Mailchimp: use their embed form URL
+        - ConvertKit: use their form action URL
+        For now this form does nothing — it needs a real endpoint.
+      -->
+      <form class="subscribe-form" action="#" method="post" onsubmit="alert('📧 ההרשמה עדיין לא מוגדרת — Ron צריך לחבר שירות מיילים'); return false;">
+        <input type="email" name="email" placeholder="your@email.com" required aria-label="כתובת מייל">
+        <button type="submit">הרשמה ✉️</button>
+      </form>
+      <div class="subscribe-rss">
+        או עקבו דרך <a href="/feed.xml" target="_blank">RSS 📡</a>
+      </div>
+    </section>
+
+    <footer class="blog-footer">
+      <div>ron.build — נבנה עם AI ❤️</div>
+    </footer>
+  </div>
+
+  <button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0})" aria-label="חזרה למעלה">↑</button>
+
+  <script>
+    const CSV_URL = 'https://docs.google.com/spreadsheets/d/1x3njEmv5_Zo92w_nH-1s75m4xzLJ_DGxBDxs2-REtPY/gviz/tq?tqx=out:csv&gid=0';
+
+    // ─── CSV Parser ───
+    function parseCSV(text) {
+      const rows = [];
+      let current = '';
+      let inQuotes = false;
+      let row = [];
+
+      for (let i = 0; i < text.length; i++) {
+        const ch = text[i];
+        if (inQuotes) {
+          if (ch === '"') {
+            if (i + 1 < text.length && text[i + 1] === '"') {
+              current += '"';
+              i++;
+            } else {
+              inQuotes = false;
+            }
+          } else {
+            current += ch;
+          }
+        } else {
+          if (ch === '"') {
+            inQuotes = true;
+          } else if (ch === ',') {
+            row.push(current);
+            current = '';
+          } else if (ch === '\n' || (ch === '\r' && text[i + 1] === '\n')) {
+            row.push(current);
+            current = '';
+            if (row.some(cell => cell.trim())) rows.push(row);
+            row = [];
+            if (ch === '\r') i++;
+          } else {
+            current += ch;
+          }
+        }
+      }
+      if (current || row.length) {
+        row.push(current);
+        if (row.some(cell => cell.trim())) rows.push(row);
+      }
+      return rows;
+    }
+
+    // ─── Date helpers ───
+    function formatDate(dateStr) {
+      const months = ['ינואר','פברואר','מרץ','אפריל','מאי','יוני','יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'];
+      const parts = dateStr.trim().split('.');
+      if (parts.length < 3) return dateStr;
+      const day = parseInt(parts[0]);
+      const month = parseInt(parts[1]) - 1;
+      const year = 2000 + parseInt(parts[2]);
+      if (isNaN(day) || isNaN(month) || isNaN(year) || month < 0 || month > 11) return dateStr;
+      return `${day} ב${months[month]} ${year}`;
+    }
+
+    function parseDateForSort(dateStr) {
+      const parts = dateStr.trim().split('.');
+      if (parts.length < 3) return 0;
+      const day = parseInt(parts[0]);
+      const month = parseInt(parts[1]);
+      const year = 2000 + parseInt(parts[2]);
+      return new Date(year, month - 1, day).getTime();
+    }
+
+    // ─── Reading time ───
+    function estimateReadingTime(text) {
+      // Hebrew reading speed ~200 words/min; count by splitting on whitespace
+      const words = text.trim().split(/\s+/).length;
+      const minutes = Math.max(1, Math.round(words / 200));
+      return minutes;
+    }
+
+    // ─── Content formatter ───
+    function formatContent(text) {
+      if (!text) return '';
+
+      // Strip poll blocks: lines starting with "סקר" followed by numbered emoji options (1️⃣ 2️⃣ etc)
+      text = text.replace(/סקר[^\n]*\n+(?:"[^"]*"\n+)?(?:(?:[1-9]️⃣|[0-9]️⃣)[^\n]*\n*)+/g, '');
+      // Also strip standalone numbered emoji option lines
+      text = text.replace(/^(?:[1-9]️⃣|[0-9]️⃣)[^\n]*$/gm, '');
+      // Clean up excess blank lines left after stripping
+      text = text.replace(/\n{3,}/g, '\n\n').trim();
+
+      let html = text
+        .replace(/\n\s*-\s*\n/g, '\n<hr>\n')
+        .replace(/\*([^*]+)\*/g, '<strong>$1</strong>')
+        .replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>')
+        .split(/\n\n+/)
+        .map(para => {
+          para = para.trim();
+          if (!para) return '';
+          if (para === '<hr>') return '<hr>';
+          // Pull quote: lines starting with >
+          if (para.startsWith('&gt;') || para.startsWith('>')) {
+            para = para.replace(/^(?:&gt;|>)\s*/, '');
+            para = para.replace(/\n/g, '<br>');
+            return `<blockquote>${para}</blockquote>`;
+          }
+          para = para.replace(/\n/g, '<br>');
+          return `<p>${para}</p>`;
+        })
+        .filter(Boolean)
+        .join('\n');
+
+      return html;
+    }
+
+    function togglePost(btn) {
+      const content = btn.nextElementSibling;
+      const isHidden = content.style.display === 'none';
+      content.style.display = isHidden ? '' : 'none';
+      btn.classList.toggle('expanded', isHidden);
+      btn.innerHTML = isHidden
+        ? '<span class="arrow">◀</span> סגור'
+        : '<span class="arrow">◀</span> קרא עוד';
+    }
+
+    function escapeHTML(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    // ─── State ───
+    let allPosts = [];
+
+    // ─── TOC toggle ───
+    function toggleToc() {
+      const list = document.getElementById('tocList');
+      const icon = document.getElementById('tocToggle');
+      list.classList.toggle('collapsed');
+      icon.classList.toggle('collapsed');
+    }
+
+    // ─── Search ───
+    function clearSearch() {
+      const input = document.getElementById('searchInput');
+      input.value = '';
+      document.getElementById('searchClear').classList.remove('visible');
+      filterPosts('');
+      input.focus();
+    }
+
+    function filterPosts(query) {
+      query = query.trim().toLowerCase();
+      const postEls = document.querySelectorAll('.blog-post[data-searchable]');
+      let visibleCount = 0;
+
+      postEls.forEach(el => {
+        const text = el.getAttribute('data-searchable');
+        const match = !query || text.includes(query);
+        el.style.display = match ? '' : 'none';
+        if (match) visibleCount++;
+      });
+
+      document.getElementById('noResults').style.display = (visibleCount === 0 && query) ? '' : 'none';
+    }
+
+    // ─── Share permalink ───
+    function sharePost(postNum, btn) {
+      const url = window.location.origin + window.location.pathname + '?post=' + postNum;
+      navigator.clipboard.writeText(url).then(() => {
+        btn.classList.add('copied');
+        const orig = btn.innerHTML;
+        btn.innerHTML = '✓ הקישור הועתק';
+        setTimeout(() => {
+          btn.classList.remove('copied');
+          btn.innerHTML = orig;
+        }, 2000);
+      });
+    }
+
+    // ─── Single post view helpers ───
+    function getSinglePostParam() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('post');
+    }
+
+    function updateMetaTag(selector, attr, value) {
+      const el = document.querySelector(selector);
+      if (el) el.setAttribute(attr, value);
+    }
+
+    function applySinglePostView(post) {
+      const postNum = post.num;
+      const postTitle = post.title;
+      const fullTitle = postTitle + ' — ron.build';
+      const postUrl = window.location.origin + window.location.pathname + '?post=' + postNum;
+
+      // Update page title
+      document.title = fullTitle;
+
+      // Update OG & Twitter meta tags
+      updateMetaTag('meta[property="og:title"]', 'content', fullTitle);
+      updateMetaTag('meta[property="og:description"]', 'content', post.tldr || postTitle);
+      updateMetaTag('meta[property="og:url"]', 'content', postUrl);
+      updateMetaTag('meta[property="og:type"]', 'content', 'article');
+      updateMetaTag('meta[name="twitter:title"]', 'content', fullTitle);
+      updateMetaTag('meta[name="twitter:description"]', 'content', post.tldr || postTitle);
+      updateMetaTag('meta[name="description"]', 'content', post.tldr || postTitle);
+      updateMetaTag('link[rel="canonical"]', 'href', postUrl);
+
+      // Hide TOC, search, post count
+      document.getElementById('toc').style.display = 'none';
+      document.getElementById('searchWrapper').style.display = 'none';
+      document.getElementById('postCount').style.display = 'none';
+
+      // Add body class
+      document.body.classList.add('single-post-mode');
+    }
+
+    // ─── Back to top ───
+    window.addEventListener('scroll', () => {
+      const btn = document.getElementById('backToTop');
+      if (window.scrollY > 400) {
+        btn.classList.add('visible');
+      } else {
+        btn.classList.remove('visible');
+      }
+    });
+
+    // ─── Main loader ───
+    async function loadBlog() {
+      const container = document.getElementById('blogPosts');
+
+      try {
+        const response = await fetch(CSV_URL);
+        if (!response.ok) throw new Error('Failed to fetch');
+        const text = await response.text();
+        const rows = parseCSV(text);
+
+        if (rows.length < 2) {
+          container.innerHTML = '<div class="blog-error">אין פוסטים עדיין 🤷</div>';
+          return;
+        }
+
+        const posts = rows.slice(1)
+          .map(row => ({
+            num: row[0] || '',
+            date: row[1] || '',
+            title: row[2] || '',
+            tldr: row[3] || '',
+            content: row[4] || ''
+          }))
+          .filter(p => p.content.trim())
+          .sort((a, b) => parseDateForSort(b.date) - parseDateForSort(a.date));
+
+        if (posts.length === 0) {
+          container.innerHTML = '<div class="blog-error">אין פוסטים עדיין 🤷</div>';
+          return;
+        }
+
+        allPosts = posts;
+
+        // ─── Single post mode ───
+        const singlePostNum = getSinglePostParam();
+        if (singlePostNum) {
+          const singlePost = posts.find(p => p.num === singlePostNum);
+          if (!singlePost) {
+            container.innerHTML = `
+              <div class="blog-error">
+                <p>😔 פוסט מספר ${escapeHTML(singlePostNum)} לא נמצא</p>
+                <p style="margin-top:0.5rem;"><a href="ronbuild.html">← כל הפוסטים</a></p>
+              </div>`;
+            return;
+          }
+
+          applySinglePostView(singlePost);
+
+          const postId = 'post-' + singlePost.num;
+          const readingTime = estimateReadingTime(singlePost.content);
+
+          container.innerHTML = `<div class="blog-posts">
+            <a href="ronbuild.html" class="single-post-back">← כל הפוסטים</a>
+            <article class="blog-post visible" id="${postId}">
+              <div class="post-meta">
+                <a href="?post=${singlePost.num}" class="post-date">${formatDate(singlePost.date)}</a>
+                <span class="reading-time">${readingTime} דק׳ קריאה</span>
+              </div>
+              <h2 class="post-title">${escapeHTML(singlePost.title)}</h2>
+              ${singlePost.tldr ? `<div class="post-tldr">${escapeHTML(singlePost.tldr)}</div>` : ''}
+              <div class="post-content">${formatContent(singlePost.content)}</div>
+              <div class="post-footer">
+                <button class="share-btn" onclick="sharePost('${escapeHTML(singlePost.num)}', this)">🔗 קישור</button>
+              </div>
+            </article>
+          </div>`;
+          return;
+        }
+
+        // ─── Normal blog view ───
+
+        // Post count badge
+        const countEl = document.getElementById('postCount');
+        countEl.textContent = `${posts.length} פוסטים`;
+        countEl.style.display = '';
+
+        // Show search
+        document.getElementById('searchWrapper').style.display = '';
+
+        // Build TOC
+        const tocEl = document.getElementById('toc');
+        const tocList = document.getElementById('tocList');
+        tocEl.style.display = '';
+        tocList.innerHTML = posts.map((post, i) => {
+          const postNum = post.num || (i + 1);
+          const postId = 'post-' + postNum;
+          return `<li class="toc-item"><a href="?post=${postNum}"><span class="toc-num">${postNum}</span> ${escapeHTML(post.title)}</a></li>`;
+        }).join('');
+
+        // Build posts HTML
+        const postsHTML = posts.map((post, i) => {
+          const postNum = post.num || (i + 1);
+          const postId = 'post-' + postNum;
+          const readingTime = estimateReadingTime(post.content);
+          const isHero = i === 0;
+          const searchable = (post.title + ' ' + post.tldr + ' ' + post.content).toLowerCase();
+
+          return `
+          <article class="blog-post${isHero ? ' hero-post' : ''}" id="${postId}" data-searchable="${escapeHTML(searchable)}">
+            ${isHero ? '<div class="hero-badge">🆕 פוסט אחרון</div>' : ''}
+            <div class="post-meta">
+              <a href="?post=${post.num || (i + 1)}" class="post-date">${formatDate(post.date)}</a>
+              <span class="reading-time">${readingTime} דק׳ קריאה</span>
+            </div>
+            <h2 class="post-title"><a href="?post=${postNum}">${escapeHTML(post.title)}</a></h2>
+            ${post.tldr ? `<div class="post-tldr">${escapeHTML(post.tldr)}</div>` : ''}
+            <div class="post-actions">
+              <span class="post-toggle" onclick="togglePost(this)"><span class="arrow">◀</span> קרא עוד</span>
+              <button class="share-btn" onclick="sharePost('${escapeHTML(String(postNum))}', this)">🔗 קישור</button>
+            </div>
+            <div class="post-content" style="display:none">${formatContent(post.content)}</div>
+          </article>`;
+        }).join('');
+
+        container.innerHTML = `<div class="blog-posts">${postsHTML}</div>`;
+
+        // Update timestamp
+        const now = new Date();
+        document.getElementById('lastUpdated').textContent =
+          `עודכן: ${now.toLocaleDateString('he-IL')} ${now.toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' })}`;
+
+        // Search listener
+        const searchInput = document.getElementById('searchInput');
+        const searchClear = document.getElementById('searchClear');
+        searchInput.addEventListener('input', () => {
+          const val = searchInput.value;
+          searchClear.classList.toggle('visible', val.length > 0);
+          filterPosts(val);
+        });
+
+        // Fade-in animations with stagger
+        requestAnimationFrame(() => {
+          document.querySelectorAll('.blog-post').forEach((el, i) => {
+            setTimeout(() => el.classList.add('visible'), i * 80);
+          });
+        });
+
+        // If URL has anchor, scroll to it after render
+        if (window.location.hash) {
+          requestAnimationFrame(() => {
+            const target = document.querySelector(window.location.hash);
+            if (target) {
+              setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }), 300);
+            }
+          });
+        }
+
+      } catch (err) {
+        console.error('Blog load error:', err);
+        container.innerHTML = `
+          <div class="blog-error">
+            <p>😔 לא הצלחתי לטעון את הפוסטים</p>
+            <p style="margin-top:0.5rem; font-size:0.85rem; opacity:0.7;">נסו לרענן את הדף</p>
+          </div>`;
+      }
+    }
+
+    loadBlog();
+  </script>
+</body>
+</html>
