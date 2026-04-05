@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>ron.build 🏗️</title>
+    <link>https://jarvis.ripper234.com/ronbuild.html</link>
+    <description>בלוג על בנייה עם AI — רון גרוס</description>
+    <language>he</language>
+    <managingEditor>ron@ripper234.com (Ron Gross)</managingEditor>
+    <lastBuildDate>Sun, 05 Apr 2026 17:37:09 +0000</lastBuildDate>
+    <atom:link href="https://jarvis.ripper234.com/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>חשיבת מטא</title>
+      <link>https://jarvis.ripper234.com/ronbuild.html#post-3</link>
+      <guid isPermaLink="true">https://jarvis.ripper234.com/ronbuild.html#post-3</guid>
+      <pubDate>Sun, 29 Mar 2026 00:00:00 +0000</pubDate>
+      <author>Ron Gross</author>
+      <description>חשיבה ברמות שונות בפיתוח tiny-pr-bot וכו'
+
+סקר- 
+
+“כמה אתם נוטים לברוח לחשיבה (כולל מטא, שיפורים, רעיונות) במקום פשוט לבצע?”
+
+1️⃣ כמעט אף פעם
+2️⃣ לפעמים
+3️⃣ לא מעט
+4️⃣ זה מצב ברירת המחדל שלי
+
+
+
+
+*חשיבת מטא, קוים לדמותה*
+
+יש לי נטיה לחשוב ב-מטא. לדלג בין רמות אבסטרקציה שונות, כמעט בלי שליטה, ולפספס מוד פעולה של"בואו פשוט נעשה את המשימה המקורית בלי להתפזר". גם בספר שכתבתי (WhateverWorks.me) על כלים, הכלי הראשון הוא כלי מטא שמדבר על "חשיבה בעזרת כלים".
+
+בבילדינג שאני עושה,
+(איך לקרוא לזה? זה לא בדיוק תכנות. "בניה" נשמע מוזר. נגיד "בילדינג")...</description>
+    </item>
+    <item>
+      <title>סינגולריות</title>
+      <link>https://jarvis.ripper234.com/ronbuild.html#post-2</link>
+      <guid isPermaLink="true">https://jarvis.ripper234.com/ronbuild.html#post-2</guid>
+      <pubDate>Fri, 27 Mar 2026 00:00:00 +0000</pubDate>
+      <author>Ron Gross</author>
+      <description>מה זה הסינגולריות? alignement.
+
+*הקדמה קצרה לטובת מי שלא מכיר את המושג סינגולריות*
+
+אתחיל במוטיבציה והגדרה קצרה, לטובת מי שלא מכיר.
+בעיני, הסינגולריות היא אחד הנושאים הכי חשובים כיום, אם לא ה-.
+אני מאמין שהיא קורית מול עיננו.
+שמתם לב ש-*קצב* המהפכות הטכנולוגיות עולה בעשורים האחרונים?
+לא רק שהעולם משתנה כל הזמן, קצב השינוי גדל מעריכית.
+
+ב-2005, ריי קורצווייל פרסם את הספר "הסינגולריות מתקרבת", שירטט על גרף את ההצטברות של המהפכות האלה ומתח תחזית קדימה בזמן - שבשנת 2045 ההתקדמות תהיה כל כך מהירה שהיא תהיה "אינסוף", לא ניתנ...</description>
+    </item>
+    <item>
+      <title>blind spots</title>
+      <link>https://jarvis.ripper234.com/ronbuild.html#post-1</link>
+      <guid isPermaLink="true">https://jarvis.ripper234.com/ronbuild.html#post-1</guid>
+      <pubDate>Sat, 07 Mar 2026 00:00:00 +0000</pubDate>
+      <author>Ron Gross</author>
+      <description>לבוטים יש נקודות עיוורות. וגם לאנשים.
+
+*בליינד ספוטס של AI ואנשים*
+
+התחלתי להריץ את Jarvis הבוט עם 5$ טוקנים של Claude, שלחתי לו מלא משימות, וישר גמרתי את התקציב 😅
+סבבה. הכנסתי $50 והגדרתי את קלוד למלא מחדש כל פעם כשהוא יורד ל-10$.
+
+אבל - זה לא עזר. Jarvis ממשיך להתלונן כל הזמן שנגמר לו הכסף, למרות שיש מלא.
+מעצבן!!!
+
+והכי מעצבן, כשאני מנסה להשתמש בו בשביל לנתח מה הבעיה, אומר לו להסתכל על הלוגים של עצמו וכו' - הוא נכשל טוטאלית. *הוא בכלל לא רואה שיש עדיין בעיה*
+
+אני חושב שמה שקורה כאן זה שיש לו blind spot.
+בתהליך הניתוח העצ...</description>
+    </item>
+    <item>
+      <title>clawbot</title>
+      <link>https://jarvis.ripper234.com/ronbuild.html#post-0</link>
+      <guid isPermaLink="true">https://jarvis.ripper234.com/ronbuild.html#post-0</guid>
+      <pubDate>Fri, 06 Mar 2026 00:00:00 +0000</pubDate>
+      <author>Ron Gross</author>
+      <description>הצלחתי להתקין clawbot!
+
+יאללה, הגיע הזמן לעצור.
+הצט אמר לי שיקח "10 דקות" להרים לי שרת Clawbot משלי.
+זה לקח 4 שעות, והרבה ריצות של deep research כשהוא נתקע בלופים.
+
+אבל *הצלחתי* - יש לי AI קטן וחמוד בשם Jarvis שרץ "בענן" ומחכה לפקודות ממני.
+
+מה ההבדל מהצט הרגיל? ש-Jarvis יודע לרוץ גם כשאני ישן.
+אפרסם בימים הקרובים מיני פרוייקט ראשון שאני מרים בעזרתו.
+
+מאז שהטרנד של Clawbot התפוצץ בחודשיים האחרונים (265,000 כוכבים בגיטהאב), רציתי להשתמש בו אבל לא נחה עלי המוזה "מה אני אעשה איתו". אז ... המוזה הגיע. מוזות. פרטים בהמשך......</description>
+    </item>
+  </channel>
+</rss>

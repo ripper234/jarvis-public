@@ -4,6 +4,45 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ron.build 🏗️</title>
+
+  <!-- SEO & Social Meta -->
+  <meta name="description" content="בלוג על בנייה עם AI — רון גרוס">
+  <meta name="author" content="Ron Gross">
+  <link rel="canonical" href="https://jarvis.ripper234.com/ronbuild.html">
+  <link rel="alternate" type="application/rss+xml" title="ron.build RSS" href="/feed.xml">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="ron.build 🏗️">
+  <meta property="og:description" content="בלוג על בנייה עם AI — רון גרוס">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://jarvis.ripper234.com/ronbuild.html">
+  <meta property="og:locale" content="he_IL">
+  <meta property="og:image" content="https://jarvis.ripper234.com/og-ronbuild.png">
+  <meta property="og:site_name" content="ron.build">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ron.build 🏗️">
+  <meta name="twitter:description" content="בלוג על בנייה עם AI — רון גרוס">
+  <meta name="twitter:image" content="https://jarvis.ripper234.com/og-ronbuild.png">
+
+  <!-- Schema.org JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "name": "ron.build 🏗️",
+    "description": "בלוג על בנייה עם AI — רון גרוס",
+    "url": "https://jarvis.ripper234.com/ronbuild.html",
+    "inLanguage": "he",
+    "author": {
+      "@type": "Person",
+      "name": "Ron Gross",
+      "url": "https://ripper234.com"
+    }
+  }
+  </script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
@@ -576,6 +615,88 @@
       transition: opacity 0.4s ease, transform 0.4s ease;
     }
 
+    /* ─── Subscribe Section ─── */
+    .subscribe-section {
+      max-width: 720px;
+      margin: 2.5rem auto 0;
+      background: linear-gradient(135deg, var(--primary-light) 0%, #F5F3FF 50%, #ECFEFF 100%);
+      border: 2px solid rgba(124,58,237,0.15);
+      border-radius: var(--radius);
+      padding: 2rem 2.5rem;
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .subscribe-section h3 {
+      font-family: var(--font-heading);
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--foreground);
+      margin-bottom: 0.5rem;
+    }
+
+    .subscribe-section p {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-bottom: 1.25rem;
+    }
+
+    .subscribe-form {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .subscribe-form input[type="email"] {
+      font-family: var(--font-body);
+      font-size: 1rem;
+      padding: 0.7rem 1.25rem;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      background: var(--card);
+      color: var(--foreground);
+      outline: none;
+      width: 280px;
+      max-width: 100%;
+      direction: ltr;
+      text-align: left;
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+    }
+
+    .subscribe-form input[type="email"]:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(124,58,237,0.1);
+    }
+
+    .subscribe-form button {
+      font-family: var(--font-heading);
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 0.7rem 1.5rem;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: white;
+      cursor: pointer;
+      transition: opacity var(--transition-fast), transform var(--transition-fast);
+    }
+
+    .subscribe-form button:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .subscribe-rss {
+      margin-top: 1rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .subscribe-rss a {
+      color: var(--accent);
+    }
+
     /* ─── Responsive ─── */
     @media (max-width: 768px) {
       .blog-header h1 {
@@ -650,6 +771,27 @@
     <div class="no-results" id="noResults" style="display:none;">
       😕 לא נמצאו פוסטים תואמים
     </div>
+
+    <!-- Subscribe Section -->
+    <section class="subscribe-section">
+      <h3>📬 רוצים לקבל עדכונים?</h3>
+      <p>הירשמו וקבלו פוסט חדש ישירות למייל</p>
+      <!--
+        TODO: Ron — set up an email service and update the form action URL.
+        Options:
+        - Buttondown.email (free tier): change action to https://buttondown.com/api/emails/embed-subscribe/YOUR_USERNAME
+        - Mailchimp: use their embed form URL
+        - ConvertKit: use their form action URL
+        For now this form does nothing — it needs a real endpoint.
+      -->
+      <form class="subscribe-form" action="#" method="post" onsubmit="alert('📧 ההרשמה עדיין לא מוגדרת — Ron צריך לחבר שירות מיילים'); return false;">
+        <input type="email" name="email" placeholder="your@email.com" required aria-label="כתובת מייל">
+        <button type="submit">הרשמה ✉️</button>
+      </form>
+      <div class="subscribe-rss">
+        או עקבו דרך <a href="/feed.xml" target="_blank">RSS 📡</a>
+      </div>
+    </section>
 
     <footer class="blog-footer">
       <div>ron.build — נבנה עם AI ❤️</div>
