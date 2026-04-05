@@ -393,6 +393,12 @@
       font-weight: 600;
       font-family: var(--font-heading);
       letter-spacing: 0.03em;
+      text-decoration: none;
+      transition: opacity 0.15s;
+    }
+
+    a.post-date:hover {
+      opacity: 0.7;
     }
 
     .reading-time {
@@ -1146,7 +1152,7 @@
             <a href="ronbuild.html" class="single-post-back">← כל הפוסטים</a>
             <article class="blog-post visible" id="${postId}">
               <div class="post-meta">
-                <span class="post-date">${formatDate(singlePost.date)}</span>
+                <a href="?post=${singlePost.num}" class="post-date">${formatDate(singlePost.date)}</a>
                 <span class="reading-time">${readingTime} דק׳ קריאה</span>
               </div>
               <h2 class="post-title">${escapeHTML(singlePost.title)}</h2>
@@ -1192,7 +1198,7 @@
           <article class="blog-post${isHero ? ' hero-post' : ''}" id="${postId}" data-searchable="${escapeHTML(searchable)}">
             ${isHero ? '<div class="hero-badge">🆕 פוסט אחרון</div>' : ''}
             <div class="post-meta">
-              <span class="post-date">${formatDate(post.date)}</span>
+              <a href="?post=${post.num || (i + 1)}" class="post-date">${formatDate(post.date)}</a>
               <span class="reading-time">${readingTime} דק׳ קריאה</span>
             </div>
             <h2 class="post-title"><a href="?post=${postNum}">${escapeHTML(post.title)}</a></h2>
