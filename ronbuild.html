@@ -4,22 +4,85 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ron.build 🏗️</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
   <style>
-    /* Blog-specific styles */
-    body {
-      direction: rtl;
-      text-align: right;
+    :root {
+      --primary: #7C3AED;
+      --primary-light: #EDE9FE;
+      --accent: #0891B2;
+      --accent-light: #CFFAFE;
+      --background: #FAF5FF;
+      --card: #FFFFFF;
+      --foreground: #1E1B2E;
+      --text-muted: #6B7280;
+      --border: #E5E1EE;
+      --font-heading: 'Space Grotesk', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+      --shadow-sm: 0 1px 3px rgba(124,58,237,0.06);
+      --shadow-md: 0 4px 16px rgba(124,58,237,0.1);
+      --shadow-lg: 0 8px 30px rgba(124,58,237,0.12);
+      --transition-fast: 0.15s ease;
+      --transition-normal: 0.25s ease;
+      --radius: 16px;
     }
 
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--background);
+      color: var(--foreground);
+      direction: rtl;
+      text-align: right;
+      min-height: 100dvh;
+      line-height: 1.6;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    a { color: var(--primary); text-decoration: none; }
+    a:hover { color: var(--accent); }
+
+    .page {
+      max-width: 800px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 1.5rem 1.25rem 3rem;
+    }
+
+    /* ─── Top bar ─── */
+    .blog-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 0;
+      font-size: 0.85rem;
+    }
+
+    .blog-nav a {
+      color: var(--primary);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-family: var(--font-heading);
+      font-weight: 500;
+    }
+
+    /* ─── Header ─── */
     .blog-header {
       text-align: center;
-      padding: 3rem 0 2rem;
+      padding: 2.5rem 0 1.5rem;
       border-bottom: 1px solid var(--border);
-      margin-bottom: 2.5rem;
+      margin-bottom: 2rem;
     }
 
     .blog-header h1 {
+      font-family: var(--font-heading);
       font-size: 2.75rem;
       font-weight: 700;
       margin-bottom: 0.5rem;
@@ -44,40 +107,234 @@
       font-style: italic;
     }
 
-    .blog-nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem 0;
-      font-size: 0.875rem;
-    }
-
-    .blog-nav a {
+    .post-count-badge {
+      display: inline-block;
+      margin-top: 0.75rem;
+      font-family: var(--font-heading);
+      font-size: 0.8rem;
+      font-weight: 600;
       color: var(--primary);
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
+      background: var(--primary-light);
+      padding: 0.25rem 0.75rem;
+      border-radius: 100px;
     }
 
+    /* ─── Search ─── */
+    .search-wrapper {
+      max-width: 720px;
+      margin: 0 auto 1.5rem;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      font-family: var(--font-body);
+      font-size: 1rem;
+      padding: 0.75rem 1.25rem 0.75rem 2.75rem;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      background: var(--card);
+      color: var(--foreground);
+      outline: none;
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+      direction: rtl;
+    }
+
+    .search-input::placeholder {
+      color: var(--text-muted);
+      opacity: 0.7;
+    }
+
+    .search-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(124,58,237,0.1);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      pointer-events: none;
+    }
+
+    .search-clear {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 1.1rem;
+      display: none;
+      padding: 0.25rem;
+    }
+
+    .search-clear.visible { display: block; }
+
+    .no-results {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--text-muted);
+      font-size: 1.1rem;
+    }
+
+    /* ─── Table of Contents ─── */
+    .toc {
+      max-width: 720px;
+      margin: 0 auto 2rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.5rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .toc-header {
+      font-family: var(--font-heading);
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--primary);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .toc-header .toggle-icon {
+      transition: transform var(--transition-fast);
+      font-size: 0.75rem;
+    }
+
+    .toc-header .toggle-icon.collapsed {
+      transform: rotate(-90deg);
+    }
+
+    .toc-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      max-height: 400px;
+      overflow-y: auto;
+      transition: max-height 0.3s ease, opacity 0.3s ease;
+    }
+
+    .toc-list.collapsed {
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+    }
+
+    .toc-item a {
+      font-size: 0.9rem;
+      color: var(--foreground);
+      opacity: 0.75;
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+      padding: 0.3rem 0.5rem;
+      border-radius: 8px;
+      transition: background var(--transition-fast), opacity var(--transition-fast);
+    }
+
+    .toc-item a:hover {
+      background: var(--primary-light);
+      opacity: 1;
+      color: var(--primary);
+    }
+
+    .toc-num {
+      font-family: var(--font-heading);
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--accent);
+      min-width: 1.75rem;
+      text-align: center;
+      opacity: 0.7;
+    }
+
+    /* ─── Blog posts container ─── */
     .blog-posts {
       display: flex;
       flex-direction: column;
-      gap: 2.5rem;
+      gap: 2rem;
       max-width: 720px;
       margin: 0 auto;
     }
 
+    /* ─── Hero (latest post) ─── */
+    .blog-post.hero-post {
+      background: linear-gradient(135deg, var(--primary-light) 0%, #F5F3FF 40%, #ECFEFF 100%);
+      border: 2px solid rgba(124,58,237,0.2);
+      padding: 2.5rem 2.5rem;
+      box-shadow: var(--shadow-md);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .blog-post.hero-post::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, rgba(124,58,237,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      font-family: var(--font-heading);
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: white;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      padding: 0.2rem 0.75rem;
+      border-radius: 100px;
+      margin-bottom: 0.75rem;
+    }
+
+    .blog-post.hero-post .post-title {
+      font-size: 1.85rem;
+      line-height: 1.25;
+    }
+
+    .blog-post.hero-post .post-content {
+      font-size: 1.05rem;
+    }
+
+    /* ─── Regular post card ─── */
     .blog-post {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 2rem 2.25rem;
+      border-radius: var(--radius);
+      padding: 1.75rem 2rem;
       box-shadow: var(--shadow-sm);
-      transition: box-shadow var(--transition-normal);
+      transition: box-shadow var(--transition-normal), transform var(--transition-normal);
     }
 
     .blog-post:hover {
       box-shadow: var(--shadow-md);
+      transform: translateY(-1px);
+    }
+
+    /* ─── Post header row ─── */
+    .post-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.5rem;
+      flex-wrap: wrap;
     }
 
     .post-date {
@@ -86,16 +343,34 @@
       font-weight: 600;
       font-family: var(--font-heading);
       letter-spacing: 0.03em;
-      margin-bottom: 0.5rem;
+    }
+
+    .reading-time {
+      font-family: var(--font-heading);
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      background: rgba(107,114,128,0.08);
+      padding: 0.15rem 0.5rem;
+      border-radius: 100px;
     }
 
     .post-title {
       font-family: var(--font-heading);
-      font-size: 1.5rem;
+      font-size: 1.45rem;
       font-weight: 700;
       color: var(--foreground);
       margin-bottom: 0.5rem;
       line-height: 1.3;
+    }
+
+    .post-title a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .post-title a:hover {
+      color: var(--primary);
     }
 
     .post-tldr {
@@ -112,16 +387,21 @@
       font-size: 1rem;
       line-height: 1.85;
       color: var(--foreground);
-      opacity: 0.85;
+      opacity: 0.88;
     }
 
     .post-content p {
       margin-bottom: 1rem;
-      opacity: 1;
     }
 
     .post-content p:last-child {
       margin-bottom: 0;
+    }
+
+    /* First paragraph emphasis for visual rhythm */
+    .post-content p:first-of-type {
+      font-size: 1.05em;
+      opacity: 1;
     }
 
     .post-content strong {
@@ -148,6 +428,57 @@
       margin: 1.5rem 0;
     }
 
+    /* Pull quote style for lines starting with > */
+    .post-content blockquote {
+      border-right: 3px solid var(--primary);
+      padding: 0.75rem 1.25rem 0.75rem 0;
+      margin: 1.25rem 0;
+      font-style: italic;
+      color: var(--primary);
+      opacity: 0.85;
+      background: rgba(124,58,237,0.03);
+      border-radius: 0 8px 8px 0;
+    }
+
+    /* ─── Post footer (share) ─── */
+    .post-footer {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      margin-top: 1.25rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .share-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-family: var(--font-heading);
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      background: none;
+      border: 1px solid var(--border);
+      padding: 0.35rem 0.75rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+
+    .share-btn:hover {
+      color: var(--primary);
+      border-color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .share-btn.copied {
+      color: #059669;
+      border-color: #059669;
+      background: #ECFDF5;
+    }
+
+    /* ─── Loading / Error ─── */
     .blog-loading {
       text-align: center;
       padding: 4rem 0;
@@ -167,9 +498,7 @@
       margin-bottom: 1rem;
     }
 
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
     .blog-error {
       text-align: center;
@@ -182,6 +511,7 @@
       margin: 0 auto;
     }
 
+    /* ─── Footer ─── */
     .blog-footer {
       margin-top: 3rem;
       padding-top: 2rem;
@@ -200,7 +530,53 @@
       margin-top: 0.75rem;
     }
 
-    /* Responsive */
+    /* ─── Back to top ─── */
+    .back-to-top {
+      position: fixed;
+      bottom: 2rem;
+      left: 2rem;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-md);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.3s ease, transform 0.3s ease, background 0.2s ease;
+      pointer-events: none;
+      z-index: 50;
+    }
+
+    .back-to-top.visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .back-to-top:hover {
+      background: var(--accent);
+    }
+
+    /* ─── Fade in animation ─── */
+    .blog-post {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+
+    .blog-post.visible {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    /* ─── Responsive ─── */
     @media (max-width: 768px) {
       .blog-header h1 {
         font-size: 2.25rem;
@@ -210,8 +586,27 @@
         padding: 1.5rem 1.25rem;
       }
 
+      .blog-post.hero-post {
+        padding: 1.75rem 1.5rem;
+      }
+
+      .blog-post.hero-post .post-title {
+        font-size: 1.5rem;
+      }
+
       .post-title {
-        font-size: 1.3rem;
+        font-size: 1.25rem;
+      }
+
+      .toc {
+        padding: 1rem 1.25rem;
+      }
+
+      .back-to-top {
+        bottom: 1.25rem;
+        left: 1.25rem;
+        width: 40px;
+        height: 40px;
       }
     }
   </style>
@@ -227,7 +622,23 @@
       <h1>ron.build 🏗️</h1>
       <div class="author">רון גרוס | Ron Gross</div>
       <div class="tagline">בלוג על בנייה עם AI</div>
+      <div class="post-count-badge" id="postCount" style="display:none;"></div>
     </header>
+
+    <!-- Search -->
+    <div class="search-wrapper" id="searchWrapper" style="display:none;">
+      <input type="text" class="search-input" id="searchInput" placeholder="🔍 חיפוש בפוסטים..." autocomplete="off">
+      <button class="search-clear" id="searchClear" onclick="clearSearch()">✕</button>
+    </div>
+
+    <!-- Table of Contents -->
+    <nav class="toc" id="toc" style="display:none;">
+      <div class="toc-header" onclick="toggleToc()">
+        <span class="toggle-icon" id="tocToggle">▼</span>
+        <span>📑 תוכן עניינים</span>
+      </div>
+      <ol class="toc-list" id="tocList"></ol>
+    </nav>
 
     <main id="blogPosts">
       <div class="blog-loading" id="loadingIndicator">
@@ -236,14 +647,21 @@
       </div>
     </main>
 
+    <div class="no-results" id="noResults" style="display:none;">
+      😕 לא נמצאו פוסטים תואמים
+    </div>
+
     <footer class="blog-footer">
       <div>ron.build — נבנה עם AI ❤️</div>
     </footer>
   </div>
 
+  <button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0})" aria-label="חזרה למעלה">↑</button>
+
   <script>
     const CSV_URL = 'https://docs.google.com/spreadsheets/d/1x3njEmv5_Zo92w_nH-1s75m4xzLJ_DGxBDxs2-REtPY/gviz/tq?tqx=out:csv&gid=0';
 
+    // ─── CSV Parser ───
     function parseCSV(text) {
       const rows = [];
       let current = '';
@@ -280,7 +698,6 @@
           }
         }
       }
-      // last row
       if (current || row.length) {
         row.push(current);
         if (row.some(cell => cell.trim())) rows.push(row);
@@ -288,8 +705,8 @@
       return rows;
     }
 
+    // ─── Date helpers ───
     function formatDate(dateStr) {
-      // "6.3.26" → "6 במרץ 2026"
       const months = ['ינואר','פברואר','מרץ','אפריל','מאי','יוני','יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'];
       const parts = dateStr.trim().split('.');
       if (parts.length < 3) return dateStr;
@@ -309,24 +726,33 @@
       return new Date(year, month - 1, day).getTime();
     }
 
+    // ─── Reading time ───
+    function estimateReadingTime(text) {
+      // Hebrew reading speed ~200 words/min; count by splitting on whitespace
+      const words = text.trim().split(/\s+/).length;
+      const minutes = Math.max(1, Math.round(words / 200));
+      return minutes;
+    }
+
+    // ─── Content formatter ───
     function formatContent(text) {
       if (!text) return '';
 
-      // Split into paragraphs on double newlines or single newlines
       let html = text
-        // Handle horizontal rules (line that is just "-" or "---" etc)
         .replace(/\n\s*-\s*\n/g, '\n<hr>\n')
-        // Convert *text* to bold (but not ** which would be empty)
         .replace(/\*([^*]+)\*/g, '<strong>$1</strong>')
-        // Convert URLs to links
         .replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>')
-        // Convert newlines to paragraphs
         .split(/\n\n+/)
         .map(para => {
           para = para.trim();
           if (!para) return '';
           if (para === '<hr>') return '<hr>';
-          // Handle single newlines within a paragraph
+          // Pull quote: lines starting with >
+          if (para.startsWith('&gt;') || para.startsWith('>')) {
+            para = para.replace(/^(?:&gt;|>)\s*/, '');
+            para = para.replace(/\n/g, '<br>');
+            return `<blockquote>${para}</blockquote>`;
+          }
           para = para.replace(/\n/g, '<br>');
           return `<p>${para}</p>`;
         })
@@ -336,9 +762,74 @@
       return html;
     }
 
+    function escapeHTML(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    // ─── State ───
+    let allPosts = [];
+
+    // ─── TOC toggle ───
+    function toggleToc() {
+      const list = document.getElementById('tocList');
+      const icon = document.getElementById('tocToggle');
+      list.classList.toggle('collapsed');
+      icon.classList.toggle('collapsed');
+    }
+
+    // ─── Search ───
+    function clearSearch() {
+      const input = document.getElementById('searchInput');
+      input.value = '';
+      document.getElementById('searchClear').classList.remove('visible');
+      filterPosts('');
+      input.focus();
+    }
+
+    function filterPosts(query) {
+      query = query.trim().toLowerCase();
+      const postEls = document.querySelectorAll('.blog-post[data-searchable]');
+      let visibleCount = 0;
+
+      postEls.forEach(el => {
+        const text = el.getAttribute('data-searchable');
+        const match = !query || text.includes(query);
+        el.style.display = match ? '' : 'none';
+        if (match) visibleCount++;
+      });
+
+      document.getElementById('noResults').style.display = (visibleCount === 0 && query) ? '' : 'none';
+    }
+
+    // ─── Share permalink ───
+    function sharePost(postId, btn) {
+      const url = window.location.origin + window.location.pathname + '#' + postId;
+      navigator.clipboard.writeText(url).then(() => {
+        btn.classList.add('copied');
+        const orig = btn.innerHTML;
+        btn.innerHTML = '✓ הקישור הועתק';
+        setTimeout(() => {
+          btn.classList.remove('copied');
+          btn.innerHTML = orig;
+        }, 2000);
+      });
+    }
+
+    // ─── Back to top ───
+    window.addEventListener('scroll', () => {
+      const btn = document.getElementById('backToTop');
+      if (window.scrollY > 400) {
+        btn.classList.add('visible');
+      } else {
+        btn.classList.remove('visible');
+      }
+    });
+
+    // ─── Main loader ───
     async function loadBlog() {
       const container = document.getElementById('blogPosts');
-      const loading = document.getElementById('loadingIndicator');
 
       try {
         const response = await fetch(CSV_URL);
@@ -346,13 +837,11 @@
         const text = await response.text();
         const rows = parseCSV(text);
 
-        // First row is headers
         if (rows.length < 2) {
           container.innerHTML = '<div class="blog-error">אין פוסטים עדיין 🤷</div>';
           return;
         }
 
-        // Parse posts (skip header row)
         const posts = rows.slice(1)
           .map(row => ({
             num: row[0] || '',
@@ -362,7 +851,6 @@
             content: row[4] || ''
           }))
           .filter(p => p.content.trim())
-          // Sort by date descending (most recent first)
           .sort((a, b) => parseDateForSort(b.date) - parseDateForSort(a.date));
 
         if (posts.length === 0) {
@@ -370,14 +858,47 @@
           return;
         }
 
-        const postsHTML = posts.map((post, i) => `
-          <article class="blog-post fade-in" style="transition-delay: ${i * 0.1}s">
-            <div class="post-date">${formatDate(post.date)}</div>
-            <h2 class="post-title">${escapeHTML(post.title)}</h2>
+        allPosts = posts;
+
+        // Post count badge
+        const countEl = document.getElementById('postCount');
+        countEl.textContent = `${posts.length} פוסטים`;
+        countEl.style.display = '';
+
+        // Show search
+        document.getElementById('searchWrapper').style.display = '';
+
+        // Build TOC
+        const tocEl = document.getElementById('toc');
+        const tocList = document.getElementById('tocList');
+        tocEl.style.display = '';
+        tocList.innerHTML = posts.map((post, i) => {
+          const postId = 'post-' + (post.num || (i + 1));
+          return `<li class="toc-item"><a href="#${postId}"><span class="toc-num">${post.num || (i + 1)}</span> ${escapeHTML(post.title)}</a></li>`;
+        }).join('');
+
+        // Build posts HTML
+        const postsHTML = posts.map((post, i) => {
+          const postId = 'post-' + (post.num || (i + 1));
+          const readingTime = estimateReadingTime(post.content);
+          const isHero = i === 0;
+          const searchable = (post.title + ' ' + post.tldr + ' ' + post.content).toLowerCase();
+
+          return `
+          <article class="blog-post${isHero ? ' hero-post' : ''}" id="${postId}" data-searchable="${escapeHTML(searchable)}">
+            ${isHero ? '<div class="hero-badge">🆕 פוסט אחרון</div>' : ''}
+            <div class="post-meta">
+              <span class="post-date">${formatDate(post.date)}</span>
+              <span class="reading-time">${readingTime} דק׳ קריאה</span>
+            </div>
+            <h2 class="post-title"><a href="#${postId}">${escapeHTML(post.title)}</a></h2>
             ${post.tldr ? `<div class="post-tldr">${escapeHTML(post.tldr)}</div>` : ''}
             <div class="post-content">${formatContent(post.content)}</div>
-          </article>
-        `).join('');
+            <div class="post-footer">
+              <button class="share-btn" onclick="sharePost('${postId}', this)">🔗 שיתוף קישור</button>
+            </div>
+          </article>`;
+        }).join('');
 
         container.innerHTML = `<div class="blog-posts">${postsHTML}</div>`;
 
@@ -386,12 +907,31 @@
         document.getElementById('lastUpdated').textContent =
           `עודכן: ${now.toLocaleDateString('he-IL')} ${now.toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' })}`;
 
-        // Trigger fade-in animations
+        // Search listener
+        const searchInput = document.getElementById('searchInput');
+        const searchClear = document.getElementById('searchClear');
+        searchInput.addEventListener('input', () => {
+          const val = searchInput.value;
+          searchClear.classList.toggle('visible', val.length > 0);
+          filterPosts(val);
+        });
+
+        // Fade-in animations with stagger
         requestAnimationFrame(() => {
-          document.querySelectorAll('.blog-post.fade-in').forEach(el => {
-            el.classList.add('visible');
+          document.querySelectorAll('.blog-post').forEach((el, i) => {
+            setTimeout(() => el.classList.add('visible'), i * 80);
           });
         });
+
+        // If URL has anchor, scroll to it after render
+        if (window.location.hash) {
+          requestAnimationFrame(() => {
+            const target = document.querySelector(window.location.hash);
+            if (target) {
+              setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }), 300);
+            }
+          });
+        }
 
       } catch (err) {
         console.error('Blog load error:', err);
@@ -401,12 +941,6 @@
             <p style="margin-top:0.5rem; font-size:0.85rem; opacity:0.7;">נסו לרענן את הדף</p>
           </div>`;
       }
-    }
-
-    function escapeHTML(str) {
-      const div = document.createElement('div');
-      div.textContent = str;
-      return div.innerHTML;
     }
 
     loadBlog();
