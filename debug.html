@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debugging OpenClaw — Jarvis</title>
+    <meta name="description" content="Practical guide to debugging OpenClaw deployments. Logs, common issues, and troubleshooting steps.">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .debug-section {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .debug-section h3 {
+            margin-top: 0;
+            color: var(--primary);
+        }
+        .code-block {
+            background: #1a1a2e;
+            color: #e0e0e0;
+            border-radius: 8px;
+            padding: 1rem;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            margin: 0.75rem 0;
+        }
+        .code-block .comment { color: #6a9955; }
+        .code-block .cmd { color: #dcdcaa; }
+        .code-block .flag { color: #9cdcfe; }
+        .code-block .output { color: #808080; font-style: italic; }
+        .tip {
+            background: rgba(124, 58, 237, 0.08);
+            border-left: 3px solid var(--primary);
+            padding: 0.75rem 1rem;
+            border-radius: 0 8px 8px 0;
+            margin: 0.75rem 0;
+            font-size: 0.9rem;
+        }
+        .warning {
+            background: rgba(234, 179, 8, 0.08);
+            border-left: 3px solid #eab308;
+            padding: 0.75rem 1rem;
+            border-radius: 0 8px 8px 0;
+            margin: 0.75rem 0;
+            font-size: 0.9rem;
+        }
+        .toc {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .toc ul { list-style: none; padding: 0; margin: 0; }
+        .toc li { padding: 0.3rem 0; }
+        .toc a { color: var(--primary); text-decoration: none; font-size: 0.9rem; }
+        .toc a:hover { text-decoration: underline; }
+        .section-number {
+            display: inline-block;
+            width: 1.5rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-content">
+            <a href="/" class="nav-logo">Jarvis 🤖</a>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="methodology.html">Methodology</a>
+                <a href="learn.html">Bot Academy</a>
+                <a href="debug.html" class="active">Debugging</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container" style="max-width: 800px; margin: 0 auto; padding: 2rem 1rem;">
+        <h1>🔍 Debugging OpenClaw</h1>
+        <p style="color: var(--muted); margin-bottom: 2rem;">
+            Practical guide to getting logs, diagnosing issues, and fixing common problems.
+            Built from real incidents running OpenClaw on Railway.
+        </p>
+
+        <div class="toc">
+            <strong>Contents</strong>
+            <ul>
+                <li><a href="#logs"><span class="section-number">1.</span> Getting Logs</a></li>
+                <li><a href="#status"><span class="section-number">2.</span> Status Checks</a></li>
+                <li><a href="#common-issues"><span class="section-number">3.</span> Common Issues</a></li>
+                <li><a href="#gateway"><span class="section-number">4.</span> Gateway Troubleshooting</a></li>
+                <li><a href="#hooks"><span class="section-number">5.</span> Hooks & Plugins</a></li>
+                <li><a href="#cron"><span class="section-number">6.</span> Cron Jobs</a></li>
+                <li><a href="#telegram"><span class="section-number">7.</span> Telegram Channel</a></li>
+                <li><a href="#railway"><span class="section-number">8.</span> Railway-Specific</a></li>
+            </ul>
+        </div>
+
+        <!-- Section 1: Logs -->
+        <div class="debug-section" id="logs">
+            <h3>1. Getting Logs</h3>
+            <p>The first step in any debugging session: get the logs.</p>
+
+            <h4>Railway Logs (Remote)</h4>
+            <p>If your OpenClaw runs on Railway, pull logs from your local machine:</p>
+            <div class="code-block">
+<span class="comment"># Get last 300 lines of Railway logs</span>
+<span class="cmd">railway logs</span> <span class="flag">--lines 300</span> > railway-logs.txt
+
+<span class="comment"># Follow logs in real-time</span>
+<span class="cmd">railway logs</span> <span class="flag">--follow</span>
+
+<span class="comment"># Filter for errors only</span>
+<span class="cmd">railway logs</span> <span class="flag">--lines 500</span> | grep -i "error\|fail\|crash"
+            </div>
+
+            <div class="tip">
+                💡 <strong>Tip:</strong> Save logs to a file first, then search. Real-time log following can miss older context.
+            </div>
+
+            <h4>On the Container (SSH/Exec)</h4>
+            <p>If you have shell access to the running container:</p>
+            <div class="code-block">
+<span class="comment"># OpenClaw status (includes recent errors)</span>
+<span class="cmd">openclaw status</span>
+
+<span class="comment"># Detailed status with all subsystems</span>
+<span class="cmd">openclaw status</span> <span class="flag">--all</span>
+
+<span class="comment"># Gateway process log (if redirected)</span>
+<span class="cmd">tail -100</span> /tmp/oc-gateway.log
+
+<span class="comment"># Check if gateway is running</span>
+<span class="cmd">ps aux</span> | grep -i "openclaw\|gateway"
+            </div>
+
+            <h4>Session Logs</h4>
+            <div class="code-block">
+<span class="comment"># List recent sessions</span>
+<span class="cmd">openclaw sessions list</span> <span class="flag">--recent 60</span>
+
+<span class="comment"># View a specific session's history</span>
+<span class="cmd">openclaw sessions history</span> <span class="flag">--key</span> &lt;session-key&gt;
+
+<span class="comment"># Find session files on disk</span>
+<span class="cmd">ls</span> /data/.clawdbot/agents/main/sessions/
+            </div>
+        </div>
+
+        <!-- Section 2: Status -->
+        <div class="debug-section" id="status">
+            <h3>2. Status Checks</h3>
+
+            <div class="code-block">
+<span class="comment"># Quick health check</span>
+<span class="cmd">openclaw status</span>
+
+<span class="comment"># Full diagnostic</span>
+<span class="cmd">openclaw status</span> <span class="flag">--all</span>
+
+<span class="comment"># Check version</span>
+<span class="cmd">openclaw</span> <span class="flag">--version</span>
+
+<span class="comment"># Doctor: find config issues</span>
+<span class="cmd">openclaw doctor</span>
+
+<span class="comment"># Doctor with auto-fix</span>
+<span class="cmd">openclaw doctor</span> <span class="flag">--fix</span>
+            </div>
+
+            <h4>Key Things to Check</h4>
+            <ul>
+                <li><strong>Gateway PID:</strong> Is the gateway process running?</li>
+                <li><strong>Version match:</strong> Does <code>openclaw --version</code> match what you expect?</li>
+                <li><strong>Plugin warnings:</strong> Plugin ID mismatches are usually cosmetic in v2026.4.x</li>
+                <li><strong>Disk space:</strong> Railway volumes can fill up, especially with session logs</li>
+            </ul>
+        </div>
+
+        <!-- Section 3: Common Issues -->
+        <div class="debug-section" id="common-issues">
+            <h3>3. Common Issues</h3>
+
+            <h4>Agent Not Responding</h4>
+            <ol>
+                <li>Check gateway is running: <code>ps aux | grep gateway</code></li>
+                <li>Check Telegram polling: Look for "polling" or "long-poll" in logs</li>
+                <li>Check for crash loops: <code>railway logs --lines 50</code></li>
+                <li>Restart gateway if needed (see Gateway section)</li>
+            </ol>
+
+            <h4>"Plugin ID Mismatch" Warnings</h4>
+            <p>These are cosmetic in v2026.4.x. Safe to ignore unless a plugin actually fails to load.</p>
+            <div class="code-block">
+<span class="output">plugin anthropic: plugin id mismatch (manifest uses "anthropic", entry hints "anthropic-provider")</span>
+<span class="comment"># This is fine. The plugin still works.</span>
+            </div>
+
+            <h4>Session Store Bloat</h4>
+            <div class="code-block">
+<span class="comment"># Check session count</span>
+<span class="cmd">cat</span> /data/.clawdbot/agents/main/sessions/sessions.json | python3 -c "import json,sys; print(len(json.load(sys.stdin)))"
+
+<span class="comment"># Check disk usage</span>
+<span class="cmd">du -sh</span> /data/.clawdbot/agents/main/sessions/
+            </div>
+
+            <h4>"openclaw update" Fails</h4>
+            <p>The built-in updater can fail on Railway. Manual update works:</p>
+            <div class="code-block">
+<span class="cmd">cd</span> /openclaw
+<span class="cmd">git fetch</span> <span class="flag">--tags</span>
+<span class="cmd">git checkout</span> v2026.4.2  <span class="comment"># or whatever version</span>
+<span class="cmd">CI=true pnpm install</span> <span class="flag">--frozen-lockfile</span>
+<span class="comment"># Then restart the gateway</span>
+            </div>
+            <div class="warning">
+                ⚠️ <strong>Warning:</strong> Container packages (pip, apt) are ephemeral on Railway. They survive reboots via the volume but may not survive redeploys.
+            </div>
+        </div>
+
+        <!-- Section 4: Gateway -->
+        <div class="debug-section" id="gateway">
+            <h3>4. Gateway Troubleshooting</h3>
+
+            <h4>Restart the Gateway</h4>
+            <div class="code-block">
+<span class="comment"># Option 1: CLI (preferred)</span>
+<span class="cmd">openclaw gateway restart</span>
+
+<span class="comment"># Option 2: Manual (if CLI fails)</span>
+<span class="cmd">pkill -f</span> openclaw-gateway
+<span class="cmd">nohup node</span> /openclaw/packages/gateway/dist/index.js > /tmp/oc-gateway.log 2>&1 &
+
+<span class="comment"># Option 3: If running from compiled binary</span>
+<span class="comment"># Check actual process name first:</span>
+<span class="cmd">ps aux</span> | grep openclaw
+            </div>
+
+            <div class="warning">
+                ⚠️ Restarting the gateway drops all active sessions. Schedule restarts during quiet hours.
+            </div>
+
+            <h4>Verify Gateway is Healthy</h4>
+            <div class="code-block">
+<span class="comment"># RPC probe</span>
+<span class="cmd">curl -s</span> http://127.0.0.1:18789/health
+
+<span class="comment"># Check gateway port</span>
+<span class="cmd">ss -tlnp</span> | grep 18789
+            </div>
+        </div>
+
+        <!-- Section 5: Hooks -->
+        <div class="debug-section" id="hooks">
+            <h3>5. Hooks & Plugins</h3>
+
+            <div class="code-block">
+<span class="comment"># List hooks (may hang in some versions)</span>
+<span class="cmd">timeout 10 openclaw hooks list</span>
+
+<span class="comment"># Check hook config directly</span>
+<span class="cmd">cat</span> /data/.clawdbot/openclaw.json | python3 -m json.tool | grep -A5 hooks
+
+<span class="comment"># Enable a hook via config (workaround if CLI hangs)</span>
+<span class="comment"># Edit /data/.clawdbot/openclaw.json, add to hooks.internal.entries</span>
+
+<span class="comment"># List plugins</span>
+<span class="cmd">openclaw plugins list</span>
+
+<span class="comment"># Inspect a specific plugin</span>
+<span class="cmd">openclaw plugins inspect</span> brave
+            </div>
+
+            <h4>Hook Locations</h4>
+            <ul>
+                <li><strong>Workspace hooks:</strong> <code>&lt;workspace&gt;/hooks/&lt;name&gt;/</code> (per-agent)</li>
+                <li><strong>Managed hooks:</strong> <code>~/.openclaw/hooks/&lt;name&gt;/</code> (global)</li>
+                <li><strong>Bundled hooks:</strong> Ship with OpenClaw (session-memory, command-logger, etc.)</li>
+            </ul>
+
+            <h4>Available Hook Events</h4>
+            <table style="width: 100%; font-size: 0.85rem; border-collapse: collapse;">
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <th style="text-align: left; padding: 0.5rem;">Event</th>
+                    <th style="text-align: left; padding: 0.5rem;">When</th>
+                    <th style="text-align: left; padding: 0.5rem;">Can Modify?</th>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;"><code>message:received</code></td>
+                    <td style="padding: 0.5rem;">Inbound message arrives</td>
+                    <td style="padding: 0.5rem;">No</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;"><code>message_sending</code></td>
+                    <td style="padding: 0.5rem;">Before outbound delivery</td>
+                    <td style="padding: 0.5rem;">Yes (content, cancel)</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;"><code>message:sent</code></td>
+                    <td style="padding: 0.5rem;">After outbound delivery</td>
+                    <td style="padding: 0.5rem;">No</td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5rem;"><code>command:new</code></td>
+                    <td style="padding: 0.5rem;">User issues /new</td>
+                    <td style="padding: 0.5rem;">No</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Section 6: Cron -->
+        <div class="debug-section" id="cron">
+            <h3>6. Cron Jobs</h3>
+
+            <div class="code-block">
+<span class="comment"># List all cron jobs</span>
+<span class="cmd">openclaw cron list</span>
+
+<span class="comment"># Check a specific job</span>
+<span class="cmd">openclaw cron info</span> &lt;job-id&gt;
+
+<span class="comment"># View recent cron runs</span>
+<span class="cmd">openclaw cron history</span> <span class="flag">--limit 10</span>
+
+<span class="comment"># Manually trigger a cron job</span>
+<span class="cmd">openclaw cron trigger</span> &lt;job-id&gt;
+            </div>
+
+            <div class="tip">
+                💡 <strong>Lesson from experience:</strong> Always set <code>timeoutSeconds</code> and <code>maxConcurrent: 1</code> on cron jobs. We once had 942 runaway sessions from a cron storm.
+            </div>
+        </div>
+
+        <!-- Section 7: Telegram -->
+        <div class="debug-section" id="telegram">
+            <h3>7. Telegram Channel</h3>
+
+            <h4>Bot Not Receiving Messages</h4>
+            <ol>
+                <li>Check bot token is set: <code>echo $TELEGRAM_BOT_TOKEN | head -c 10</code></li>
+                <li>Verify long polling is active in logs</li>
+                <li>Check <code>allowFrom</code> config isn't blocking your chat ID</li>
+                <li>Test with BotFather: send /start to your bot</li>
+            </ol>
+
+            <h4>Bot API Limits</h4>
+            <ul>
+                <li><strong>File download:</strong> 20MB max (use Telethon/User API for larger files)</li>
+                <li><strong>Message length:</strong> 4096 chars (split or use file attachments)</li>
+                <li><strong>Rate limit:</strong> ~30 messages/second to same chat</li>
+            </ul>
+
+            <h4>Finding Your Chat ID</h4>
+            <div class="code-block">
+<span class="comment"># Check in the config</span>
+<span class="cmd">cat</span> /data/.clawdbot/credentials/telegram-allowFrom.json
+
+<span class="comment"># Or check inbound message metadata in logs</span>
+<span class="cmd">railway logs</span> | grep "chat_id\|sender_id"
+            </div>
+        </div>
+
+        <!-- Section 8: Railway -->
+        <div class="debug-section" id="railway">
+            <h3>8. Railway-Specific</h3>
+
+            <h4>Useful Commands</h4>
+            <div class="code-block">
+<span class="comment"># Get logs</span>
+<span class="cmd">railway logs</span> <span class="flag">--lines 300</span> > railway-logs.txt
+
+<span class="comment"># SSH into the container</span>
+<span class="cmd">railway shell</span>
+
+<span class="comment"># Check environment variables</span>
+<span class="cmd">railway variables</span>
+
+<span class="comment"># Trigger a redeploy</span>
+<span class="cmd">railway up</span>
+            </div>
+
+            <h4>Volume & Disk</h4>
+            <div class="code-block">
+<span class="comment"># Check disk usage</span>
+<span class="cmd">df -h</span> /data
+
+<span class="comment"># Find large files</span>
+<span class="cmd">du -sh</span> /data/* | sort -rh | head -10
+
+<span class="comment"># Session logs are often the biggest consumer</span>
+<span class="cmd">du -sh</span> /data/.clawdbot/agents/main/sessions/
+            </div>
+
+            <div class="warning">
+                ⚠️ <strong>Railway limits:</strong> No Docker-in-Docker. Packages installed via apt/pip are ephemeral (survive reboots but not redeploys). Volume data persists.
+            </div>
+
+            <h4>Manual Update on Railway</h4>
+            <div class="code-block">
+<span class="comment"># When `openclaw update` fails</span>
+<span class="cmd">cd</span> /openclaw
+<span class="cmd">git fetch</span> <span class="flag">--all --tags</span>
+<span class="cmd">git checkout</span> &lt;version-tag&gt;
+<span class="cmd">CI=true COREPACK_ENABLE_AUTO_INSTALL=1 pnpm install</span> <span class="flag">--frozen-lockfile</span>
+<span class="comment"># Restart gateway after install</span>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 3rem; padding: 1.5rem; color: var(--muted); font-size: 0.85rem;">
+            <p>Built from real debugging sessions. Updated as we learn more.</p>
+            <p><a href="https://github.com/openclaw/openclaw" style="color: var(--primary);">OpenClaw on GitHub</a> · <a href="https://docs.openclaw.ai" style="color: var(--primary);">Official Docs</a></p>
+        </div>
+    </main>
+
+    <script src="animations.js"></script>
+</body>
+</html>
