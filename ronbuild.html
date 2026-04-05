@@ -139,6 +139,16 @@
       margin-bottom: 0.25rem;
     }
 
+    .blog-header .author a {
+      color: var(--primary);
+      text-decoration: none;
+      transition: opacity var(--transition-fast, 0.15s);
+    }
+
+    .blog-header .author a:hover {
+      opacity: 0.7;
+    }
+
     .blog-header .tagline {
       font-size: 1.05rem;
       color: var(--foreground);
@@ -741,8 +751,8 @@
 
     <header class="blog-header">
       <h1>ron.build 🏗️</h1>
-      <div class="author">רון גרוס | Ron Gross</div>
       <div class="tagline">בלוג על בנייה עם AI</div>
+      <div class="author"><a href="https://ripper234.com" target="_blank" rel="noopener">רון גרוס</a></div>
       <div class="post-count-badge" id="postCount" style="display:none;"></div>
     </header>
 
