@@ -3,484 +3,552 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin — Jarvis Site Dashboard</title>
+    <title>Admin — Jarvis Dashboard</title>
     <meta name="robots" content="noindex, nofollow">
     <meta name="plausible-domain" content="">
     <meta name="clarity-project" content="">
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Admin-specific styles */
-        .admin-header { margin-bottom: 1.5rem; }
-        .admin-header h1 { font-size: 1.6rem; margin-bottom: 0.25rem; }
-        .admin-header .subtitle { color: #888; font-size: 0.82rem; }
-
-        /* Setup banner */
-        .setup-banner {
-            background: linear-gradient(135deg, #fef3c7, #fde68a);
-            border: 1px solid #fbbf24;
-            border-radius: 12px; padding: 1.25rem; margin-bottom: 1.5rem;
+        /* ── Admin Dashboard Styles ── */
+        :root {
+            --admin-bg: #FAF5FF;
+            --admin-card: #FFFFFF;
+            --admin-border: #E5E1F0;
+            --admin-muted: #6B7280;
+            --admin-primary: #7C3AED;
+            --admin-accent: #0891B2;
+            --admin-radius: 8px;
         }
-        .setup-banner h3 { margin: 0 0 0.5rem; font-size: 0.95rem; color: #92400e; }
-        .setup-banner p { margin: 0 0 0.5rem; font-size: 0.85rem; color: #78350f; line-height: 1.6; }
-        .setup-banner .step { display: flex; gap: 0.5rem; align-items: flex-start; margin-bottom: 0.5rem; }
-        .setup-banner .step-num {
-            background: #f59e0b; color: white; width: 22px; height: 22px; border-radius: 50%;
+
+        body { background: var(--admin-bg); }
+
+        .admin-wrap {
+            max-width: 960px; margin: 0 auto; padding: 1rem 1rem 2rem;
+            font-family: 'DM Sans', 'Heebo', sans-serif;
+        }
+
+        /* ── Header ── */
+        .admin-topbar {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 1rem; padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--admin-border);
+        }
+        .admin-topbar h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.15rem; font-weight: 700; color: #1E1B4B; margin: 0;
+        }
+        .admin-topbar .back-link {
+            font-size: 0.75rem; color: var(--admin-muted); text-decoration: none;
+        }
+        .admin-topbar .back-link:hover { color: var(--admin-primary); }
+
+        /* ── Password Gate ── */
+        .pw-gate {
             display: flex; align-items: center; justify-content: center;
-            font-size: 0.72rem; font-weight: 700; flex-shrink: 0; margin-top: 0.1rem;
+            min-height: 60vh;
         }
-        .setup-banner .step-text { font-size: 0.82rem; color: #78350f; }
-        .setup-banner .step-text code { background: rgba(0,0,0,0.06); font-size: 0.78rem; }
-        .setup-banner .done { opacity: 0.5; text-decoration: line-through; }
-        .setup-banner input {
-            width: 100%; max-width: 400px; padding: 0.4rem 0.6rem;
-            border: 1px solid #fbbf24; border-radius: 6px; font-size: 0.82rem;
-            margin: 0.3rem 0;
+        .pw-box {
+            background: var(--admin-card); border: 1px solid var(--admin-border);
+            border-radius: 12px; padding: 2rem; width: 100%; max-width: 340px;
+            text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.04);
         }
-        .setup-banner button {
-            background: #f59e0b; color: white; border: none; padding: 0.4rem 0.8rem;
-            border-radius: 6px; cursor: pointer; font-size: 0.78rem; font-weight: 600;
-            margin-left: 0.3rem;
+        .pw-box h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem; margin-bottom: 0.25rem; color: #1E1B4B;
         }
-        .setup-banner button:hover { background: #d97706; }
+        .pw-box .pw-sub { font-size: 0.75rem; color: var(--admin-muted); margin-bottom: 1.25rem; }
+        .pw-box input {
+            width: 100%; padding: 0.5rem 0.75rem; border: 1px solid var(--admin-border);
+            border-radius: 6px; font-size: 0.85rem; margin-bottom: 0.75rem;
+            font-family: inherit;
+        }
+        .pw-box input:focus { outline: none; border-color: var(--admin-primary); box-shadow: 0 0 0 2px rgba(124,58,237,0.1); }
+        .pw-box button {
+            width: 100%; padding: 0.5rem; background: var(--admin-primary); color: white;
+            border: none; border-radius: 6px; font-size: 0.82rem; font-weight: 600;
+            cursor: pointer; font-family: inherit;
+        }
+        .pw-box button:hover { background: #6D28D9; }
+        .pw-box .pw-err { font-size: 0.72rem; color: #EF4444; margin-top: 0.5rem; display: none; }
 
-        /* Quick links */
-        .quick-links { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem; }
-        .qlink {
-            display: inline-flex; align-items: center; gap: 0.3rem;
-            padding: 0.4rem 0.75rem; background: rgba(255,255,255,0.8);
-            border: 1px solid rgba(0,0,0,0.08); border-radius: 8px;
-            font-size: 0.78rem; color: #444; text-decoration: none; transition: all 0.15s;
+        /* ── Tab Pills ── */
+        .tab-bar {
+            display: flex; gap: 4px; margin-bottom: 1rem;
+            background: rgba(0,0,0,0.03); border-radius: 8px; padding: 3px;
+            width: fit-content;
         }
-        .qlink:hover { border-color: #6366f1; color: #4f46e5; }
-        .qlink.primary { background: rgba(79,70,229,0.08); border-color: rgba(79,70,229,0.15); color: #4f46e5; }
+        .tab-pill {
+            padding: 0.3rem 0.7rem; border-radius: 6px; font-size: 0.72rem;
+            font-weight: 600; cursor: pointer; border: none; background: none;
+            color: var(--admin-muted); transition: all 0.15s; white-space: nowrap;
+            font-family: inherit;
+        }
+        .tab-pill:hover { color: #1E1B4B; }
+        .tab-pill.active {
+            background: var(--admin-card); color: var(--admin-primary);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
 
-        /* Tabs */
-        .tabs { display: flex; gap: 0.25rem; margin-bottom: 1.5rem; border-bottom: 1px solid #e5e7eb; padding-bottom: 0.5rem; }
-        .tab {
-            padding: 0.4rem 0.8rem; border-radius: 6px 6px 0 0; font-size: 0.82rem;
-            font-weight: 500; cursor: pointer; border: none; background: none; color: #666;
-        }
-        .tab:hover { color: #4f46e5; }
-        .tab.active { color: #4f46e5; background: rgba(79,70,229,0.08); font-weight: 600; }
+        /* ── Panels ── */
         .panel { display: none; }
         .panel.active { display: block; }
 
-        /* Section card */
-        .section {
-            background: rgba(255,255,255,0.8); backdrop-filter: blur(8px);
-            border: 1px solid rgba(0,0,0,0.06); border-radius: 12px;
-            padding: 1.25rem; margin-bottom: 1rem;
+        /* ── Cards ── */
+        .card {
+            background: var(--admin-card); border: 1px solid var(--admin-border);
+            border-radius: var(--admin-radius); padding: 0.85rem; margin-bottom: 0.75rem;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.03);
         }
-        .section h3 { font-size: 0.9rem; font-weight: 600; color: #111; margin: 0 0 0.75rem; }
-        .section h4 { font-size: 0.82rem; font-weight: 600; color: #333; margin: 1rem 0 0.4rem; }
-
-        /* Embedded dashboard */
-        .embed-frame {
-            width: 100%; border: none; border-radius: 8px;
-            min-height: 500px; background: #fafafa;
+        .card h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.78rem; font-weight: 700; color: #1E1B4B;
+            margin: 0 0 0.5rem; text-transform: uppercase; letter-spacing: 0.03em;
         }
 
-        /* Stats grid */
-        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.75rem; margin-bottom: 1rem; }
-        .stat {
-            background: rgba(255,255,255,0.8); border: 1px solid rgba(0,0,0,0.06);
-            border-radius: 10px; padding: 0.75rem; text-align: center;
+        /* ── Stat Row ── */
+        .stat-row {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem;
+            margin-bottom: 0.75rem;
         }
-        .stat .num { font-size: 1.5rem; font-weight: 700; color: #111; }
-        .stat .label { font-size: 0.68rem; color: #888; text-transform: uppercase; letter-spacing: 0.04em; }
-
-        /* Pages table */
-        .ptable { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
-        .ptable th {
-            text-align: left; color: #666; font-weight: 500; padding: 0.5rem 0.6rem;
-            border-bottom: 2px solid #eee; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em;
+        .stat-card {
+            background: var(--admin-card); border: 1px solid var(--admin-border);
+            border-radius: var(--admin-radius); padding: 0.6rem 0.75rem; text-align: center;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.03);
         }
-        .ptable td { padding: 0.5rem 0.6rem; border-bottom: 1px solid #f5f5f5; }
-        .ptable tr:hover { background: rgba(79,70,229,0.02); }
-        .ptable a { color: #111; font-weight: 500; }
-        .ptable a:hover { color: #4f46e5; }
-        .badge { font-size: 0.62rem; padding: 0.1rem 0.35rem; border-radius: 8px; font-weight: 600; }
-        .badge-live { background: rgba(16,185,129,0.1); color: #10b981; }
-        .badge-top { background: rgba(239,68,68,0.1); color: #ef4444; }
-        .badge-high { background: rgba(245,158,11,0.1); color: #f59e0b; }
+        .stat-card .val {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.25rem; font-weight: 700; color: #1E1B4B;
+        }
+        .stat-card .lbl {
+            font-size: 0.6rem; color: var(--admin-muted); text-transform: uppercase;
+            letter-spacing: 0.05em; margin-top: 0.1rem;
+        }
 
-        /* Funnel */
-        .funnel { margin: 0.75rem 0; }
-        .funnel-step { display: flex; align-items: center; gap: 0.6rem; padding: 0.4rem 0; }
-        .funnel-dot {
-            width: 24px; height: 24px; border-radius: 50%; background: #6366f1;
+        /* ── Overview Hub Cards ── */
+        .hub-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 0.5rem; margin-bottom: 0.75rem;
+        }
+        .hub-card {
+            display: flex; align-items: center; gap: 0.6rem;
+            background: var(--admin-card); border: 1px solid var(--admin-border);
+            border-radius: var(--admin-radius); padding: 0.65rem 0.75rem;
+            text-decoration: none; transition: all 0.15s;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+        }
+        .hub-card:hover { border-color: var(--admin-primary); box-shadow: 0 2px 6px rgba(124,58,237,0.08); transform: translateY(-1px); }
+        .hub-icon { font-size: 1.1rem; flex-shrink: 0; }
+        .hub-text .hub-title { font-size: 0.78rem; font-weight: 600; color: #1E1B4B; }
+        .hub-text .hub-desc { font-size: 0.65rem; color: var(--admin-muted); line-height: 1.3; }
+
+        /* ── Charts Grid (2-col) ── */
+        .chart-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+        .chart-grid .card { margin-bottom: 0; }
+        .chart-grid canvas { max-height: 160px; }
+
+        /* ── Compact Table ── */
+        .ctable { width: 100%; border-collapse: collapse; font-size: 0.72rem; }
+        .ctable th {
+            text-align: left; font-size: 0.62rem; color: var(--admin-muted);
+            text-transform: uppercase; letter-spacing: 0.04em;
+            padding: 0.35rem 0.5rem; border-bottom: 2px solid #F3F0FA;
+            font-weight: 600;
+        }
+        .ctable td { padding: 0.3rem 0.5rem; border-bottom: 1px solid #F8F6FC; color: #333; }
+        .ctable tr:hover { background: rgba(124,58,237,0.02); }
+        .ctable .mono { font-family: 'Space Grotesk', monospace; }
+
+        /* ── Badges ── */
+        .badge { font-size: 0.58rem; padding: 0.1rem 0.3rem; border-radius: 6px; font-weight: 700; }
+        .badge-top { background: rgba(239,68,68,0.08); color: #EF4444; }
+        .badge-high { background: rgba(245,158,11,0.08); color: #F59E0B; }
+        .badge-live { background: rgba(16,185,129,0.08); color: #10B981; }
+
+        /* ── Metric rows ── */
+        .metric-row { display: flex; justify-content: space-between; padding: 0.3rem 0; border-bottom: 1px solid #F8F6FC; }
+        .metric-row:last-child { border-bottom: none; }
+        .metric-row .mk { font-size: 0.75rem; color: #555; }
+        .metric-row .mv { font-size: 0.75rem; font-weight: 600; color: #1E1B4B; }
+
+        /* ── Funnel ── */
+        .funnel-step { display: flex; align-items: center; gap: 0.5rem; padding: 0.25rem 0; }
+        .funnel-num {
+            width: 20px; height: 20px; border-radius: 50%; background: var(--admin-primary);
             color: white; display: flex; align-items: center; justify-content: center;
-            font-size: 0.7rem; font-weight: 700; flex-shrink: 0;
+            font-size: 0.6rem; font-weight: 700; flex-shrink: 0;
         }
-        .funnel-label { font-size: 0.82rem; color: #333; flex: 1; }
-        .funnel-event { font-size: 0.72rem; color: #888; font-family: 'JetBrains Mono', monospace; }
-        .funnel-arrow { padding-left: 0.65rem; color: #d1d5db; font-size: 0.75rem; }
+        .funnel-label { font-size: 0.75rem; color: #333; flex: 1; }
+        .funnel-code { font-size: 0.62rem; color: var(--admin-muted); font-family: 'Space Grotesk', monospace; }
+        .funnel-arrow { padding-left: 0.55rem; color: #D1D5DB; font-size: 0.65rem; line-height: 1; }
 
-        /* Metrics */
-        .metric { display: flex; justify-content: space-between; padding: 0.4rem 0; border-bottom: 1px solid #f5f5f5; }
-        .metric:last-child { border-bottom: none; }
-        .metric-name { font-size: 0.82rem; color: #555; }
-        .metric-val { font-size: 0.82rem; font-weight: 600; color: #111; }
+        /* ── Events list ── */
+        .ev-list { font-size: 0.72rem; }
+        .ev-list li { margin-bottom: 0.2rem; line-height: 1.5; }
+        .ev-list code { font-size: 0.65rem; background: #F3F0FA; padding: 0.08rem 0.25rem; border-radius: 3px; }
 
-        /* Event list */
-        .events { font-size: 0.78rem; }
-        .events li { margin-bottom: 0.3rem; line-height: 1.5; }
-        .events code { font-size: 0.72rem; background: #f0eef5; padding: 0.1rem 0.3rem; border-radius: 3px; }
+        /* ── Setup Banner ── */
+        .setup-banner {
+            background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+            border: 1px solid #FBBF24; border-radius: var(--admin-radius);
+            padding: 0.85rem; margin-bottom: 0.75rem;
+        }
+        .setup-banner h3 { font-size: 0.82rem; color: #92400E; margin: 0 0 0.4rem; }
+        .setup-banner p { font-size: 0.72rem; color: #78350F; margin: 0 0 0.3rem; line-height: 1.5; }
+        .setup-banner .s-step { display: flex; gap: 0.4rem; align-items: flex-start; margin-bottom: 0.4rem; }
+        .setup-banner .s-num {
+            background: #F59E0B; color: white; width: 18px; height: 18px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.6rem; font-weight: 700; flex-shrink: 0; margin-top: 0.1rem;
+        }
+        .setup-banner .s-text { font-size: 0.72rem; color: #78350F; }
+        .setup-banner .s-text code { background: rgba(0,0,0,0.06); font-size: 0.68rem; padding: 0.05rem 0.2rem; border-radius: 2px; }
+        .setup-banner input {
+            width: 100%; max-width: 320px; padding: 0.3rem 0.5rem;
+            border: 1px solid #FBBF24; border-radius: 4px; font-size: 0.72rem; margin: 0.2rem 0;
+            font-family: inherit;
+        }
+        .setup-banner button {
+            background: #F59E0B; color: white; border: none; padding: 0.3rem 0.6rem;
+            border-radius: 4px; cursor: pointer; font-size: 0.68rem; font-weight: 600;
+            margin-left: 0.2rem; font-family: inherit;
+        }
+        .setup-banner button:hover { background: #D97706; }
+        .setup-banner .done { opacity: 0.4; text-decoration: line-through; }
 
-        /* Responsive */
-        @media (max-width: 600px) {
-            .stats { grid-template-columns: repeat(2, 1fr); }
-            .ptable { font-size: 0.75rem; }
+        /* ── Embed ── */
+        .embed-frame {
+            width: 100%; border: none; border-radius: 6px;
+            min-height: 400px; background: #FAFAFA;
+        }
+
+        /* ── Footer ── */
+        .admin-footer {
+            font-size: 0.62rem; color: var(--admin-muted); text-align: center;
+            margin-top: 1.5rem; padding-top: 0.75rem; border-top: 1px solid var(--admin-border);
+        }
+        .admin-footer a { color: var(--admin-muted); text-decoration: none; }
+        .admin-footer a:hover { color: var(--admin-primary); }
+
+        /* ── Timestamp ── */
+        .ts { font-size: 0.6rem; color: var(--admin-muted); font-style: italic; }
+
+        /* ── Responsive ── */
+        @media (max-width: 700px) {
+            .admin-wrap { padding: 0.75rem; }
+            .stat-row { grid-template-columns: repeat(2, 1fr); }
+            .chart-grid { grid-template-columns: 1fr; }
+            .hub-grid { grid-template-columns: 1fr; }
+            .tab-bar { flex-wrap: wrap; }
+        }
+        @media (max-width: 400px) {
+            .stat-row { grid-template-columns: 1fr 1fr; }
         }
     </style>
 </head>
 <body>
-<div class="page" style="max-width: 900px;">
-    <a class="back" href="./">← Home</a>
 
-    <div class="admin-header">
-        <h1>📊 Site Command Center</h1>
-        <p class="subtitle">jarvis.ripper234.com — analytics, structure, and conversion tracking</p>
+<!-- ════ PASSWORD GATE ════ -->
+<div class="pw-gate" id="pw-gate">
+    <div class="pw-box">
+        <h2>🔒 Admin Dashboard</h2>
+        <p class="pw-sub">jarvis.ripper234.com</p>
+        <input type="password" id="pw-input" placeholder="Password" autofocus
+               onkeydown="if(event.key==='Enter')checkPw()">
+        <button onclick="checkPw()">Sign In</button>
+        <p class="pw-err" id="pw-err">Incorrect password</p>
+    </div>
+</div>
+
+<!-- ════ DASHBOARD (hidden until auth) ════ -->
+<div class="admin-wrap" id="dashboard" style="display:none;">
+
+    <!-- Top bar -->
+    <div class="admin-topbar">
+        <h1>📊 Jarvis Dashboard</h1>
+        <a class="back-link" href="./">← Home</a>
     </div>
 
-    <!-- Setup Banner (shown until both services are configured) -->
-    <div class="setup-banner" id="setup-banner">
-        <h3>⚡ First-time setup (2 minutes)</h3>
-        <p>Two free/cheap services give you world-class analytics. Both are privacy-friendly, no cookies, lightweight.</p>
-
-        <div class="step" id="step-plausible">
-            <span class="step-num">1</span>
-            <div class="step-text">
-                <strong>Plausible Analytics</strong> ($9/mo) — page views, referrers, goals, conversion funnels<br>
-                <a href="https://plausible.io/register" target="_blank">Sign up</a> → add site <code>jarvis.ripper234.com</code> → create a <a href="https://plausible.io/docs/shared-links" target="_blank">shared link</a> for embedding<br>
-                <input type="text" id="plausible-domain" placeholder="Domain (e.g. jarvis.ripper234.com)">
-                <input type="text" id="plausible-shared" placeholder="Shared link URL (for embed)">
-                <button onclick="savePlausible()">Save</button>
-            </div>
-        </div>
-
-        <div class="step" id="step-clarity">
-            <span class="step-num">2</span>
-            <div class="step-text">
-                <strong>Microsoft Clarity</strong> (free forever) — heatmaps, session recordings, rage/dead clicks<br>
-                <a href="https://clarity.microsoft.com/" target="_blank">Sign up</a> → create project → copy project ID<br>
-                <input type="text" id="clarity-id" placeholder="Clarity project ID (e.g. abc123xyz)">
-                <button onclick="saveClarity()">Save</button>
-            </div>
-        </div>
-
-        <p style="font-size: 0.72rem; color: #92400e; margin-top: 0.5rem;">Settings stored in your browser's localStorage. Never transmitted.</p>
+    <!-- Tab pills -->
+    <div class="tab-bar">
+        <button class="tab-pill active" data-tab="overview">Overview</button>
+        <button class="tab-pill" data-tab="analytics">Analytics</button>
+        <button class="tab-pill" data-tab="costs">Costs</button>
     </div>
 
-    <!-- Quick Links -->
-    <div class="quick-links">
-        <a class="qlink primary" id="ql-plausible" href="#" target="_blank" style="display:none;">📈 Plausible Dashboard</a>
-        <a class="qlink primary" id="ql-clarity" href="#" target="_blank" style="display:none;">🔥 Clarity Heatmaps</a>
-        <a class="qlink" href="https://github.com/ripper234/jarvis-public" target="_blank">📁 GitHub Repo</a>
-        <a class="qlink" href="https://github.com/ripper234/jarvis-public/actions" target="_blank">🚀 Deploy Status</a>
-        <a class="qlink" href="balance.html" target="_blank">⚖️ Balance</a>
-        <a class="qlink" href="learn.html" target="_blank">🎓 Academy</a>
-        <a class="qlink" href="https://docs.google.com/spreadsheets/d/1tx6jnUpmuCml8hAZnACLUEQ6yQScubixCpFoFzxiyxw/edit" target="_blank">📋 Balance CRM</a>
-    </div>
-
-    <!-- Tabs -->
-    <div class="tabs">
-        <button class="tab active" data-tab="overview">Overview</button>
-        <button class="tab" data-tab="academy">🎓 Academy</button>
-        <button class="tab" data-tab="balance">⚖️ Balance</button>
-        <button class="tab" data-tab="costs">💰 Costs</button>
-        <button class="tab" data-tab="live">📈 Live Analytics</button>
-    </div>
-
-    <!-- ===== OVERVIEW ===== -->
+    <!-- ═══ OVERVIEW ═══ -->
     <div class="panel active" id="tab-overview">
-
-        <div class="stats" id="gh-stats">
-            <div class="stat"><div class="num" id="s-views">--</div><div class="label">Views (14d)</div></div>
-            <div class="stat"><div class="num" id="s-visitors">--</div><div class="label">Visitors (14d)</div></div>
-            <div class="stat"><div class="num">12</div><div class="label">Pages</div></div>
-            <div class="stat"><div class="num">v0.3</div><div class="label">Version</div></div>
+        <!-- Quick stats -->
+        <div class="stat-row" id="gh-stats">
+            <div class="stat-card"><div class="val" id="s-views">--</div><div class="lbl">Views (14d)</div></div>
+            <div class="stat-card"><div class="val" id="s-visitors">--</div><div class="lbl">Visitors</div></div>
+            <div class="stat-card"><div class="val">12</div><div class="lbl">Pages</div></div>
+            <div class="stat-card"><div class="val">v0.3</div><div class="lbl">Version</div></div>
         </div>
 
-        <div class="section">
+        <!-- External dashboards hub -->
+        <div class="hub-grid">
+            <a class="hub-card" href="https://railway.com/project/jarvis" target="_blank">
+                <span class="hub-icon">🚂</span>
+                <div class="hub-text">
+                    <div class="hub-title">Railway</div>
+                    <div class="hub-desc">Hosting & deploys</div>
+                </div>
+            </a>
+            <a class="hub-card" href="https://github.com/ripper234/jarvis-public" target="_blank">
+                <span class="hub-icon">📁</span>
+                <div class="hub-text">
+                    <div class="hub-title">GitHub Repo</div>
+                    <div class="hub-desc">Source code & PRs</div>
+                </div>
+            </a>
+            <a class="hub-card" href="https://github.com/ripper234/jarvis-public/actions" target="_blank">
+                <span class="hub-icon">🚀</span>
+                <div class="hub-text">
+                    <div class="hub-title">Deploy Status</div>
+                    <div class="hub-desc">GitHub Actions</div>
+                </div>
+            </a>
+            <a class="hub-card" id="ql-plausible" href="#" target="_blank" style="display:none;">
+                <span class="hub-icon">📈</span>
+                <div class="hub-text">
+                    <div class="hub-title">Plausible</div>
+                    <div class="hub-desc">Traffic analytics</div>
+                </div>
+            </a>
+            <a class="hub-card" id="ql-clarity" href="#" target="_blank" style="display:none;">
+                <span class="hub-icon">🔥</span>
+                <div class="hub-text">
+                    <div class="hub-title">Clarity</div>
+                    <div class="hub-desc">Heatmaps & recordings</div>
+                </div>
+            </a>
+            <a class="hub-card" href="balance.html" target="_blank">
+                <span class="hub-icon">⚖️</span>
+                <div class="hub-text">
+                    <div class="hub-title">Balance</div>
+                    <div class="hub-desc">Landing page</div>
+                </div>
+            </a>
+            <a class="hub-card" href="learn.html" target="_blank">
+                <span class="hub-icon">🎓</span>
+                <div class="hub-text">
+                    <div class="hub-title">Academy</div>
+                    <div class="hub-desc">Bot learning hub</div>
+                </div>
+            </a>
+            <a class="hub-card" href="https://docs.google.com/spreadsheets/d/1tx6jnUpmuCml8hAZnACLUEQ6yQScubixCpFoFzxiyxw/edit" target="_blank">
+                <span class="hub-icon">📋</span>
+                <div class="hub-text">
+                    <div class="hub-title">Balance CRM</div>
+                    <div class="hub-desc">Google Sheets</div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Setup Banner (collapsed if configured) -->
+        <div class="setup-banner" id="setup-banner">
+            <h3>⚡ Setup — connect analytics</h3>
+            <div class="s-step" id="step-plausible">
+                <span class="s-num">1</span>
+                <div class="s-text">
+                    <strong>Plausible</strong> ($9/mo) — <a href="https://plausible.io/register" target="_blank">sign up</a>, add site, create <a href="https://plausible.io/docs/shared-links" target="_blank">shared link</a><br>
+                    <input type="text" id="plausible-domain" placeholder="Domain (jarvis.ripper234.com)">
+                    <input type="text" id="plausible-shared" placeholder="Shared link URL">
+                    <button onclick="savePlausible()">Save</button>
+                </div>
+            </div>
+            <div class="s-step" id="step-clarity">
+                <span class="s-num">2</span>
+                <div class="s-text">
+                    <strong>Clarity</strong> (free) — <a href="https://clarity.microsoft.com/" target="_blank">sign up</a>, copy project ID<br>
+                    <input type="text" id="clarity-id" placeholder="Clarity project ID">
+                    <button onclick="saveClarity()">Save</button>
+                </div>
+            </div>
+            <p style="font-size: 0.6rem; color: #92400E; margin-top: 0.3rem;">Stored in localStorage only.</p>
+        </div>
+
+        <!-- Analytics status -->
+        <div class="card">
+            <h3>Service Status</h3>
+            <div class="metric-row"><span class="mk">Plausible</span><span class="mv" id="status-plausible">❌ Not connected</span></div>
+            <div class="metric-row"><span class="mk">Clarity</span><span class="mv" id="status-clarity">❌ Not connected</span></div>
+            <div class="metric-row"><span class="mk">GitHub Traffic API</span><span class="mv" id="status-gh">🔄 Loading…</span></div>
+            <div class="metric-row"><span class="mk">analytics.js</span><span class="mv">✅ Active</span></div>
+        </div>
+
+        <!-- All Pages -->
+        <div class="card">
             <h3>All Pages</h3>
-            <table class="ptable">
-                <thead><tr><th>Page</th><th>Focus</th><th>Key Metric</th><th>Tracked Events</th></tr></thead>
+            <table class="ctable">
+                <thead><tr><th>Page</th><th>Priority</th><th>Key Metric</th><th>Events</th></tr></thead>
                 <tbody>
-                    <tr>
-                        <td><a href="balance.html">⚖️ Balance</a></td>
-                        <td><span class="badge badge-top">Top Priority</span></td>
-                        <td>CTA → WhatsApp</td>
-                        <td>scroll-depth, cta-click, time-on-page</td>
-                    </tr>
-                    <tr>
-                        <td><a href="learn.html">🎓 Bot Academy</a></td>
-                        <td><span class="badge badge-high">High</span></td>
-                        <td>Prompt copies</td>
-                        <td>section-expand, prompt-copy, link-external, scroll-depth</td>
-                    </tr>
-                    <tr><td><a href="index.html">🏠 Home</a></td><td><span class="badge badge-live">Live</span></td><td>Bounce rate</td><td>scroll-depth, cta-click</td></tr>
-                    <tr><td><a href="methodology.html">📐 Methodology</a></td><td><span class="badge badge-live">Live</span></td><td>Time on page</td><td>scroll-depth, link-external</td></tr>
-                    <tr><td><a href="request-for-startups.html">🚀 RFS / Projects</a></td><td><span class="badge badge-live">Live</span></td><td>Project clicks</td><td>scroll-depth, cta-click</td></tr>
-                    <tr><td><a href="setup.html">🔧 Setup Guide</a></td><td><span class="badge badge-live">Live</span></td><td>Completion</td><td>scroll-depth</td></tr>
-                    <tr><td><a href="tiny-pr-bot.html">🤖 Tiny PR Bot</a></td><td><span class="badge badge-live">Live</span></td><td>GitHub clicks</td><td>scroll-depth, link-external</td></tr>
-                    <tr><td><a href="projects.html">📦 Projects Grid</a></td><td><span class="badge badge-live">Live</span></td><td>Card clicks</td><td>scroll-depth, cta-click</td></tr>
-                    <tr><td><a href="dev-practices.html">🛠 Dev Practices</a></td><td><span class="badge badge-live">Live</span></td><td>Time on page</td><td>scroll-depth</td></tr>
-                    <tr><td><a href="tools.html">🧰 Tools</a></td><td><span class="badge badge-live">Live</span></td><td>Ext. clicks</td><td>scroll-depth, link-external</td></tr>
-                    <tr><td><a href="academy-marketing.html">📣 Academy Marketing</a></td><td><span class="badge badge-live">Live</span></td><td>-</td><td>scroll-depth</td></tr>
+                    <tr><td><a href="balance.html">⚖️ Balance</a></td><td><span class="badge badge-top">Top</span></td><td>CTA → WhatsApp</td><td>scroll, cta, time</td></tr>
+                    <tr><td><a href="learn.html">🎓 Academy</a></td><td><span class="badge badge-high">High</span></td><td>Prompt copies</td><td>expand, copy, ext</td></tr>
+                    <tr><td><a href="index.html">🏠 Home</a></td><td><span class="badge badge-live">Live</span></td><td>Bounce rate</td><td>scroll, cta</td></tr>
+                    <tr><td><a href="methodology.html">📐 Methodology</a></td><td><span class="badge badge-live">Live</span></td><td>Time on page</td><td>scroll, ext</td></tr>
+                    <tr><td><a href="request-for-startups.html">🚀 RFS</a></td><td><span class="badge badge-live">Live</span></td><td>Project clicks</td><td>scroll, cta</td></tr>
+                    <tr><td><a href="setup.html">🔧 Setup</a></td><td><span class="badge badge-live">Live</span></td><td>Completion</td><td>scroll</td></tr>
+                    <tr><td><a href="tiny-pr-bot.html">🤖 Tiny PR Bot</a></td><td><span class="badge badge-live">Live</span></td><td>GH clicks</td><td>scroll, ext</td></tr>
+                    <tr><td><a href="projects.html">📦 Projects</a></td><td><span class="badge badge-live">Live</span></td><td>Card clicks</td><td>scroll, cta</td></tr>
+                    <tr><td><a href="dev-practices.html">🛠 Dev Practices</a></td><td><span class="badge badge-live">Live</span></td><td>Time on page</td><td>scroll</td></tr>
+                    <tr><td><a href="tools.html">🧰 Tools</a></td><td><span class="badge badge-live">Live</span></td><td>Ext. clicks</td><td>scroll, ext</td></tr>
+                    <tr><td><a href="academy-marketing.html">📣 Marketing</a></td><td><span class="badge badge-live">Live</span></td><td>—</td><td>scroll</td></tr>
                 </tbody>
             </table>
         </div>
-
-        <div class="section">
-            <h3>Analytics Stack</h3>
-            <div class="metric"><span class="metric-name">Plausible ($9/mo)</span><span class="metric-val" id="status-plausible">❌ Not connected</span></div>
-            <div class="metric"><span class="metric-name">Microsoft Clarity (free)</span><span class="metric-val" id="status-clarity">❌ Not connected</span></div>
-            <div class="metric"><span class="metric-name">GitHub Traffic API</span><span class="metric-val" id="status-gh">🔄 Auto-fetching...</span></div>
-            <div class="metric"><span class="metric-name">analytics.js</span><span class="metric-val">✅ Loaded on all pages</span></div>
-        </div>
     </div>
 
-    <!-- ===== ACADEMY ===== -->
-    <div class="panel" id="tab-academy">
-        <h2 style="font-size: 1.1rem; margin-bottom: 0.5rem;">🎓 Bot Academy — Deep Dive</h2>
-        <p style="font-size: 0.82rem; color: #666; margin-bottom: 1rem;">Track how agents and humans discover, learn from, and reuse our lessons.</p>
+    <!-- ═══ ANALYTICS ═══ -->
+    <div class="panel" id="tab-analytics">
 
-        <div class="section">
-            <h3>Conversion Funnel</h3>
-            <p style="font-size: 0.78rem; color: #888; margin-bottom: 0.5rem;">
-                Set up as <a href="https://plausible.io/docs/funnel-analysis" target="_blank">Plausible Funnel</a> with these goals:
-            </p>
-            <div class="funnel">
-                <div class="funnel-step">
-                    <span class="funnel-dot">1</span>
-                    <span class="funnel-label">Visit learn.html</span>
-                    <span class="funnel-event">pageview: /learn.html</span>
-                </div>
-                <div class="funnel-arrow">↓</div>
-                <div class="funnel-step">
-                    <span class="funnel-dot">2</span>
-                    <span class="funnel-label">Expand a section (engaged reader)</span>
-                    <span class="funnel-event">event: section-expand</span>
-                </div>
-                <div class="funnel-arrow">↓</div>
-                <div class="funnel-step">
-                    <span class="funnel-dot">3</span>
-                    <span class="funnel-label">Copy the agent prompt (high intent)</span>
-                    <span class="funnel-event">event: prompt-copy</span>
-                </div>
-                <div class="funnel-arrow">↓</div>
-                <div class="funnel-step">
-                    <span class="funnel-dot">4</span>
-                    <span class="funnel-label">Click external resource</span>
-                    <span class="funnel-event">event: link-external</span>
-                </div>
+        <!-- Plausible embed -->
+        <div class="card" id="plausible-embed-section">
+            <h3>Plausible Dashboard</h3>
+            <div id="plausible-embed-placeholder">
+                <p style="color: var(--admin-muted); font-size: 0.75rem;">Connect Plausible in Overview → Setup to embed live analytics here.</p>
             </div>
+            <iframe id="plausible-embed" class="embed-frame" src="" style="display:none;" title="Plausible"></iframe>
         </div>
 
-        <div class="section">
-            <h3>Tracked Events</h3>
-            <ul class="events">
-                <li><code>section-expand</code> — which sections get opened (props: <code>section</code>)</li>
-                <li><code>prompt-copy</code> — agent prompt was copied (high-value signal)</li>
-                <li><code>link-external</code> — clicked through to a resource (props: <code>target</code> = hostname)</li>
-                <li><code>scroll-depth</code> — reached 25%, 50%, 75%, 90% of page</li>
-                <li><code>time-on-page</code> — stayed 30s, 60s, 2m, 5m</li>
-            </ul>
-        </div>
-
-        <div class="section">
-            <h3>Plausible Goals to Create</h3>
-            <p style="font-size: 0.82rem; color: #666;">In Plausible → Site Settings → Goals, add:</p>
-            <ol style="font-size: 0.82rem; line-height: 2;">
-                <li>Custom event: <code>section-expand</code></li>
-                <li>Custom event: <code>prompt-copy</code></li>
-                <li>Custom event: <code>link-external</code></li>
-                <li>Custom event: <code>scroll-depth</code></li>
-                <li>Custom event: <code>time-on-page</code></li>
-                <li>Funnel: Visit → Expand → Copy → External click</li>
-            </ol>
-        </div>
-
-        <div class="section">
-            <h3>Key Questions This Answers</h3>
-            <ul style="font-size: 0.85rem; color: #444; line-height: 1.8;">
-                <li>Which sections do people actually read? (section-expand breakdown)</li>
-                <li>Are agents copying the prompt? (prompt-copy rate)</li>
-                <li>Where do visitors come from? (Plausible referrers)</li>
-                <li>Do people stay or bounce? (scroll-depth + time-on-page)</li>
-                <li>Which external resources get clicks? (link-external breakdown)</li>
-            </ul>
-        </div>
-    </div>
-
-    <!-- ===== BALANCE ===== -->
-    <div class="panel" id="tab-balance">
-        <h2 style="font-size: 1.1rem; margin-bottom: 0.5rem;">⚖️ Balance — Deep Dive</h2>
-        <p style="font-size: 0.82rem; color: #666; margin-bottom: 1rem;">Track the path from landing page visit to beta signup via WhatsApp.</p>
-
-        <div class="section">
-            <h3>Conversion Funnel</h3>
-            <p style="font-size: 0.78rem; color: #888; margin-bottom: 0.5rem;">
-                Set up as <a href="https://plausible.io/docs/funnel-analysis" target="_blank">Plausible Funnel</a>:
-            </p>
-            <div class="funnel">
-                <div class="funnel-step">
-                    <span class="funnel-dot">1</span>
-                    <span class="funnel-label">Visit balance.html</span>
-                    <span class="funnel-event">pageview: /balance.html</span>
-                </div>
-                <div class="funnel-arrow">↓</div>
-                <div class="funnel-step">
-                    <span class="funnel-dot">2</span>
-                    <span class="funnel-label">Read the page (scroll ≥75%)</span>
-                    <span class="funnel-event">event: scroll-depth {depth: "75%"}</span>
-                </div>
-                <div class="funnel-arrow">↓</div>
-                <div class="funnel-step">
-                    <span class="funnel-dot">3</span>
-                    <span class="funnel-label">Click WhatsApp CTA</span>
-                    <span class="funnel-event">event: cta-click {target: "wa.me/..."}</span>
-                </div>
-                <div class="funnel-arrow">↓</div>
-                <div class="funnel-step">
-                    <span class="funnel-dot">4</span>
-                    <span class="funnel-label">Send WhatsApp message (manual CRM entry)</span>
-                    <span class="funnel-event">tracked in <a href="https://docs.google.com/spreadsheets/d/1tx6jnUpmuCml8hAZnACLUEQ6yQScubixCpFoFzxiyxw/edit" target="_blank">Balance CRM</a></span>
-                </div>
+        <!-- Clarity -->
+        <div class="card">
+            <h3>Clarity Heatmaps</h3>
+            <div id="clarity-embed-placeholder">
+                <p style="color: var(--admin-muted); font-size: 0.75rem;">Connect Clarity in Overview → Setup.</p>
             </div>
+            <a id="clarity-link" class="hub-card" href="#" target="_blank" style="display:none; margin-top: 0.4rem; width: fit-content;">
+                <span class="hub-icon">🔥</span>
+                <div class="hub-text"><div class="hub-title">Open Clarity Dashboard →</div></div>
+            </a>
         </div>
 
-        <div class="section">
-            <h3>Tracked Events</h3>
-            <ul class="events">
-                <li><code>cta-click</code> — WhatsApp CTA button clicked (the money event)</li>
-                <li><code>scroll-depth</code> — how far visitors read (25%, 50%, 75%, 90%)</li>
-                <li><code>time-on-page</code> — engagement duration (30s, 60s, 2m, 5m)</li>
-                <li><code>link-external</code> — any outbound link clicks</li>
-            </ul>
+        <!-- GH Traffic -->
+        <div class="card">
+            <h3>GitHub Traffic (14d)</h3>
+            <div id="gh-traffic"><p style="color: var(--admin-muted); font-size: 0.75rem;">Loading…</p></div>
         </div>
 
-        <div class="section">
-            <h3>Clarity Heatmap Priorities</h3>
-            <p style="font-size: 0.82rem; color: #666;">In Clarity, filter to <code>/balance.html</code> and check:</p>
-            <ul style="font-size: 0.82rem; color: #444; line-height: 1.8;">
-                <li><strong>Click heatmap:</strong> Where do people click? Is the CTA getting attention?</li>
-                <li><strong>Scroll heatmap:</strong> What % of visitors see the CTA? (it needs to be above the fold or within natural scroll)</li>
-                <li><strong>Session recordings:</strong> Watch 5-10 sessions to see hesitation patterns before CTA click</li>
-                <li><strong>Dead clicks:</strong> Are people clicking non-interactive elements? (opportunity for more content)</li>
-            </ul>
+        <!-- Balance Funnel -->
+        <div class="card">
+            <h3>⚖️ Balance Funnel</h3>
+            <div class="funnel-step"><span class="funnel-num">1</span><span class="funnel-label">Visit balance.html</span><span class="funnel-code">pageview</span></div>
+            <div class="funnel-arrow">↓</div>
+            <div class="funnel-step"><span class="funnel-num">2</span><span class="funnel-label">Scroll ≥75%</span><span class="funnel-code">scroll-depth</span></div>
+            <div class="funnel-arrow">↓</div>
+            <div class="funnel-step"><span class="funnel-num">3</span><span class="funnel-label">Click WhatsApp CTA</span><span class="funnel-code">cta-click</span></div>
+            <div class="funnel-arrow">↓</div>
+            <div class="funnel-step"><span class="funnel-num">4</span><span class="funnel-label">WhatsApp message → CRM</span><span class="funnel-code">manual</span></div>
         </div>
 
-        <div class="section">
-            <h3>Key Questions This Answers</h3>
-            <ul style="font-size: 0.85rem; color: #444; line-height: 1.8;">
-                <li>What % of visitors click the WhatsApp CTA? (cta-click / pageviews)</li>
-                <li>Do people read the full page or bounce early? (scroll-depth distribution)</li>
-                <li>Where do beta testers come from? (Plausible referrers for /balance.html)</li>
-                <li>Is the page too long/short? (Clarity scroll heatmap)</li>
-                <li>What's the CTA click → actual WhatsApp message conversion? (CRM cross-reference)</li>
-            </ul>
+        <!-- Academy Funnel -->
+        <div class="card">
+            <h3>🎓 Academy Funnel</h3>
+            <div class="funnel-step"><span class="funnel-num">1</span><span class="funnel-label">Visit learn.html</span><span class="funnel-code">pageview</span></div>
+            <div class="funnel-arrow">↓</div>
+            <div class="funnel-step"><span class="funnel-num">2</span><span class="funnel-label">Expand a section</span><span class="funnel-code">section-expand</span></div>
+            <div class="funnel-arrow">↓</div>
+            <div class="funnel-step"><span class="funnel-num">3</span><span class="funnel-label">Copy agent prompt</span><span class="funnel-code">prompt-copy</span></div>
+            <div class="funnel-arrow">↓</div>
+            <div class="funnel-step"><span class="funnel-num">4</span><span class="funnel-label">Click external resource</span><span class="funnel-code">link-external</span></div>
         </div>
 
-        <div class="section">
-            <h3>Optimization Ideas (data-driven, run after 100+ visitors)</h3>
-            <ul style="font-size: 0.82rem; color: #444; line-height: 1.8;">
-                <li>If scroll-depth drops before CTA: move CTA higher or add above-the-fold CTA</li>
-                <li>If CTA clicks high but WhatsApp messages low: simplify the pre-filled message</li>
-                <li>If time-on-page &lt;15s: add engaging content (video, testimonials, feature preview)</li>
-                <li>A/B test CTA copy: "Join the Beta →" vs "Message me on WhatsApp →"</li>
-                <li>Add UTM parameters to all distribution links for referrer attribution</li>
+        <!-- Tracked Events -->
+        <div class="card">
+            <h3>All Tracked Events</h3>
+            <ul class="ev-list">
+                <li><code>cta-click</code> — CTA button clicks (props: target)</li>
+                <li><code>section-expand</code> — section opened (props: section)</li>
+                <li><code>prompt-copy</code> — agent prompt copied</li>
+                <li><code>link-external</code> — outbound click (props: target)</li>
+                <li><code>scroll-depth</code> — 25%, 50%, 75%, 90%</li>
+                <li><code>time-on-page</code> — 30s, 60s, 2m, 5m</li>
             </ul>
         </div>
     </div>
 
-    <!-- ===== COSTS ===== -->
+    <!-- ═══ COSTS ═══ -->
     <div class="panel" id="tab-costs">
-        <h2 style="font-size: 1.1rem; margin-bottom: 1rem;">💰 Cost Tracking</h2>
-
-        <div class="stats" id="cost-stats">
-            <div class="stat"><div class="num" id="c-llm-total">--</div><div class="label">LLM Total</div></div>
-            <div class="stat"><div class="num" id="c-infra-total">--</div><div class="label">Infra Total</div></div>
-            <div class="stat"><div class="num" id="c-grand-total">--</div><div class="label">Grand Total</div></div>
-            <div class="stat"><div class="num" id="c-sessions">--</div><div class="label">Sessions</div></div>
+        <!-- Stat cards row -->
+        <div class="stat-row" id="cost-stats">
+            <div class="stat-card"><div class="val" id="c-llm-total">--</div><div class="lbl">LLM Total</div></div>
+            <div class="stat-card"><div class="val" id="c-infra-total">--</div><div class="lbl">Infra Total</div></div>
+            <div class="stat-card"><div class="val" id="c-grand-total">--</div><div class="lbl">Grand Total</div></div>
+            <div class="stat-card"><div class="val" id="c-sessions">--</div><div class="lbl">Sessions</div></div>
         </div>
 
-        <div class="section">
-            <h3>📊 Daily LLM Costs</h3>
-            <p style="font-size: 0.75rem; color: #888; margin-bottom: 0.75rem;">Claude Opus 4 — input, output, and cache read costs</p>
-            <canvas id="chart-llm" height="280"></canvas>
+        <!-- Charts side by side -->
+        <div class="chart-grid">
+            <div class="card">
+                <h3>Daily LLM Costs</h3>
+                <canvas id="chart-llm" height="160"></canvas>
+            </div>
+            <div class="card">
+                <h3>Total Costs (LLM + Infra)</h3>
+                <canvas id="chart-total" height="160"></canvas>
+            </div>
         </div>
 
-        <div class="section">
-            <h3>📊 Total Daily Costs (LLM + Infrastructure)</h3>
-            <p style="font-size: 0.75rem; color: #888; margin-bottom: 0.75rem;">All costs: LLM API + Railway hosting</p>
-            <canvas id="chart-total" height="280"></canvas>
-        </div>
-
-        <div class="section">
-            <h3>📋 Daily Breakdown</h3>
-            <table class="ptable" id="cost-table">
+        <!-- Daily Breakdown -->
+        <div class="card">
+            <h3>Daily Breakdown</h3>
+            <table class="ctable" id="cost-table">
                 <thead><tr><th>Date</th><th>Sessions</th><th>LLM</th><th>Infra</th><th>Total</th></tr></thead>
                 <tbody id="cost-tbody"></tbody>
             </table>
         </div>
 
-        <p style="font-size: 0.68rem; color: #999; margin-top: 0.5rem;">
-            Data generated from OpenClaw session logs. Updated via cron.
-            Pricing: Claude Opus 4 ($15/M input, $75/M output, $1.50/M cache read). Railway Hobby $5/mo.
+        <p class="ts" id="cost-ts">
+            Pricing: Claude Opus 4 ($15/M in, $75/M out, $1.50/M cache). Railway Hobby $5/mo.
         </p>
     </div>
 
-    <!-- ===== LIVE ANALYTICS ===== -->
-    <div class="panel" id="tab-live">
-        <h2 style="font-size: 1.1rem; margin-bottom: 1rem;">📈 Live Analytics</h2>
-
-        <div class="section" id="plausible-embed-section">
-            <h3>Plausible Dashboard</h3>
-            <div id="plausible-embed-placeholder">
-                <p style="color: #888; font-size: 0.85rem;">Connect Plausible (in the setup banner above) to see your live dashboard embedded here.</p>
-                <p style="color: #888; font-size: 0.82rem;">After setup: <a href="https://plausible.io/docs/shared-links" target="_blank">create a shared link</a> → paste the URL above → dashboard appears here.</p>
-            </div>
-            <iframe id="plausible-embed" class="embed-frame" src="" style="display:none;" title="Plausible Dashboard"></iframe>
-        </div>
-
-        <div class="section">
-            <h3>Clarity Dashboard</h3>
-            <div id="clarity-embed-placeholder">
-                <p style="color: #888; font-size: 0.85rem;">Connect Clarity to enable heatmaps and session recordings.</p>
-                <p style="color: #888; font-size: 0.82rem;">Clarity dashboards can't be embedded, but you can access them directly:</p>
-            </div>
-            <a id="clarity-link" class="qlink primary" href="#" target="_blank" style="display:none; margin-top: 0.5rem;">🔥 Open Clarity Dashboard →</a>
-        </div>
-
-        <div class="section">
-            <h3>GitHub Traffic (14-day, built-in)</h3>
-            <p style="font-size: 0.78rem; color: #888; margin-bottom: 0.5rem;">Auto-fetched from GitHub API. No setup needed (uses public repo stats).</p>
-            <div id="gh-traffic">
-                <p style="color: #999; font-size: 0.82rem;">Loading...</p>
-            </div>
-        </div>
-    </div>
-
-    <p class="footer" style="margin-top: 2rem;">
+    <!-- Footer -->
+    <div class="admin-footer">
         <a href="./">Home</a> · <a href="https://github.com/ripper234/jarvis-public" target="_blank">GitHub</a>
-        <br><span class="version">Admin v0.2 · <code>noindex</code> — not visible to search engines</span>
-    </p>
+        <br>Admin v0.3 · <code style="font-size:0.6rem;">noindex</code>
+    </div>
 </div>
 
 <script>
-// --- Tab switching ---
-document.querySelectorAll('.tab').forEach(function(tab) {
+// ── Password Gate ──
+var PW_HASH = '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8'; // sha256('password')
+function checkPw() {
+    var input = document.getElementById('pw-input').value;
+    crypto.subtle.digest('SHA-256', new TextEncoder().encode(input)).then(function(buf) {
+        var hash = Array.from(new Uint8Array(buf)).map(function(b) { return b.toString(16).padStart(2, '0'); }).join('');
+        if (hash === PW_HASH || !PW_HASH) {
+            sessionStorage.setItem('admin_auth', '1');
+            showDashboard();
+        } else {
+            document.getElementById('pw-err').style.display = 'block';
+            document.getElementById('pw-input').value = '';
+            document.getElementById('pw-input').focus();
+        }
+    });
+}
+function showDashboard() {
+    document.getElementById('pw-gate').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    initDashboard();
+}
+// Auto-login if already authed this session
+if (sessionStorage.getItem('admin_auth') === '1') { showDashboard(); }
+
+// ── Tab switching ──
+document.querySelectorAll('.tab-pill').forEach(function(tab) {
     tab.addEventListener('click', function() {
-        document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+        document.querySelectorAll('.tab-pill').forEach(function(t) { t.classList.remove('active'); });
         document.querySelectorAll('.panel').forEach(function(p) { p.classList.remove('active'); });
         tab.classList.add('active');
         document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
     });
 });
 
-// --- Settings management ---
+// ── Settings ──
 function savePlausible() {
     var domain = document.getElementById('plausible-domain').value.trim();
     var shared = document.getElementById('plausible-shared').value.trim();
@@ -489,68 +557,50 @@ function savePlausible() {
     if (shared) localStorage.setItem('plausible_shared', shared);
     applySettings();
 }
-
 function saveClarity() {
     var id = document.getElementById('clarity-id').value.trim();
     if (!id) return alert('Enter your Clarity project ID');
     localStorage.setItem('clarity_id', id);
     applySettings();
 }
-
 function applySettings() {
     var domain = localStorage.getItem('plausible_domain');
     var shared = localStorage.getItem('plausible_shared');
     var clarityId = localStorage.getItem('clarity_id');
 
-    // Plausible
     if (domain) {
         document.getElementById('status-plausible').innerHTML = '✅ ' + domain;
         document.getElementById('step-plausible').classList.add('done');
         document.getElementById('ql-plausible').href = 'https://plausible.io/' + domain;
         document.getElementById('ql-plausible').style.display = '';
-
-        // Update meta tag for analytics.js on other pages
         var meta = document.querySelector('meta[name="plausible-domain"]');
         if (meta) meta.setAttribute('content', domain);
     }
-
     if (shared) {
-        // Embed the shared link
         var iframe = document.getElementById('plausible-embed');
-        // Plausible shared links can be embedded as iframes with ?embed=true&theme=light
-        var embedUrl = shared + (shared.includes('?') ? '&' : '?') + 'embed=true&theme=light';
-        iframe.src = embedUrl;
+        iframe.src = shared + (shared.includes('?') ? '&' : '?') + 'embed=true&theme=light';
         iframe.style.display = '';
         document.getElementById('plausible-embed-placeholder').style.display = 'none';
     }
-
-    // Clarity
     if (clarityId) {
         document.getElementById('status-clarity').innerHTML = '✅ Project ' + clarityId;
         document.getElementById('step-clarity').classList.add('done');
-        var clarityUrl = 'https://clarity.microsoft.com/projects/view/' + clarityId + '/dashboard';
-        document.getElementById('ql-clarity').href = clarityUrl;
+        var cUrl = 'https://clarity.microsoft.com/projects/view/' + clarityId + '/dashboard';
+        document.getElementById('ql-clarity').href = cUrl;
         document.getElementById('ql-clarity').style.display = '';
-        document.getElementById('clarity-link').href = clarityUrl;
+        document.getElementById('clarity-link').href = cUrl;
         document.getElementById('clarity-link').style.display = '';
         document.getElementById('clarity-embed-placeholder').style.display = 'none';
     }
-
-    // Hide setup banner if both are configured
-    if (domain && clarityId) {
-        document.getElementById('setup-banner').style.display = 'none';
-    }
-
-    // Restore input values
+    if (domain && clarityId) document.getElementById('setup-banner').style.display = 'none';
     if (domain) document.getElementById('plausible-domain').value = domain;
     if (shared) document.getElementById('plausible-shared').value = shared;
     if (clarityId) document.getElementById('clarity-id').value = clarityId;
 }
 
-// --- GitHub Traffic (public, no token needed for public repos) ---
+// ── GitHub Traffic ──
 async function fetchGHTraffic() {
     try {
-        // Try without auth first (works for public repos' popular paths/referrers)
         var [paths, referrers] = await Promise.all([
             fetch('https://api.github.com/repos/ripper234/jarvis-public/traffic/popular/paths', {
                 headers: { Accept: 'application/vnd.github.v3+json' }
@@ -559,68 +609,62 @@ async function fetchGHTraffic() {
                 headers: { Accept: 'application/vnd.github.v3+json' }
             }).then(function(r) { return r.ok ? r.json() : []; }),
         ]);
-
         var html = '';
-
         if (Array.isArray(paths) && paths.length > 0) {
-            html += '<h4>Top Pages</h4><table class="ptable"><thead><tr><th>Path</th><th>Views</th><th>Uniques</th></tr></thead><tbody>';
-            paths.forEach(function(p) {
-                html += '<tr><td>' + p.path + '</td><td>' + p.count + '</td><td>' + p.uniques + '</td></tr>';
-            });
+            html += '<table class="ctable"><thead><tr><th>Path</th><th>Views</th><th>Uniques</th></tr></thead><tbody>';
+            paths.forEach(function(p) { html += '<tr><td>' + p.path + '</td><td>' + p.count + '</td><td>' + p.uniques + '</td></tr>'; });
             html += '</tbody></table>';
-
-            // Update overview stats
-            var totalViews = paths.reduce(function(s, p) { return s + p.count; }, 0);
-            var totalUniques = paths.reduce(function(s, p) { return s + p.uniques; }, 0);
-            document.getElementById('s-views').textContent = totalViews;
-            document.getElementById('s-visitors').textContent = totalUniques;
+            var tv = paths.reduce(function(s, p) { return s + p.count; }, 0);
+            var tu = paths.reduce(function(s, p) { return s + p.uniques; }, 0);
+            document.getElementById('s-views').textContent = tv;
+            document.getElementById('s-visitors').textContent = tu;
         }
-
         if (Array.isArray(referrers) && referrers.length > 0) {
-            html += '<h4 style="margin-top:1rem;">Top Referrers</h4><table class="ptable"><thead><tr><th>Source</th><th>Views</th><th>Uniques</th></tr></thead><tbody>';
-            referrers.forEach(function(r) {
-                html += '<tr><td>' + r.referrer + '</td><td>' + r.count + '</td><td>' + r.uniques + '</td></tr>';
-            });
+            html += '<h4 style="font-size:0.72rem;font-weight:600;margin:0.6rem 0 0.3rem;color:#1E1B4B;">Referrers</h4>';
+            html += '<table class="ctable"><thead><tr><th>Source</th><th>Views</th><th>Uniques</th></tr></thead><tbody>';
+            referrers.forEach(function(r) { html += '<tr><td>' + r.referrer + '</td><td>' + r.count + '</td><td>' + r.uniques + '</td></tr>'; });
             html += '</tbody></table>';
         }
-
-        if (!html) {
-            html = '<p style="color:#888; font-size:0.82rem;">GitHub Traffic API requires push access. Stats appear in Plausible once connected.</p>';
-        }
-
+        if (!html) html = '<p style="color:var(--admin-muted);font-size:0.72rem;">Needs repo push access for traffic data.</p>';
         document.getElementById('gh-traffic').innerHTML = html;
-        document.getElementById('status-gh').innerHTML = paths.length > 0 ? '✅ ' + paths.length + ' pages tracked' : '⚠️ Needs repo push access';
+        document.getElementById('status-gh').innerHTML = paths.length > 0 ? '✅ ' + paths.length + ' pages' : '⚠️ Needs push access';
     } catch (e) {
-        document.getElementById('gh-traffic').innerHTML = '<p style="color:#888; font-size:0.82rem;">Could not fetch. GitHub Traffic API requires authentication for private repos.</p>';
-        document.getElementById('status-gh').innerHTML = '⚠️ Could not fetch';
+        document.getElementById('gh-traffic').innerHTML = '<p style="color:var(--admin-muted);font-size:0.72rem;">Could not fetch.</p>';
+        document.getElementById('status-gh').innerHTML = '⚠️ Error';
     }
 }
 
-// --- Cost Charts ---
+// ── Cost Data + Charts ──
 async function loadCostData() {
     try {
-        const resp = await fetch('data/costs.json');
-        if (!resp.ok) throw new Error('No cost data');
-        const data = await resp.json();
+        var resp = await fetch('data/costs.json');
+        if (!resp.ok) throw new Error('No data');
+        var data = await resp.json();
 
-        // Update stats
         document.getElementById('c-llm-total').textContent = '$' + data.totals.llm.toFixed(2);
         document.getElementById('c-infra-total').textContent = '$' + data.totals.infra.toFixed(2);
         document.getElementById('c-grand-total').textContent = '$' + data.totals.total.toFixed(2);
         document.getElementById('c-sessions').textContent = data.totals.sessions;
 
-        // Populate table
+        // Table
         var tbody = document.getElementById('cost-tbody');
         var rows = '';
         data.daily.forEach(function(d) {
-            rows += '<tr><td>' + d.date + '</td><td>' + d.sessions + '</td>'
-                + '<td>$' + d.llm.toFixed(2) + '</td>'
-                + '<td>$' + d.infra.toFixed(2) + '</td>'
-                + '<td><strong>$' + d.total.toFixed(2) + '</strong></td></tr>';
+            rows += '<tr><td class="mono">' + d.date + '</td><td>' + d.sessions + '</td>'
+                + '<td class="mono">$' + d.llm.toFixed(2) + '</td>'
+                + '<td class="mono">$' + d.infra.toFixed(2) + '</td>'
+                + '<td class="mono"><strong>$' + d.total.toFixed(2) + '</strong></td></tr>';
         });
         tbody.innerHTML = rows;
 
-        // Load Chart.js dynamically
+        // Timestamp
+        var ts = data.generated_at || data.updated_at || null;
+        var tsEl = document.getElementById('cost-ts');
+        if (ts) {
+            tsEl.textContent = 'Last updated: ' + new Date(ts).toLocaleString() + ' · Pricing: Claude Opus 4 ($15/M in, $75/M out, $1.50/M cache). Railway Hobby $5/mo.';
+        }
+
+        // Charts
         if (!window.Chart) {
             await new Promise(function(resolve) {
                 var s = document.createElement('script');
@@ -630,83 +674,38 @@ async function loadCostData() {
             });
         }
 
-        var labels = data.daily.map(function(d) { return d.date; });
-        var llmValues = data.daily.map(function(d) { return d.llm; });
-        var infraValues = data.daily.map(function(d) { return d.infra; });
-        var totalValues = data.daily.map(function(d) { return d.total; });
+        var labels = data.daily.map(function(d) { return d.date.slice(5); }); // MM-DD
+        var llmV = data.daily.map(function(d) { return d.llm; });
+        var infraV = data.daily.map(function(d) { return d.infra; });
 
-        // LLM Cost Chart
+        var chartOpts = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false }, tooltip: { callbacks: { label: function(c) { return '$' + c.raw.toFixed(2); } } } },
+            scales: {
+                y: { beginAtZero: true, ticks: { callback: function(v) { return '$' + v; }, font: { size: 10 } }, grid: { color: 'rgba(0,0,0,0.04)' } },
+                x: { ticks: { font: { size: 9 } }, grid: { display: false } }
+            }
+        };
+
         new Chart(document.getElementById('chart-llm'), {
             type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'LLM Cost ($)',
-                    data: llmValues,
-                    backgroundColor: 'rgba(124, 58, 237, 0.7)',
-                    borderColor: '#7C3AED',
-                    borderWidth: 1,
-                    borderRadius: 4
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        callbacks: {
-                            label: function(ctx) { return '$' + ctx.raw.toFixed(2); }
-                        }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: { callback: function(v) { return '$' + v; } }
-                    }
-                }
-            }
+            data: { labels: labels, datasets: [{ data: llmV, backgroundColor: 'rgba(124,58,237,0.65)', borderRadius: 3 }] },
+            options: chartOpts
         });
 
-        // Total Cost Chart (stacked)
+        var chartOpts2 = JSON.parse(JSON.stringify(chartOpts));
+        chartOpts2.plugins.legend = { display: true, position: 'top', labels: { font: { size: 9 }, boxWidth: 10, padding: 6 } };
         new Chart(document.getElementById('chart-total'), {
             type: 'bar',
             data: {
                 labels: labels,
                 datasets: [
-                    {
-                        label: 'LLM',
-                        data: llmValues,
-                        backgroundColor: 'rgba(124, 58, 237, 0.7)',
-                        borderRadius: 4
-                    },
-                    {
-                        label: 'Infrastructure',
-                        data: infraValues,
-                        backgroundColor: 'rgba(8, 145, 178, 0.7)',
-                        borderRadius: 4
-                    }
+                    { label: 'LLM', data: llmV, backgroundColor: 'rgba(124,58,237,0.65)', borderRadius: 3 },
+                    { label: 'Infra', data: infraV, backgroundColor: 'rgba(8,145,178,0.65)', borderRadius: 3 }
                 ]
             },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: { position: 'top', labels: { font: { size: 11 } } },
-                    tooltip: {
-                        callbacks: {
-                            label: function(ctx) { return ctx.dataset.label + ': $' + ctx.raw.toFixed(2); }
-                        }
-                    }
-                },
-                scales: {
-                    x: { stacked: true },
-                    y: {
-                        stacked: true,
-                        beginAtZero: true,
-                        ticks: { callback: function(v) { return '$' + v; } }
-                    }
-                }
-            }
+            options: Object.assign(chartOpts2, { scales: Object.assign(chartOpts2.scales, { x: { stacked: true, ticks: { font: { size: 9 } }, grid: { display: false } }, y: { stacked: true, beginAtZero: true, ticks: { callback: function(v) { return '$' + v; }, font: { size: 10 } }, grid: { color: 'rgba(0,0,0,0.04)' } } }) })
         });
 
     } catch (e) {
@@ -714,15 +713,12 @@ async function loadCostData() {
     }
 }
 
-// --- Init (only after auth) ---
+// ── Init ──
 function initDashboard() {
     applySettings();
     fetchGHTraffic();
     loadCostData();
 }
-
-// Init
-initDashboard();
 </script>
 </body>
 </html>
