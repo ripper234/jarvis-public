@@ -114,6 +114,11 @@
       inputMode: 'keyboard',
       tiltReady: false,
       tiltValue: 0,
+      motionSupported: false,
+      motionArmed: false,
+      motionSeen: false,
+      tiltCenterBeta: null,
+      tiltCenterGamma: null,
       pointerActive: false,
       lastTime: 0,
     };
@@ -324,40 +329,76 @@
       statusEl.textContent = message;
     }
 
+    function normalizedTiltFromEvent(event) {
+      const beta = typeof event.beta === 'number' ? event.beta : null;
+      const gamma = typeof event.gamma === 'number' ? event.gamma : null;
+      if (beta == null && gamma == null) return null;
+
+      if (state.tiltCenterBeta == null && beta != null) state.tiltCenterBeta = beta;
+      if (state.tiltCenterGamma == null && gamma != null) state.tiltCenterGamma = gamma;
+
+      const deltaBeta = beta == null ? 0 : beta - state.tiltCenterBeta;
+      const deltaGamma = gamma == null ? 0 : gamma - state.tiltCenterGamma;
+      const dominant = Math.abs(deltaGamma) > Math.abs(deltaBeta) ? deltaGamma : deltaBeta;
+      return clamp(dominant / 25, -1, 1);
+    }
+
+    function armMotionControls() {
+      state.motionArmed = true;
+      state.tiltReady = true;
+      state.inputMode = 'tilt';
+      motionButton.hidden = true;
+      setStatus('Tilt armed. Move your phone. Drag or keys still work too.');
+
+      window.setTimeout(() => {
+        if (state.motionArmed && !state.motionSeen) {
+          motionButton.hidden = false;
+          motionButton.textContent = 'Retry motion controls';
+          setStatus('No motion data yet. Disable orientation lock, allow motion access, or drag instead.');
+        }
+      }, 1500);
+    }
+
     function enableMotion() {
       if (typeof DeviceOrientationEvent === 'undefined') {
         setStatus('Motion sensors are unavailable here. Use keyboard or drag.');
         return;
       }
 
-      const start = () => {
-        state.inputMode = 'tilt';
-        state.tiltReady = true;
-        motionButton.hidden = true;
-        setStatus('Tilt controls active. Desktop fallback: drag or use ↑ and ↓.');
-      };
+      state.motionSupported = true;
+      motionButton.hidden = false;
+      motionButton.textContent = 'Enable motion controls';
+      setStatus('Tap Enable motion controls, then tilt your phone. Drag also works.');
 
-      if (typeof DeviceOrientationEvent.requestPermission === 'function') {
-        motionButton.hidden = false;
-        motionButton.onclick = async () => {
+      motionButton.onclick = async () => {
+        state.motionSeen = false;
+        state.tiltCenterBeta = null;
+        state.tiltCenterGamma = null;
+
+        if (typeof DeviceOrientationEvent.requestPermission === 'function') {
           try {
             const result = await DeviceOrientationEvent.requestPermission();
-            if (result === 'granted') start();
-            else setStatus('Motion permission denied. Use keyboard or drag.');
+            if (result !== 'granted') {
+              setStatus('Motion permission denied. Use keyboard or drag.');
+              return;
+            }
           } catch (error) {
             setStatus('Could not enable motion. Use keyboard or drag.');
+            return;
           }
-        };
-      } else {
-        start();
-      }
+        }
+
+        armMotionControls();
+      };
     }
 
     window.addEventListener('deviceorientation', (event) => {
-      if (event.beta == null) return;
-      const normalized = clamp(event.beta / 45, -1, 1);
+      const normalized = normalizedTiltFromEvent(event);
+      if (normalized == null) return;
+      state.motionSeen = true;
+      state.motionSupported = true;
       state.tiltValue = normalized;
-      if (state.tiltReady) state.inputMode = 'tilt';
+      if (state.tiltReady && !state.pointerActive) state.inputMode = 'tilt';
     });
 
     window.addEventListener('keydown', (event) => {
@@ -394,7 +435,7 @@
 
     canvas.addEventListener('pointerup', () => {
       state.pointerActive = false;
-      setStatus(state.tiltReady ? 'Tilt controls active. Desktop fallback: drag or use ↑ and ↓.' : 'Tilt phone to move. Desktop: ↑ and ↓ keys.');
+      setStatus(state.tiltReady ? 'Tilt controls active. Drag or keys still work too.' : 'Tap Enable motion controls, or use ↑ and ↓ keys.');
     });
 
     window.addEventListener('resize', resize);
