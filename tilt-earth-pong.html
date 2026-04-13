@@ -117,8 +117,11 @@
       motionSupported: false,
       motionArmed: false,
       motionSeen: false,
+      motionSource: '',
       tiltCenterBeta: null,
       tiltCenterGamma: null,
+      accelCenterX: null,
+      accelCenterY: null,
       pointerActive: false,
       lastTime: 0,
     };
@@ -343,11 +346,44 @@
       return clamp(dominant / 25, -1, 1);
     }
 
+    function normalizedAccelerationFromEvent(event) {
+      const accel = event.accelerationIncludingGravity;
+      if (!accel) return null;
+
+      const x = typeof accel.x === 'number' ? accel.x : null;
+      const y = typeof accel.y === 'number' ? accel.y : null;
+      if (x == null && y == null) return null;
+
+      if (state.accelCenterX == null && x != null) state.accelCenterX = x;
+      if (state.accelCenterY == null && y != null) state.accelCenterY = y;
+
+      const deltaX = x == null ? 0 : x - state.accelCenterX;
+      const deltaY = y == null ? 0 : y - state.accelCenterY;
+      const dominant = Math.abs(deltaX) > Math.abs(deltaY) ? deltaX : -deltaY;
+      return clamp(dominant / 4, -1, 1);
+    }
+
+    function activateMotionSignal(source, normalized) {
+      if (normalized == null) return;
+      const firstSeen = !state.motionSeen;
+      state.motionSeen = true;
+      state.motionSupported = true;
+      state.motionSource = source;
+      state.tiltValue = normalized;
+      if (state.tiltReady && !state.pointerActive) state.inputMode = 'tilt';
+      if (firstSeen && state.tiltReady) {
+        motionButton.hidden = false;
+        motionButton.textContent = 'Recenter tilt';
+        setStatus(`Tilt active via ${source}. Tap Recenter tilt if needed.`);
+      }
+    }
+
     function armMotionControls() {
       state.motionArmed = true;
       state.tiltReady = true;
       state.inputMode = 'tilt';
-      motionButton.hidden = true;
+      motionButton.hidden = false;
+      motionButton.textContent = 'Recenter tilt';
       setStatus('Tilt armed. Move your phone. Drag or keys still work too.');
 
       window.setTimeout(() => {
@@ -360,7 +396,7 @@
     }
 
     function enableMotion() {
-      if (typeof DeviceOrientationEvent === 'undefined') {
+      if (typeof DeviceOrientationEvent === 'undefined' && typeof DeviceMotionEvent === 'undefined') {
         setStatus('Motion sensors are unavailable here. Use keyboard or drag.');
         return;
       }
@@ -372,12 +408,23 @@
 
       motionButton.onclick = async () => {
         state.motionSeen = false;
+        state.motionSource = '';
         state.tiltCenterBeta = null;
         state.tiltCenterGamma = null;
+        state.accelCenterX = null;
+        state.accelCenterY = null;
 
-        if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+        const needsPermission =
+          (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') ||
+          (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function');
+
+        if (needsPermission) {
           try {
-            const result = await DeviceOrientationEvent.requestPermission();
+            const permissionFn =
+              (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function')
+                ? DeviceOrientationEvent.requestPermission
+                : DeviceMotionEvent.requestPermission;
+            const result = await permissionFn();
             if (result !== 'granted') {
               setStatus('Motion permission denied. Use keyboard or drag.');
               return;
@@ -393,12 +440,11 @@
     }
 
     window.addEventListener('deviceorientation', (event) => {
-      const normalized = normalizedTiltFromEvent(event);
-      if (normalized == null) return;
-      state.motionSeen = true;
-      state.motionSupported = true;
-      state.tiltValue = normalized;
-      if (state.tiltReady && !state.pointerActive) state.inputMode = 'tilt';
+      activateMotionSignal('orientation', normalizedTiltFromEvent(event));
+    });
+
+    window.addEventListener('devicemotion', (event) => {
+      activateMotionSignal('acceleration', normalizedAccelerationFromEvent(event));
     });
 
     window.addEventListener('keydown', (event) => {
