@@ -1,473 +1,155 @@
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html lang="he">
 <head>
     <meta charset="UTF-8">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>באלאנס — יחד עם מאניה דפרסיה</title>
-    <meta name="description" content="באלאנס — אפליקציה שעוזרת לך לחיות עם מאניה דפרסיה. מעקב מחזורים, שגרות יומיות, ספרינטים עם חברים.">
-    <meta property="og:title" content="באלאנס — יחד עם מאניה דפרסיה">
-    <meta property="og:description" content="אפליקציה שעוזרת לך לחיות עם מאניה דפרסיה. מעקב מחזורים, שגרות יומיות, ספרינטים עם חברים.">
-    <meta property="og:type" content="website">
-    <style>
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-        :root {
-            --bg: #fefcf9;
-            --surface: #ffffff;
-            --surface-alt: #f7f3ee;
-            --text: #2d2a26;
-            --text-muted: #7a7570;
-            --accent: #7c6df0;
-            --accent-light: #ede9fe;
-            --warm: #f59e0b;
-            --warm-light: #fef3c7;
-            --green: #10b981;
-            --green-light: #d1fae5;
-            --rainbow-start: #f472b6;
-            --rainbow-mid: #a78bfa;
-            --rainbow-end: #60a5fa;
-            --radius: 16px;
-            --shadow: 0 2px 12px rgba(0,0,0,0.06);
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.7;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        .container {
-            max-width: 480px;
-            margin: 0 auto;
-            padding: 0 1.25rem;
-        }
-
-        /* Hero */
-        .hero {
-            padding: 2.5rem 0 1rem;
-            text-align: center;
-        }
-        .hero-icon {
-            font-size: 3rem;
-            margin-bottom: 0.4rem;
-        }
-        .hero h1 {
-            font-size: 2.2rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, var(--rainbow-start), var(--rainbow-mid), var(--rainbow-end));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 0.2rem;
-        }
-        .hero .tagline {
-            font-size: 1.1rem;
-            color: var(--text-muted);
-            margin-bottom: 1rem;
-        }
-        .hero .desc {
-            font-size: 0.92rem;
-            color: var(--text-muted);
-            text-align: center;
-            max-width: 380px;
-            margin: 0 auto;
-        }
-
-        /* CTA */
-        .cta-wrap {
-            text-align: center;
-            margin: 1.25rem 0;
-        }
-        .cta-btn {
-            display: inline-block;
-            background: linear-gradient(135deg, var(--accent), #9b7dfa);
-            color: white;
-            padding: 0.8rem 2.2rem;
-            border-radius: 50px;
-            font-size: 1.05rem;
-            font-weight: 700;
-            text-decoration: none;
-            border: none;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 4px 16px rgba(124,109,240,0.25);
-        }
-        .cta-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 24px rgba(124,109,240,0.35);
-        }
-        .cta-btn:active { transform: translateY(0); }
-        .cta-btn:focus-visible { outline: 3px solid var(--rainbow-end); outline-offset: 3px; }
-
-        /* Video */
-        .video-section {
-            margin: 1.5rem 0;
-            text-align: center;
-        }
-        .video-wrapper {
-            max-width: 260px;
-            margin: 0 auto;
-            border-radius: var(--radius);
-            overflow: hidden;
-            box-shadow: var(--shadow), 0 8px 24px rgba(0,0,0,0.08);
-            border: 1px solid rgba(0,0,0,0.06);
-        }
-        .video-wrapper video { width: 100%; display: block; }
-        .video-caption {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            margin-top: 0.5rem;
-        }
-
-        /* Pillars */
-        .pillars {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 0.6rem;
-            margin: 1.5rem 0;
-        }
-        .pillar {
-            display: flex;
-            align-items: center;
-            gap: 0.9rem;
-            background: var(--surface);
-            border: 1px solid rgba(0,0,0,0.06);
-            border-radius: var(--radius);
-            padding: 0.9rem 1.1rem;
-            box-shadow: var(--shadow);
-            transition: transform 0.2s;
-        }
-        .pillar { cursor: pointer; }
-        .pillar:hover { transform: translateY(-1px); }
-        .pillar-expand {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease, padding 0.3s ease;
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            line-height: 1.6;
-            padding: 0;
-        }
-        .pillar.open .pillar-expand {
-            max-height: 200px;
-            padding-top: 0.6rem;
-        }
-        .pillar-expand img {
-            width: 100%;
-            border-radius: 10px;
-            margin-top: 0.4rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-        }
-        .pillar-icon {
-            font-size: 1.4rem;
-            flex-shrink: 0;
-            width: 44px;
-            height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--accent-light);
-            border-radius: 12px;
-        }
-        .pillar-text h3 {
-            font-size: 0.92rem;
-            font-weight: 700;
-            margin-bottom: 0.1rem;
-            color: var(--text);
-        }
-        .pillar-text p {
-            font-size: 0.78rem;
-            color: var(--text-muted);
-            line-height: 1.5;
-        }
-
-        /* Stats */
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 0.5rem;
-            margin: 1.25rem 0;
-        }
-        .stat {
-            text-align: center;
-            background: var(--surface);
-            border: 1px solid rgba(0,0,0,0.06);
-            border-radius: 12px;
-            padding: 0.65rem 0.2rem;
-            box-shadow: var(--shadow);
-        }
-        .stat .num {
-            font-size: 1.25rem;
-            font-weight: 800;
-            color: var(--accent);
-        }
-        .stat .label {
-            font-size: 0.58rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-            margin-top: 0.1rem;
-        }
-
-        /* Carousel */
-        .carousel-section {
-            margin: 1.5rem 0;
-            text-align: center;
-        }
-        .carousel-section h2 {
-            font-size: 1.05rem;
-            font-weight: 700;
-            margin-bottom: 0.6rem;
-        }
-        .carousel {
-            position: relative;
-            max-width: 220px;
-            margin: 0 auto;
-        }
-        .carousel-track {
-            display: flex;
-            overflow: hidden;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow), 0 8px 24px rgba(0,0,0,0.08);
-            border: 1px solid rgba(0,0,0,0.06);
-        }
-        .carousel-track img {
-            min-width: 100%;
-            transition: transform 0.4s ease;
-            display: block;
-        }
-        .carousel-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: var(--accent);
-            color: white;
-            border: none;
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 1.2rem;
-            z-index: 2;
-            transition: background 0.2s;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-        }
-        .carousel-btn:hover { background: #6b5ce0; }
-        .carousel-btn:focus-visible { outline: 3px solid var(--rainbow-end); outline-offset: 2px; }
-        .carousel-btn.prev { right: -18px; }
-        .carousel-btn.next { left: -18px; }
-        .carousel-dots {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            margin-top: 0.6rem;
-        }
-        .carousel-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: #d4d0cc;
-            border: none;
-            cursor: pointer;
-            padding: 0;
-            transition: background 0.2s;
-        }
-        .carousel-dot:focus-visible { outline: 2px solid var(--rainbow-end); outline-offset: 2px; }
-        .carousel-dot.active { background: var(--accent); }
-        .carousel-label {
-            margin-top: 0.4rem;
-            font-size: 0.78rem;
-            color: var(--text-muted);
-            min-height: 1.3em;
-        }
-
-        /* Bottom CTA */
-        .cta-bottom {
-            text-align: center;
-            margin: 1.5rem 0;
-            padding: 1.25rem;
-            background: var(--green-light);
-            border: 1px solid rgba(16,185,129,0.2);
-            border-radius: var(--radius);
-        }
-        .cta-bottom p {
-            font-size: 0.85rem;
-            color: #065f46;
-            margin-bottom: 0.9rem;
-            line-height: 1.6;
-        }
-
-        /* Footer */
-        footer {
-            padding: 1.5rem 0;
-            border-top: 1px solid rgba(0,0,0,0.06);
-            text-align: center;
-            font-size: 0.72rem;
-            color: #b5b0aa;
-        }
-        footer a { color: #9a958f; text-decoration: none; }
-        footer a:hover { color: var(--accent); }
-        .version {
-            margin-top: 0.4rem;
-            font-size: 0.6rem;
-            color: #d4d0cc;
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            .carousel-track img, .cta-btn, .pillar { transition: none; }
-        }
-        @media (max-width: 380px) {
-            .stats { grid-template-columns: repeat(2, 1fr); }
-        }
-    </style>
+    <title>Balance — להשתתף בחיים</title>
+    <meta name="description" content="כלי AI לניהול דו קוטבי - להתחיל את היום עם כוונה, לא משנה מה הוא מביא">
+    <link rel="stylesheet" href="style.css">
+    <meta name="plausible-domain" content="">
+    <meta name="clarity-project" content="">
 </head>
 <body>
-
-<div class="container">
-
-    <div class="hero">
-        <div class="hero-icon">🌈</div>
-        <h1>באלאנס</h1>
-        <p class="tagline">יחד עם מאניה דפרסיה</p>
-        <p class="desc">אפליקציה שעוזרת לך לחיות עם מאניה דפרסיה. מעקב מחזורים, שגרות יומיות ואחריותיות עם חברים.</p>
-    </div>
-
-    <div class="cta-wrap">
-        <a href="https://wa.me/972526558841?text=היי רון, אני מעוניין/ת לשמוע על באלאנס" class="cta-btn" role="button">אני מעוניין/ת</a>
-    </div>
-
-    <div class="video-section">
-        <div class="video-wrapper">
-            <video controls preload="metadata" poster="balance-assets/screenshot-06.jpg"
-                   aria-label="הדגמת אפליקציית באלאנס, 5 דקות">
-                <source src="https://github.com/ripper234-openclaw/jarvis-public/releases/download/v0.4.0-assets/balance-demo.mp4" type="video/mp4">
-            </video>
+    <script>
+    // Redirect non-Israel visitors to English version
+    (function() {
+        if (window.location.hash === '#he' || sessionStorage.getItem('balance_lang') === 'he') return;
+        var tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+        var lang = (navigator.language || navigator.userLanguage || '').toLowerCase();
+        var isIsrael = tz === 'Asia/Jerusalem' || lang.startsWith('he');
+        if (!isIsrael) {
+            window.location.replace('balance-en.html');
+        }
+    })();
+    </script>
+    <a href="#main" class="skip-to-content">דלג לתוכן הראשי</a>
+    
+    <div class="page" id="main">
+        <a class="back" href="request-for-startups.html">← פרויקטים</a>
+        
+        <div style="text-align:left; margin-bottom: -1rem;">
+            <a href="balance-en.html" style="font-size: 0.85rem; opacity: 0.7; text-decoration: none;">🌐 English</a>
         </div>
-        <p class="video-caption">סיור של 5 דקות באפליקציה</p>
-    </div>
+        
+        <!-- Hero Section -->
+        <div class="hero hero-hebrew">
+            <h1>להשתתף בחיים</h1>
+            <p>להתחיל את היום עם כוונה - לא משנה מה הוא מביא</p>
+            <a href="#learn-more" class="cta-button">גלו איך</a>
+        </div>
 
-    <div class="pillars">
-        <div class="pillar" onclick="this.classList.toggle('open')">
-            <div class="pillar-icon">🔍</div>
-            <div class="pillar-text">
-                <h3>להבין מה קורה</h3>
-                <p>לוגינג יומי, הצלבה עם נתונים, זיהוי דפוסים</p>
-                <div class="pillar-expand">
-                    מעקב יומי אחרי מצב רוח, שינה ואנרגיה. הצלבה עם נתונים מהשעון החכם, תרופות ומידע נוסף. זיהוי דפוסים שעוזרים לך ולפסיכיאטר שלך.
-                    <img src="balance-assets/screenshot-04.jpg" alt="דוח מחזורים">
+        <!-- Problem Section -->
+        <section class="emotional-section fade-in" id="learn-more">
+            <h2>אתם לא לבד במסע הזה</h2>
+            <p>חיים עם דו קוטבי זה כמו לנווט בסערה - לפעמים השמש זורחת, לפעמים יש ברק. אבל מה אם יכולתם לדעת איך מזג האוויר משתנה לפני שהוא מגיע?</p>
+        </section>
+
+        <!-- Solution Section -->
+        <section class="fade-in">
+            <h2>מה זה Balance?</h2>
+            <p class="intro">Balance הוא הכלי הראשון שמבין באמת איך אתם מרגישים. לא עוד יישום לעקיבת מצב רוח - אלא שותף דיגיטלי שלומד את הדפוסים שלכם ועוזר לכם להישאר צעד אחד קדימה.</p>
+            
+            <div class="grid">
+                <div class="card">
+                    <div class="card-icon">🧠</div>
+                    <div class="card-title">בינה מלאכותית אישית</div>
+                    <div class="card-desc">אלגוריתם שלומד את המחזורים הייחודיים שלכם ומתריע על שינויים לפני שאתם מרגישים אותם</div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon">📊</div>
+                    <div class="card-title">מעקב חכם</div>
+                    <div class="card-desc">שינה, אנרגיה, מצב רוח - הכל במקום אחד, בלי להפוך את זה למשימה נוספת ברשימת המשימות</div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon">🎯</div>
+                    <div class="card-title">כוונה יומית</div>
+                    <div class="card-desc">כל יום מתחיל עם הכוונה הנכונה - בין אם זה יום טוב, יום קשה, או משהו ביניהם</div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon">🤝</div>
+                    <div class="card-title">תמיכה אמיתית</div>
+                    <div class="card-desc">לא רק נתונים - הבנה אמיתית של מה שאתם עוברים ועזרה מעשית בזמן אמת</div>
                 </div>
             </div>
-        </div>
-        <div class="pillar" onclick="this.classList.toggle('open')">
-            <div class="pillar-icon">🏃</div>
-            <div class="pillar-text">
-                <h3>להשתתף בחיים</h3>
-                <p>למדוד את הקימה, לתרגל שגרות מותאמות אישית</p>
-                <div class="pillar-expand">
-                    צ'קליסט יומי מותאם אישית שאתה בונה בעצמך. כל משימה שמושלמת מרוויחה 🌈 נקודות. שגרות בוקר, בונוס ולילה טוב.
-                    <img src="balance-assets/screenshot-06.jpg" alt="צ'קליסט שגרות יומיות">
+        </section>
+
+        <!-- Emotional Connection -->
+        <section class="emotional-section fade-in">
+            <h2>אתם יודעים את התחושה הזאת</h2>
+            <p>כשאתם קמים בבוקר ולא יודעים איזה "אתם" תהיו היום. כשאתם מפחדים מהרגע שהדברים יתחילו להסתבך שוב. כשאתם רוצים פשוט לחיות, לא לשרוד.</p>
+            <p><strong>Balance נבנה בשביל הרגעים האלה.</strong></p>
+        </section>
+
+        <!-- How it works -->
+        <section class="fade-in">
+            <h2>איך זה עובד?</h2>
+            <div class="grid-3">
+                <div class="card">
+                    <div class="card-title">1. תיעוד פשוט</div>
+                    <div class="card-desc">5 דקות בבוקר ובערב - איך ישנתם, איך אתם מרגישים, מה הרמת האנרגיה</div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">2. AI שלומד</div>
+                    <div class="card-desc">המערכת מזהה דפוסים שאפילו אתם לא שמתם לב אליהם ומתחילה לחזות שינויים</div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">3. הכוונה יומית</div>
+                    <div class="card-desc">המלצות מותאמות אישית לכל יום - מה לעשות, איך להתכונן, מתי לבקש עזרה</div>
                 </div>
             </div>
-        </div>
-        <div class="pillar" onclick="this.classList.toggle('open')">
-            <div class="pillar-icon">🤝</div>
-            <div class="pillar-text">
-                <h3>לא לבד</h3>
-                <p>ספרינטים עם חברים, שיתוף בלי שיפוט</p>
-                <div class="pillar-expand">
-                    ספרינטים של 14 יום עם חברים. רואים מה אחרים עושים, מגיבים ומעודדים. עדות הדדית ותחושה משותפת.
-                    <img src="balance-assets/screenshot-05.jpg" alt="פיד השראה חברתי">
-                </div>
-            </div>
-        </div>
+        </section>
+
+        <!-- Social Proof -->
+        <section class="emotional-section fade-in">
+            <h2>"זה שינה לי את החיים"</h2>
+            <p><em>"לראשונה מזה שנים אני מרגיש שיש לי שליטה. לא שליטה מלאה - אבל מספיק כדי לחיות באמת."</em></p>
+            <p>- משתמש בטא, תל אביב</p>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="emotional-section fade-in">
+            <h2>מוכנים להתחיל?</h2>
+            <p>אנחנו בשלבי פיתוח ומחפשים אנשים שחיים עם דו קוטבי לבדיקת הגרסה הראשונה.</p>
+            <p><strong>זה לא עוד יישום - זה השותף שחיכיתם לו.</strong></p>
+            
+            <a href="https://wa.me/972526558841?text=Hi%20Ron%2C%20I%27m%20interested%20in%20testing%20Balance" class="whatsapp-cta">
+                <span>💬</span>
+                בואו נתחיל לדבר
+            </a>
+            
+            <p style="margin-top: 1rem; font-size: 0.875rem; opacity: 0.7;">שיחה פרטית בוואטסאפ - בלי התחייבויות</p>
+        </section>
+
+        <!-- Privacy & Trust -->
+        <section class="callout fade-in">
+            <h3>הפרטיות שלכם חשובה לנו</h3>
+            <p>כל המידע שלכם נשמר מוצפן במכשיר שלכם. אנחנו לא רואים את הנתונים האישיים, רק תובנות כלליות שעוזרות לשפר את המוצר לכולם.</p>
+        </section>
+
+        <p class="footer">
+            <a href="request-for-startups.html">פרויקטים</a> · 
+            <a href="./">בית</a> · 
+            נבנה על ידי <a href="http://ripper234.com/">רון גרוס</a> · 
+            v1.0
+        </p>
     </div>
 
-    <div class="stats">
-        <div class="stat">
-            <div class="num">15</div>
-            <div class="label">מחזורים</div>
-        </div>
-        <div class="stat">
-            <div class="num">23.7</div>
-            <div class="label">ימים/מחזור</div>
-        </div>
-        <div class="stat">
-            <div class="num">34%</div>
-            <div class="label">ימים טובים</div>
-        </div>
-        <div class="stat">
-            <div class="num">🌈</div>
-            <div class="label">50 נקודות/יום</div>
-        </div>
-    </div>
-
-    <div class="carousel-section">
-        <h2>צילומי מסך</h2>
-        <div class="carousel" id="mainCarousel">
-            <button class="carousel-btn prev" onclick="carouselMove(1)" aria-label="הקודם">‹</button>
-            <div class="carousel-track" id="carouselTrack">
-                <img src="balance-assets/screenshot-06.jpg" alt="צ'קליסט שגרה יומית עם נקודות קשת" data-label="שגרות יומיות מותאמות אישית">
-                <img src="balance-assets/screenshot-02.jpg" alt="מסך לילה טוב עם צ'ק-אאוט" data-label="סיום היום בצ'ק-אאוט">
-                <img src="balance-assets/screenshot-05.jpg" alt="פיד השראה חברתי" data-label="מה החברים עושים היום">
-                <img src="balance-assets/screenshot-03.jpg" alt="ספרינטים ואחריותיות" data-label="ספרינטים של 14 יום עם באדי">
-                <img src="balance-assets/screenshot-04.jpg" alt="דוח מחזורים עם סטטיסטיקות" data-label="מעקב מחזורים לאורך זמן">
-            </div>
-            <button class="carousel-btn next" onclick="carouselMove(-1)" aria-label="הבא">›</button>
-            <div class="carousel-dots" id="carouselDots"></div>
-        </div>
-        <div class="carousel-label" id="carouselLabel">שגרות יומיות מותאמות אישית</div>
-    </div>
-
-    <div class="cta-bottom">
-        <p>מחפשים משתתפים ראשונים. אם אתם חיים עם מאניה דפרסיה ורוצים לנסות — דברו איתנו.</p>
-        <a href="https://wa.me/972526558841?text=היי רון, אני מעוניין/ת לשמוע על באלאנס" class="cta-btn" role="button">אני מעוניין/ת</a>
-    </div>
-
-    <footer>
-        <a href="https://ripper234.com" target="_blank" rel="noopener">רון גרוס</a> · <a href="https://www.linkedin.com/in/gatigno/" target="_blank" rel="noopener">יניב גטיניו</a>
-        <div class="version">v0.4.3</div>
-    </footer>
-
-</div>
-
-<script>
-let ci = 0;
-const track = document.getElementById('carouselTrack');
-const imgs = track.querySelectorAll('img');
-const dots = document.getElementById('carouselDots');
-const label = document.getElementById('carouselLabel');
-
-imgs.forEach((_, i) => {
-    const d = document.createElement('button');
-    d.className = 'carousel-dot' + (i === 0 ? ' active' : '');
-    d.setAttribute('aria-label', `תמונה ${i + 1}`);
-    d.onclick = () => go(i);
-    dots.appendChild(d);
-});
-
-function go(i) {
-    ci = i < 0 ? imgs.length - 1 : i >= imgs.length ? 0 : i;
-    imgs.forEach(img => img.style.transform = `translateX(${ci * 100}%)`);
-    dots.querySelectorAll('.carousel-dot').forEach((d, j) => d.classList.toggle('active', j === ci));
-    label.textContent = imgs[ci].dataset.label;
-}
-function carouselMove(dir) { go(ci + dir); }
-
-setInterval(() => carouselMove(1), 5000);
-
-let sx = 0;
-track.addEventListener('touchstart', e => sx = e.touches[0].clientX, {passive: true});
-track.addEventListener('touchend', e => {
-    const d = sx - e.changedTouches[0].clientX;
-    if (Math.abs(d) > 50) carouselMove(d > 0 ? -1 : 1);
-}, {passive: true});
-</script>
-
-<!-- Analytics: GoatCounter (to be configured) -->
-<!-- <script data-goatcounter="https://SITENAME.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script> -->
-
+    <!-- Analytics: Plausible + Clarity via shared module -->
+    <script>
+    // Load config from localStorage (set via admin.html)
+    (function() {
+        var pd = localStorage.getItem('plausible_domain');
+        var ci = localStorage.getItem('clarity_id');
+        if (pd) document.querySelector('meta[name="plausible-domain"]')?.setAttribute('content', pd);
+        if (ci) document.querySelector('meta[name="clarity-project"]')?.setAttribute('content', ci);
+    })();
+    </script>
+    <script src="analytics.js?v=env-ribbon-2" defer></script>
+    <script src="animations.js" defer></script>
 </body>
 </html>
