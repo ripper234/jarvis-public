@@ -2,208 +2,231 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Projects — Ron Gross</title>
     <meta name="description" content="Active projects and ideas by Ron Gross">
     <link rel="stylesheet" href="style.css">
+    <meta name="plausible-domain" content="">
+    <meta name="clarity-project" content="">
     <style>
-        .project-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 0.75rem;
-            margin-top: 1.5rem;
-        }
-        .project-tile {
+        .score-row {
             display: flex;
-            flex-direction: column;
+            justify-content: flex-start;
             align-items: center;
-            text-align: center;
-            background: rgba(255,255,255,0.8);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border: 1px solid rgba(0,0,0,0.06);
-            border-radius: 14px;
-            padding: 1.25rem 0.75rem;
-            text-decoration: none;
-            transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
-            -webkit-tap-highlight-color: transparent;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
         }
-        .project-tile:hover {
-            border-color: rgba(99,102,241,0.2);
-            box-shadow: 0 4px 20px rgba(79,70,229,0.08);
+        .project-card {
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+        .project-card:hover {
             transform: translateY(-2px);
         }
-        .project-tile:active { transform: translateY(0); }
-        .tile-icon {
-            font-size: 2.2rem;
+        .project-card .card-title {
             margin-bottom: 0.5rem;
-            line-height: 1;
         }
-        .tile-name {
-            font-size: 0.82rem;
+        .project-card .card-desc {
+            margin-bottom: 0;
+        }
+        .submit-section {
+            margin-top: 3rem;
+        }
+        .intro-details {
+            margin-top: 0.75rem;
+            margin-bottom: 1.5rem;
+            padding: 0.85rem 1rem;
+            border: 1px solid rgba(124, 58, 237, 0.12);
+            border-radius: 14px;
+            background: rgba(124, 58, 237, 0.04);
+        }
+        .intro-details summary {
+            cursor: pointer;
             font-weight: 600;
-            color: #111;
-            margin-bottom: 0.2rem;
+            color: var(--primary);
         }
-        .tile-tag {
-            font-size: 0.55rem;
-            padding: 0.1rem 0.4rem;
-            border-radius: 20px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-            margin-bottom: 0.35rem;
+        .intro-details p {
+            margin: 0.75rem 0 0;
         }
-        .tile-tag-focus { 
-            background: linear-gradient(135deg, #fef3c7, #fde68a); 
-            color: #92400e; 
-            font-size: 0.6rem;
-            padding: 0.15rem 0.5rem;
-            box-shadow: 0 1px 4px rgba(245,158,11,0.2);
-        }
-        .tile-tag-active { background: rgba(79,70,229,0.08); color: #4f46e5; }
-        .tile-tag-maintenance { background: rgba(156,163,175,0.08); color: #6b7280; }
-        .tile-tag-ideation { background: rgba(156,163,175,0.1); color: #9ca3af; }
-        /* Focus tiles get a subtle glow */
-        .project-tile.focus-tile {
-            border: 2px solid rgba(245,158,11,0.3);
-            box-shadow: 0 2px 12px rgba(245,158,11,0.08);
-        }
-        .project-tile.focus-tile:hover {
-            border-color: rgba(245,158,11,0.5);
-            box-shadow: 0 4px 20px rgba(245,158,11,0.15);
-        }
-        .tile-desc {
-            font-size: 0.68rem;
-            color: #888;
-            line-height: 1.4;
-            max-height: 2.8em;
-            overflow: hidden;
-        }
-        /* Tooltip popup on hover */
-        .project-tile {
-            position: relative;
-        }
-        .tile-tooltip {
-            position: absolute;
-            top: calc(100% + 10px);
-            left: 50%;
-            width: 200px;
-            background: #fff;
-            border: 1px solid rgba(0,0,0,0.06);
-            border-radius: 10px;
-            padding: 0.6rem 0.75rem;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-            font-size: 0.7rem;
-            color: #666;
-            line-height: 1.5;
-            z-index: 10;
-            pointer-events: none;
-            /* Start hidden, slide up gently */
-            opacity: 0;
-            transform: translateX(-50%) translateY(-4px);
-            transition: opacity 0.2s ease, transform 0.2s ease;
-        }
-        .tile-tooltip::after {
-            content: '';
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            border: 5px solid transparent;
-            border-bottom-color: #fff;
-        }
-        .project-tile:hover .tile-tooltip {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-            transition-delay: 0.3s;
-        }
-        @media (max-width: 480px) {
-            .project-grid { grid-template-columns: repeat(2, 1fr); }
-            .tile-icon { font-size: 1.8rem; }
-        }
-        @media (max-width: 320px) {
-            .project-grid { grid-template-columns: 1fr; }
+        .intro-details .whatsapp-cta {
+            margin-top: 1rem;
+            display: inline-flex;
         }
     </style>
 </head>
 <body>
-    <div class="page">
+    <a href="#main" class="skip-to-content">Skip to main content</a>
+    
+    <div class="page" id="main">
         <a class="back" href="./">← Jarvis</a>
-        <h1>What I'm Working On</h1>
-        <p class="intro"><a href="http://ripper234.com/">Ron Gross</a></p>
-
-        <div class="project-grid">
-            <!-- Focus -->
-            <a class="project-tile focus-tile" href="balance.html">
-                <div class="tile-icon">🌈</div>
-                <span class="tile-tag tile-tag-focus">🎯 Focus</span>
-                <div class="tile-name">Balance</div>
-                <div class="tile-desc">App for living with bipolar.</div>
-                <div class="tile-tooltip">Cycle tracking, daily rituals, sprint accountability with buddies. Built with Yaniv Gatigno.</div>
-            </a>
-            <a class="project-tile focus-tile" href="methodology.html">
-                <div class="tile-icon">🤖</div>
-                <span class="tile-tag tile-tag-focus">🎯 Focus</span>
-                <div class="tile-name">Jarvis</div>
-                <div class="tile-desc">AI agent on OpenClaw. Spec-first, 24/7.</div>
-                <div class="tile-tooltip">Manages websites, repos, research via Telegram. Ron writes specs, Jarvis does the rest.</div>
-            </a>
-            <!-- Active -->
-            <a class="project-tile" href="https://github.com/ripper234/tiny-pr-bot">
-                <div class="tile-icon">🔧</div>
-                <span class="tile-tag tile-tag-active">Active</span>
-                <div class="tile-name">tiny-pr-bot</div>
-                <div class="tile-desc">1-2 line PRs from specs.</div>
-                <div class="tile-tooltip">Reads repo specs, submits tiny PRs. One idea, one file, one change. The spec is the product.</div>
-            </a>
-            <a class="project-tile" href="https://docs.google.com/spreadsheets/d/1x3njEmv5_Zo92w_nH-1s75m4xzLJ_DGxBDxs2-REtPY/edit?gid=0#gid=0">
-                <div class="tile-icon">📝</div>
-                <span class="tile-tag tile-tag-active">Active</span>
-                <div class="tile-name">ron.build</div>
-                <div class="tile-desc">Public build log in Hebrew.</div>
-                <div class="tile-tooltip">Weekly updates on what I'm building and shipping. Shared via WhatsApp with founders and friends.</div>
-            </a>
-            <a class="project-tile" href="https://github.com/ripper234/know-thyself">
-                <div class="tile-icon">🪞</div>
-                <span class="tile-tag tile-tag-active">Active</span>
-                <div class="tile-name">know-thyself</div>
-                <div class="tile-desc">Daily self-knowledge game.</div>
-                <div class="tile-tooltip">30 guided writing prompts in Hebrew. Surface patterns and blind spots through reflection.</div>
-            </a>
-            <a class="project-tile" href="https://docs.google.com/document/d/1CWh1JruHN5nPEzKt610S4mdoQqG6q_kltdIJfc4SJLc/edit">
-                <div class="tile-icon">🧖</div>
-                <span class="tile-tag tile-tag-ideation">Ideation</span>
-                <div class="tile-name">Next-Level Spa</div>
-                <div class="tile-desc">World-class spa in Tel Aviv.</div>
-                <div class="tile-tooltip">Japanese onsen meets biohacking. Meditation, wellness tech, world-class massage.</div>
-            </a>
-            <!-- Maintenance -->
-            <a class="project-tile" href="https://fredo.ai/">
-                <div class="tile-icon">💬</div>
-                <span class="tile-tag tile-tag-maintenance">Maintenance</span>
-                <div class="tile-name">Fredo.ai</div>
-                <div class="tile-desc">WhatsApp bot. ~3K WAU.</div>
-                <div class="tile-tooltip">WhatsApp productivity bot. Free, running on autopilot. Jarvis's predecessor.</div>
-            </a>
-            <a class="project-tile" href="https://github.com/ripper234-openclaw/chess-tutor">
-                <div class="tile-icon">♟️</div>
-                <span class="tile-tag tile-tag-ideation">Idea</span>
-                <div class="tile-name">Chess Tutor</div>
-                <div class="tile-desc">AI chess teacher for Hebrew-speaking kids.</div>
-                <div class="tile-tooltip">AI-powered chess tutor for ~10 year old children who only understand Hebrew. Adaptive, patient, always available.</div>
-            </a>
-            <a class="project-tile" href="https://whateverworks.me/">
-                <div class="tile-icon">📖</div>
-                <span class="tile-tag tile-tag-maintenance">Maintenance</span>
-                <div class="tile-name">Whatever Works</div>
-                <div class="tile-desc">Self-optimization book + wiki.</div>
-                <div class="tile-tooltip">Evidence-based toolkit for therapy, productivity, and personal growth. Available on Amazon.</div>
-            </a>
+        
+        <div class="fade-in">
+            <h1>Projects</h1>
+            <p class="subtitle">What I'm Working On</p>
+            <details class="intro-details">
+                <summary>Learn more</summary>
+                <p>This page mixes projects Ron is actively building with ideas he wants to exist in the world. Some he is building himself, some he is looking for collaborators or founders for, and some he may support as an investor, advisor, or power user.</p>
+                <a href="https://wa.me/972526558841?text=Hi%20Ron%2C%20I%27d%20like%20to%20talk%20about%20one%20of%20your%20projects" class="whatsapp-cta" target="_blank" rel="noopener noreferrer">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+                    </svg>
+                    <span>Contact Ron on WhatsApp →</span>
+                </a>
+            </details>
         </div>
 
-        <p class="footer">Built by <a href="http://ripper234.com/">Ron Gross</a> · <a href="./">Home</a></p>
+        <section class="fade-in">
+            <h2>Main Projects</h2>
+            <div class="grid-3">
+                <a class="card project-card" href="balance.html" target="_blank" rel="noopener noreferrer">
+                    <div class="score-row">
+                        <span class="tag tag-ideation">Beta</span>
+                    </div>
+                    <div class="card-title">Balance ⚖️</div>
+                    <div class="card-desc">Bipolar copilot app. AI-powered mood tracking and insights for managing bipolar cycles, with a Hebrew-first interface and WhatsApp integration.</div>
+                </a>
+
+                <a class="card project-card" href="https://github.com/ripper234-openclaw/jarvis-public/blob/staging/projects/wish-machine/README.md" target="_blank" rel="noopener noreferrer">
+                    <div class="score-row">
+                        <span class="tag tag-ideation">Idea</span>
+                    </div>
+                    <div class="card-title">Wish Machine</div>
+                    <div class="card-desc">An AI-era venture studio where Ron lists ideas he cares about, builds some, invites others to build some, and may fund the best ones.</div>
+                </a>
+            </div>
+        </section>
+
+        <section class="fade-in">
+            <h2>Active Projects</h2>
+            <div class="grid-3">
+                <a class="card project-card" href="learn.html" target="_blank" rel="noopener noreferrer">
+                    <div class="score-row">
+                        <span class="tag tag-launched">Live</span>
+                    </div>
+                    <div class="card-title">Bot Academy</div>
+                    <div class="card-desc">A learning library for AI agents, with practical OpenClaw lessons, prompts, and operating principles.</div>
+                </a>
+
+                <a class="card project-card" href="tiny-pr-bot.html" target="_blank" rel="noopener noreferrer">
+                    <div class="score-row">
+                        <span class="tag tag-launched">Deployed</span>
+                    </div>
+                    <div class="card-title">Tiny PR Bot</div>
+                    <div class="card-desc">GitHub bot that creates microscopic pull requests so review is faster and merge conflicts stay small.</div>
+                </a>
+
+                <a class="card project-card" href="https://docs.google.com/spreadsheets/d/1x3njEmv5_Zo92w_nH-1s75m4xzLJ_DGxBDxs2-REtPY/edit?gid=0#gid=0" target="_blank" rel="noopener noreferrer">
+                    <div class="score-row">
+                        <span class="tag tag-launched">Live</span>
+                    </div>
+                    <div class="card-title">ron.build</div>
+                    <div class="card-desc">Public build log in Hebrew about what Ron is building and shipping.</div>
+                </a>
+
+                <a class="card project-card" href="https://github.com/ripper234/know-thyself" target="_blank" rel="noopener noreferrer">
+                    <div class="score-row">
+                        <span class="tag tag-launched">Active</span>
+                    </div>
+                    <div class="card-title">Know Thyself</div>
+                    <div class="card-desc">A daily self-awareness writing game for noticing patterns, blind spots, and inner truth.</div>
+                </a>
+            </div>
+        </section>
+
+        <section class="fade-in">
+            <h2>Ideas</h2>
+            <div class="grid-3">
+                <a class="card project-card" href="https://github.com/ripper234-openclaw/jarvis-public/blob/staging/projects/openclaw-playground/README.md" target="_blank" rel="noopener noreferrer">
+                    <div class="score-row">
+                        <span class="tag tag-ideation">Idea</span>
+                    </div>
+                    <div class="card-title">OpenClaw Playground</div>
+                    <div class="card-desc">A free, no-card sandbox where people can try real OpenClaw agents with safe limits.</div>
+                </a>
+
+                <a class="card project-card" href="https://github.com/ripper234-openclaw/jarvis-public/blob/staging/projects/song-aware-running-coach/README.md" target="_blank" rel="noopener noreferrer">
+                    <div class="score-row">
+                        <span class="tag tag-ideation">Idea</span>
+                    </div>
+                    <div class="card-title">Song-Aware Running Coach</div>
+                    <div class="card-desc">A Spotify-like running app with coaching timed to song starts, endings, and transitions.</div>
+                </a>
+
+                <a class="card project-card" href="responsible-disclosure-bot.html" target="_blank" rel="noopener noreferrer">
+                    <div class="score-row">
+                        <span class="tag tag-ideation">Idea</span>
+                    </div>
+                    <div class="card-title">Responsible Disclosure Bot</div>
+                    <div class="card-desc">Privacy-first bot that detects accidental Bitcoin self-doxxing in public posts and privately warns the poster before the leak spreads.</div>
+                </a>
+
+                <a class="card project-card" href="https://github.com/ripper234-openclaw/jarvis-public/blob/staging/projects/just-in-time/README.md" target="_blank" rel="noopener noreferrer">
+                    <div class="score-row">
+                        <span class="tag tag-ideation">Idea</span>
+                    </div>
+                    <div class="card-title">Just In Time (Working Title)</div>
+                    <div class="card-desc">A project to help people find activities they're interested in right now, leveraging real-time capabilities and localization to fit diverse schedules and preferences.</div>
+                </a>
+
+                <a class="card project-card" href="https://github.com/ripper234-openclaw/jarvis-public/blob/staging/projects/next-level-spa/README.md" target="_blank" rel="noopener noreferrer">
+                    <div class="score-row">
+                        <span class="tag tag-ideation">Idea</span>
+                    </div>
+                    <div class="card-title">Next-Level Spa</div>
+                    <div class="card-desc">A world-class hot/cold therapy spa concept for Tel Aviv, designed around recovery and calm.</div>
+                </a>
+
+            </div>
+        </section>
+
+        <section class="fade-in">
+            <h2>Existing Projects</h2>
+            <div class="grid-3">
+                <a class="card project-card" href="https://fredo.ai/" target="_blank" rel="noopener noreferrer">
+                    <div class="score-row">
+                        <span class="tag">Existing</span>
+                    </div>
+                    <div class="card-title">Fredo.ai</div>
+                    <div class="card-desc">WhatsApp productivity bot, still live and running largely on autopilot.</div>
+                </a>
+
+                <a class="card project-card" href="https://whateverworks.me/" target="_blank" rel="noopener noreferrer">
+                    <div class="score-row">
+                        <span class="tag">Existing</span>
+                    </div>
+                    <div class="card-title">Whatever Works</div>
+                    <div class="card-desc">Self-optimization book and wiki covering therapy, productivity, and personal growth.</div>
+                </a>
+
+            </div>
+        </section>
+
+        <section class="emotional-section fade-in submit-section">
+            <h2>Building Something Interesting?</h2>
+            <p>If you have an idea that should exist, send it over.</p>
+            <a href="https://wa.me/972526558841?text=Hi%20Ron%2C%20I%27d%20like%20to%20submit%20an%20idea" class="whatsapp-cta">
+                <span>💡</span>
+                Submit Your Idea
+            </a>
+        </section>
+
+        <p class="footer">
+            <a href="./">Jarvis</a> · 
+            Built by <a href="http://ripper234.com/">Ron Gross</a> · 
+            <span class="version">v0.4.0</span>
+        </p>
     </div>
+
+    <script>
+    (function() {
+        var pd = localStorage.getItem('plausible_domain');
+        var ci = localStorage.getItem('clarity_id');
+        if (pd) document.querySelector('meta[name="plausible-domain"]')?.setAttribute('content', pd);
+        if (ci) document.querySelector('meta[name="clarity-project"]')?.setAttribute('content', ci);
+    })();
+    </script>
+    <script src="analytics.js" defer></script>
+    <script src="animations.js" defer></script>
 </body>
 </html>
