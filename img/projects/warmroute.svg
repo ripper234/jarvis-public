@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" fill="none">
+  <!-- location pin -->
+  <path d="M40 18C33.373 18 28 23.373 28 30C28 39 40 52 40 52C40 52 52 39 52 30C52 23.373 46.627 18 40 18Z" stroke="#8b5cf6" stroke-width="2.5" stroke-linejoin="round"/>
+  <circle cx="40" cy="30" r="4" stroke="#6366f1" stroke-width="2.5"/>
+  <!-- warm connection lines -->
+  <path d="M22 58C28 54 34 56 40 54C46 52 52 54 58 58" stroke="#8b5cf6" stroke-width="2.5" stroke-linecap="round" opacity="0.6"/>
+  <path d="M26 64C32 60 36 62 40 60C44 58 48 60 54 64" stroke="#6366f1" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+</svg>

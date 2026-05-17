@@ -1,0 +1,5 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "python3 scripts/check_projects_page_regressions.py && python3 scripts/generate_projects_feed.py",
+  "outputDirectory": "."
+}

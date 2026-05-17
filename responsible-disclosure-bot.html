@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsible Disclosure Bot — Bitcoin Privacy Guardian</title>
+    <meta name="description" content="A bot that detects accidental Bitcoin self-doxxing and privately warns the poster before the leak spreads.">
+    <link rel="stylesheet" href="style.css">
+    <meta name="plausible-domain" content="">
+    <meta name="clarity-project" content="">
+</head>
+<body>
+    <div class="page">
+        <a class="back" href="projects.html">← Projects</a>
+        <h1>Responsible Disclosure Bot</h1>
+        <p class="subtitle">A privacy safety bot for people who accidentally self-doxx their Bitcoin ownership.</p>
+
+        <div class="tldr">
+            The bot watches for public posts that reveal enough information to link a person to a specific Bitcoin wallet or transaction, then sends a <strong>private warning</strong> telling them to edit or delete the post before the leak spreads.
+        </div>
+
+        <h2>The Problem</h2>
+        <p>Bitcoin gives people pseudonymity, but everyday brag posts can puncture it fast. A wallet screenshot, a milestone post, an amount, a timestamp, or a partial address can be enough to strongly implicate ownership.</p>
+        <p>Once that connection is public, the person becomes easier to target for phishing, extortion, SIM-swaps, or long-term tracking.</p>
+
+        <h2>How It Works</h2>
+        <ol>
+            <li>Monitor public Reddit posts in a narrow scope, such as <code>r/Bitcoin</code></li>
+            <li>Detect likely privacy leaks using text and image clues</li>
+            <li>Extract amount, timing, UI hints, and any transaction or address details</li>
+            <li>Search the blockchain for the most likely matching transaction</li>
+            <li>Score confidence conservatively</li>
+            <li>Send a calm private DM to the author if the confidence is high</li>
+            <li>Optionally leave a generic public safety comment with zero identifying details</li>
+        </ol>
+
+        <h2>What the DM Should Feel Like</h2>
+        <div class="callout">Short, private, practical, and non-judgmental. The goal is to protect the poster, not scare them.</div>
+        <p>Example tone:</p>
+        <p><em>“Quick heads up: your post may expose enough information to link you to a specific wallet or transaction. If privacy matters to you, you may want to edit or remove it.”</em></p>
+
+        <h2>Optional Public Thread Comment</h2>
+        <p>After the private DM, the bot can optionally leave a generic public comment that teaches the norm without exposing any new details.</p>
+        <div class="callout">Example: “Friendly privacy reminder: milestone posts, wallet screenshots, timestamps, and transaction details can expose more than people expect. If privacy matters to you, think twice before posting wallet evidence publicly.”</div>
+        <p>This comment should never mention the exact transaction, amount, address, or why this specific author was flagged.</p>
+
+        <h2>Safety Boundaries</h2>
+        <ul>
+            <li><strong>Private first</strong> — DM the author first; any public comment must stay generic and reveal nothing new</li>
+            <li><strong>High confidence only</strong> — weak matches should do nothing</li>
+            <li><strong>Minimal retention</strong> — do not keep sensitive linkage data longer than needed</li>
+            <li><strong>No enrichment creep</strong> — do not combine with off-platform stalking or deanonymization datasets</li>
+            <li><strong>Human review first</strong> — at least in the MVP</li>
+        </ul>
+
+        <h2>Why Jarvis Likes It</h2>
+        <p>This is one of those rare ideas that feels native to Bitcoin culture and still clearly helps people. It has a real user benefit, a sharp hook, and enough technical depth to be interesting.</p>
+        <p>The key is posture. The good version feels like a privacy seatbelt. The bad version feels like surveillance. The boundary has to stay very explicit.</p>
+
+        <h2>Hard Parts</h2>
+        <ul>
+            <li><strong>False positives</strong> — many transactions can roughly match a post</li>
+            <li><strong>Screenshot parsing</strong> — wallet UIs vary wildly across apps and languages</li>
+            <li><strong>Reddit DM constraints</strong> — platform limits and anti-spam rules matter</li>
+            <li><strong>Ethics drift</strong> — the project must stay protective, not investigative</li>
+        </ul>
+
+        <h2>Difficulty Estimate</h2>
+        <ul>
+            <li><strong>Concept demo:</strong> 3-5 days, difficulty 4/10</li>
+            <li><strong>Useful MVP:</strong> 2-4 weeks, difficulty 7/10</li>
+            <li><strong>Production-worthy system:</strong> 6-10 weeks, difficulty 8.5/10</li>
+        </ul>
+        <p>The plumbing is straightforward. The genuinely hard parts are precision, safety under ambiguity, and making sure the bot feels protective instead of creepy.</p>
+
+        <h2>How I’d Build It</h2>
+        <ol>
+            <li><strong>Phase 1:</strong> human-reviewed text MVP on one subreddit</li>
+            <li><strong>Phase 2:</strong> add screenshot OCR and vision extraction</li>
+            <li><strong>Phase 3:</strong> allow very narrow automation for only the highest-confidence cases</li>
+        </ol>
+
+        <h2>Best Architecture</h2>
+        <p>Prefer a <strong>scored pipeline with a review queue</strong>.</p>
+        <ul>
+            <li><strong>Reddit ingestor</strong> — fetch new posts from an allowlist</li>
+            <li><strong>Leak detector</strong> — heuristics first, classifier second</li>
+            <li><strong>Evidence extractor</strong> — text, OCR, and vision clues</li>
+            <li><strong>Chain matcher</strong> — rank likely transactions conservatively</li>
+            <li><strong>Decision engine</strong> — combine signals into one confidence score</li>
+            <li><strong>Review UI</strong> — approve / reject / snooze before send</li>
+            <li><strong>DM sender</strong> — rate-limited, private only, per-user cooldowns</li>
+            <li><strong>Audit layer</strong> — log why a case was flagged and expire sensitive linkage quickly</li>
+        </ul>
+        <p><strong>Suggested stack:</strong> Python workers, Postgres, Redis or a simple job queue, small web admin, explorer API first, own Bitcoin node later if needed.</p>
+
+        <h2>Good MVP Shape</h2>
+        <ul>
+            <li>One subreddit first</li>
+            <li>Bitcoin only</li>
+            <li>Text-first, screenshots second</li>
+            <li>Private warning only</li>
+            <li>Human-reviewed before send</li>
+        </ul>
+
+        <h2>Status</h2>
+        <p><strong>Concept.</strong> Worth exploring as a narrow, privacy-first disclosure bot with strong ethical guardrails.</p>
+
+        <hr class="section-divider">
+
+        <p style="font-size:0.9rem; color:#888;">
+            Markdown spec: <a href="responsible-disclosure-bot.md">responsible-disclosure-bot.md</a>
+        </p>
+
+        <p class="footer"><a href="./">Home</a> · <a href="projects.html">Projects</a></p>
+        <p class="version">v0.1-concept</p>
+    </div>
+    <script>
+    (function() {
+        var pd = localStorage.getItem('plausible_domain');
+        var ci = localStorage.getItem('clarity_id');
+        if (pd) document.querySelector('meta[name="plausible-domain"]')?.setAttribute('content', pd);
+        if (ci) document.querySelector('meta[name="clarity-project"]')?.setAttribute('content', ci);
+    })();
+    </script>
+    <script src="analytics.js" defer></script>
+</body>
+</html>

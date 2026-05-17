@@ -56,11 +56,22 @@
       letter-spacing: 0.08em;
     }
 
-    .panel {
-      max-width: min(64vw, 360px);
+    .panel-wrap {
+      max-width: min(72vw, 380px);
       text-align: right;
+    }
+
+    .panel {
       font-size: clamp(12px, 2.8vw, 14px);
-      opacity: 0.9;
+      opacity: 0.95;
+    }
+
+    .debug {
+      margin-top: 6px;
+      font-size: clamp(10px, 2.4vw, 12px);
+      line-height: 1.35;
+      opacity: 0.78;
+      white-space: pre-line;
     }
 
     .controls {
@@ -90,7 +101,10 @@
   <canvas id="game"></canvas>
   <div class="hud">
     <div class="score" id="score">0 : 0</div>
-    <div class="panel" id="status">Tilt phone to move. Desktop: ↑ and ↓ keys.</div>
+    <div class="panel-wrap">
+      <div class="panel" id="status">Tilt phone to move. Desktop: ↑ and ↓ keys.</div>
+      <div class="debug" id="debug">sensor: waiting</div>
+    </div>
   </div>
   <div class="controls">
     <button id="motionButton" hidden>Enable motion controls</button>
@@ -101,6 +115,7 @@
     const ctx = canvas.getContext('2d');
     const scoreEl = document.getElementById('score');
     const statusEl = document.getElementById('status');
+    const debugEl = document.getElementById('debug');
     const motionButton = document.getElementById('motionButton');
 
     const state = {
@@ -122,6 +137,10 @@
       tiltCenterGamma: null,
       accelCenterX: null,
       accelCenterY: null,
+      lastBeta: null,
+      lastGamma: null,
+      lastAccelX: null,
+      lastAccelY: null,
       pointerActive: false,
       lastTime: 0,
     };
@@ -164,10 +183,13 @@
     }
 
     function updatePlayer(dt) {
-      if (state.pointerActive || state.inputMode === 'tilt') {
+      if (state.motionSeen || state.tiltReady) {
         const targetY = clamp((state.tiltValue + 1) * 0.5 * (state.height - state.player.h), 0, state.height - state.player.h);
-        const blend = state.pointerActive ? 1 : Math.min(1, dt * 8);
+        const blend = Math.min(1, dt * 8);
         state.player.y += (targetY - state.player.y) * blend;
+      } else if (state.pointerActive) {
+        const targetY = clamp((state.tiltValue + 1) * 0.5 * (state.height - state.player.h), 0, state.height - state.player.h);
+        state.player.y = targetY;
       } else {
         let dir = 0;
         if (state.keys.up) dir -= 1;
@@ -328,13 +350,27 @@
       requestAnimationFrame(loop);
     }
 
+    function fmt(value) {
+      return typeof value === 'number' ? value.toFixed(1) : '—';
+    }
+
+    function updateDebug() {
+      debugEl.textContent = [
+        `sensor: ${state.motionSource || 'none'} | seen: ${state.motionSeen ? 'yes' : 'no'} | mode: ${state.inputMode}`,
+        `beta ${fmt(state.lastBeta)} | gamma ${fmt(state.lastGamma)} | ax ${fmt(state.lastAccelX)} | ay ${fmt(state.lastAccelY)}`,
+      ].join('\n');
+    }
+
     function setStatus(message) {
       statusEl.textContent = message;
+      updateDebug();
     }
 
     function normalizedTiltFromEvent(event) {
       const beta = typeof event.beta === 'number' ? event.beta : null;
       const gamma = typeof event.gamma === 'number' ? event.gamma : null;
+      state.lastBeta = beta;
+      state.lastGamma = gamma;
       if (beta == null && gamma == null) return null;
 
       if (state.tiltCenterBeta == null && beta != null) state.tiltCenterBeta = beta;
@@ -352,6 +388,8 @@
 
       const x = typeof accel.x === 'number' ? accel.x : null;
       const y = typeof accel.y === 'number' ? accel.y : null;
+      state.lastAccelX = x;
+      state.lastAccelY = y;
       if (x == null && y == null) return null;
 
       if (state.accelCenterX == null && x != null) state.accelCenterX = x;
@@ -369,9 +407,12 @@
       state.motionSeen = true;
       state.motionSupported = true;
       state.motionSource = source;
+      state.tiltReady = true;
+      state.inputMode = 'tilt';
+      state.pointerActive = false;
       state.tiltValue = normalized;
-      if (state.tiltReady && !state.pointerActive) state.inputMode = 'tilt';
-      if (firstSeen && state.tiltReady) {
+      updateDebug();
+      if (firstSeen) {
         motionButton.hidden = false;
         motionButton.textContent = 'Recenter tilt';
         setStatus(`Tilt active via ${source}. Tap Recenter tilt if needed.`);
@@ -413,6 +454,11 @@
         state.tiltCenterGamma = null;
         state.accelCenterX = null;
         state.accelCenterY = null;
+        state.lastBeta = null;
+        state.lastGamma = null;
+        state.lastAccelX = null;
+        state.lastAccelY = null;
+        updateDebug();
 
         const needsPermission =
           (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') ||
@@ -464,10 +510,11 @@
     });
 
     function updatePointer(clientY) {
+      if (state.motionSeen || state.tiltReady) return;
       state.pointerActive = true;
       state.inputMode = 'pointer';
       state.tiltValue = clamp((clientY / state.height) * 2 - 1, -1, 1);
-      setStatus('Pointer drag active. Mobile can also use tilt.');
+      setStatus('Pointer drag active.');
     }
 
     canvas.addEventListener('pointerdown', (event) => {
@@ -481,12 +528,13 @@
 
     canvas.addEventListener('pointerup', () => {
       state.pointerActive = false;
-      setStatus(state.tiltReady ? 'Tilt controls active. Drag or keys still work too.' : 'Tap Enable motion controls, or use ↑ and ↓ keys.');
+      setStatus(state.tiltReady ? 'Tilt controls active.' : 'Tap Enable motion controls, or use ↑ and ↓ keys.');
     });
 
     window.addEventListener('resize', resize);
 
     resize();
+    updateDebug();
     enableMotion();
     requestAnimationFrame(loop);
   </script>

@@ -18,6 +18,7 @@ Not deployed to GitHub Pages (lives in repo only).
 | `testing.md` | QA process, browser matrix, accessibility |
 | `operations.md` | Deploy, rollback, CDN, versioning, incidents |
 | `content.md` | Writing tone, Hebrew handling, image sourcing |
+| `open-issues.md` | Parked follow-up work and unresolved product choices |
 
 ## Rules
 

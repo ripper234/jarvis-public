@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" fill="none">
+  <path d="M40 18C30.6112 18 23 25.6112 23 35C23 44.3888 30.6112 52 40 52C49.3888 52 57 44.3888 57 35C57 25.6112 49.3888 18 40 18Z" stroke="#6366f1" stroke-width="2.5"/>
+  <path d="M34 58H46" stroke="#8b5cf6" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M40 52V62" stroke="#8b5cf6" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M32 35C34 32 36.5 30.5 40 30.5C43.5 30.5 46 32 48 35" stroke="#8b5cf6" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+</svg>
